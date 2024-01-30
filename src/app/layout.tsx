@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BudgetBuddy-Tracker",
+  title: "BudgetPro",
   description: "Track your expenses and manage your personal budget.",
 };
 
@@ -16,6 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="icon" href="/favicon.png" sizes="32x32" />
       <body className={inter.className}>{children}</body>
     </html>
   );
