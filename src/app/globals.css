@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.landing-page {
+  background: rgb(0, 0, 42);
+}
+
+.signin-page,
+.signup-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensure the body takes up at least the full height of the viewport */
+  background: radial-gradient(
+    ellipse 650px 700px at center,
+    rgb(86, 137, 203) 30%,
+    rgb(0, 0, 42) 70%
+  );
+}
+
+.cl-logoImage {
+  width: 70px;
+  height: 70px;
+}
+
+.cl-logoBox {
+  display: flex; /* Use Flexbox layout */
+  justify-content: center; /* Center horizontally */
+}
+
+.cl-headerTitle,
+.cl-headerSubtitle,
+.cl-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

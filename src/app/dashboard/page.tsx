@@ -1,7 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 export default function Dashboard() {
   return (
-    <div className="h-screen">
+    <div className="text-white h-screen">
       <h1> This is the Dashboard page</h1>
       <UserButton afterSignOutUrl="/" />
     </div>
