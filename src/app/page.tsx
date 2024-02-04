@@ -12,7 +12,6 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Updated Link Usage */}
       <Link
         href="/dashboard"
         className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 transition duration-300"
@@ -22,7 +21,6 @@ export default function Home() {
 
       <SignedOut>
         <div className="text-center">
-          {/* Updated Link Usage */}
           <Link
             href="/sign-up"
             className="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600 transition duration-300"

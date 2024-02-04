@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Landing Page customization */
 .landing-page {
   background: rgb(0, 0, 42);
 }
-
+/* Sign in and Sign up page syle */
 .signin-page,
 .signup-page {
   display: flex;
@@ -19,6 +20,7 @@
   );
 }
 
+/* Sign-in and Sign-up Component Customization */
 .cl-logoImage {
   width: 70px;
   height: 70px;
