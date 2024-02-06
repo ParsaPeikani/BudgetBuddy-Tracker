@@ -10,9 +10,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className="landing-page">{children}</body>
-    </html>
-  );
+  return <section>{children}</section>;
 }
