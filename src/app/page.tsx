@@ -1,7 +1,19 @@
+"use client";
+
 import { SignedOut } from "@clerk/nextjs";
+import axios from "axios";
 import Link from "next/link";
 
 export default function Home() {
+  const handleClick = async (e: any) => {
+    // e.preventDefault(); // Stop the link from triggering a page navigation
+    try {
+      const response = await axios.post("/api/hello", { name: "parsa" });
+      console.log(response.data.message); // "Hello from Next.js!"
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+  };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-deep-blue text-white space-y-8">
       <div className="text-center">
@@ -14,6 +26,7 @@ export default function Home() {
 
       <Link
         href="/dashboard"
+        onClick={handleClick}
         className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 transition duration-300"
       >
         Go to Dashboard
