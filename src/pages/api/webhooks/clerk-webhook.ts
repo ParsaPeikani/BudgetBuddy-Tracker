@@ -28,16 +28,10 @@ export default async function handler(
     return;
   }
 
-  // Assuming you're parsing JSON body, ensure your Next.js API route is setup to do so
-  // Next.js automatically parses JSON bodies, but ensure you've not disabled this feature
-
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
 
   try {
-    // Verify the payload with the headers
-    // Note: You need to ensure body is a raw string for signature verification
-    // This might require configuring body parsing in Next.js or using a different approach
     const evt = wh.verify(JSON.stringify(req.body), {
       "svix-id": svix_id,
       "svix-timestamp": svix_timestamp,
@@ -48,25 +42,31 @@ export default async function handler(
     };
 
     // Process the event as needed
-    console.log("Verified event:", evt);
+    console.log("This is the verified event:", evt);
+    // Creating a new user in the database if the event type is "user.created"
     if (evt.type === "user.created") {
       // Data for new user
       const newUser = new User({
         externalId: evt.data.id,
         email: evt.data.email_addresses[0].email_address,
       });
-
       // Save the new user to the database
       newUser
         .save()
-        .then((user) => console.log("New user created:", user))
-        .catch((err) => console.error("Error creating new user:", err));
-      console.log(
-        "This is the user first name, last name and email address: ",
-        evt.data.first_name,
-        evt.data.last_name,
-        evt.data.email_addresses[0].email_address
-      );
+        .then((user: object) => console.log("New user created:", user))
+        .catch((err: any) => console.error("Error creating new user:", err));
+    } else if (evt.type === "user.deleted") {
+      // Deleting a user from the database if the event type is "user.deleted"
+      const deletedUser = await User.findOneAndDelete({
+        externalId: evt.data.id,
+      });
+
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res
+        .status(200)
+        .json({ message: "User deleted successfully", deletedUser });
     }
 
     res.status(200).json({ message: "Webhook processed successfully" });

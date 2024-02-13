@@ -1,29 +1,31 @@
-import mongoose from "mongoose";
+// src/Models/user.ts
 
-const userSchema = new mongoose.Schema(
+import mongoose, { Schema, model, models } from "mongoose";
+
+const userSchema = new Schema(
   {
     externalId: {
       type: String,
       required: true,
-      unique: true, // Assuming you want each externalId to be unique
+      unique: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true, // This enforces the email to be unique across users
+      unique: true,
     },
     createdAt: {
       type: Date,
-      default: Date.now, // Automatically sets to current date and time
+      default: Date.now,
     },
     updatedAt: {
       type: Date,
-      default: Date.now, // Automatically sets to current date and time
+      default: Date.now,
     },
   },
   { timestamps: true }
-); // This option enables automatic handling of `createdAt` and `updatedAt` fields
+);
 
-const User = mongoose.model("User", userSchema);
+const User = models.User || model("User", userSchema);
 
 export default User;
