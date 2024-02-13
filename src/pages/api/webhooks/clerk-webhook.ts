@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import User from "@/Models/user";
+import connectDB from "@/pages/lib/connectDB";
 import { Webhook } from "svix";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await connectDB();
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
@@ -47,6 +50,17 @@ export default async function handler(
     // Process the event as needed
     console.log("Verified event:", evt);
     if (evt.type === "user.created") {
+      // Data for new user
+      const newUser = new User({
+        externalId: evt.data.id,
+        email: evt.data.email_addresses[0].email_address,
+      });
+
+      // Save the new user to the database
+      newUser
+        .save()
+        .then((user) => console.log("New user created:", user))
+        .catch((err) => console.error("Error creating new user:", err));
       console.log(
         "This is the user first name, last name and email address: ",
         evt.data.first_name,
