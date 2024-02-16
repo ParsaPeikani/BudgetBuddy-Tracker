@@ -51,10 +51,10 @@ const PieChartComponent = () => {
       class="text-left, items-end"
       style={{ color: "white", marginBottom: "20px" }}
     >
-      <h1 class="pl-96 pb-10 font-bold text-2xl">My Daily Activities</h1>
+      <h1 class="pl-48 pb-10 font-bold text-2xl">My Daily Activities</h1>
       <Chart
         chartType="PieChart"
-        width="80%"
+        width="100%"
         height="400px"
         data={data}
         options={options}

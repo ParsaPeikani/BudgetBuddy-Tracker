@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "src/pages/api/hello.ts",
     "src/pages/lib/connectDB.js",
-    "src/components/charts/donut.jsx"
+    "src/components/charts/pie.jsx"
   ],
   "exclude": ["node_modules"]
 }
