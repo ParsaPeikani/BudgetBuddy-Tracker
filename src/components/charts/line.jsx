@@ -49,8 +49,8 @@ const LineChartComponent = () => {
   };
 
   return (
-    <div class="text-left">
-      <h1 class="pl-56 font-bold text-4xl pb-10 text-white">
+    <div className="text-left">
+      <h1 className="pl-56 font-bold text-4xl pb-10 text-white">
         Sales vs Expenses
       </h1>
       <Chart
