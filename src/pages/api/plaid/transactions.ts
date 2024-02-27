@@ -8,12 +8,6 @@ type ResponseData = {
   latest_transactions: Transaction[];
 };
 
-// const util = require("util");
-// const { v4: uuidv4 } = require("uuid");
-// const bodyParser = require("body-parser");
-// const moment = require("moment");
-// const cors = require("cors");
-
 // Assigning the environment variables to the variables
 const APP_PORT = process.env.APP_PORT || 8000;
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
@@ -44,7 +38,6 @@ const client = new PlaidApi(configuration);
 
 type Transaction = {
   date: string; // Assuming date is a string, adjust if it's a Date object or other type
-  // Add other properties here as needed
 };
 
 export default function handler(
@@ -75,6 +68,7 @@ export default function handler(
         modified = modified.concat(data.modified);
         removed = removed.concat(data.removed);
         hasMore = data.has_more;
+
         // Update cursor to the next cursor
         cursor = data.next_cursor;
         // prettyPrintResponse(response);
@@ -104,44 +98,3 @@ export default function handler(
     }
   });
 }
-
-// app.get("/api/transactions", function (request, response, next) {
-//   Promise.resolve()
-//     .then(async function () {
-//       // Set cursor to empty to receive all historical updates
-//       let cursor = null;
-
-//       // New transaction updates since "cursor"
-//       let added = [];
-//       let modified = [];
-//       // Removed transaction ids
-//       let removed = [];
-//       let hasMore = true;
-//       // Iterate through each page of new transaction updates for item
-//       while (hasMore) {
-//         const request = {
-//           access_token: ACCESS_TOKEN,
-//           cursor: cursor,
-//         };
-//         const response = await client.transactionsSync(request);
-//         const data = response.data;
-//         // Add this page of results
-//         added = added.concat(data.added);
-//         modified = modified.concat(data.modified);
-//         removed = removed.concat(data.removed);
-//         hasMore = data.has_more;
-//         // Update cursor to the next cursor
-//         cursor = data.next_cursor;
-//         prettyPrintResponse(response);
-//       }
-
-//       const compareTxnsByDateAscending = (a, b) =>
-//         (a.date > b.date) - (a.date < b.date);
-//       // Return the 8 most recent transactions
-//       const recently_added = [...added]
-//         .sort(compareTxnsByDateAscending)
-//         .slice(-8);
-//       response.json({ latest_transactions: recently_added });
-//     })
-//     .catch(next);
-// });

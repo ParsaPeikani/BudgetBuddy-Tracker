@@ -1,10 +1,51 @@
 "use client";
 import Navbar from "@/components/navbar/navbar";
+import { Payment, columns } from "@/components/custom-table/columns";
+import { DataTable } from "@/components/custom-table/data-table";
 import PieChartComponent from "@/components/charts/pie";
 import LineChartComponent from "@/components/charts/line";
 import axios from "axios";
+import { get } from "http";
 
 export default function Dashboard() {
+  function getData(): Payment[] {
+    // Fetch data from your API here.
+    return [
+      {
+        id: "728ed52f",
+        amount: 100,
+        status: "pending",
+        email: "m@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 100,
+        status: "pending",
+        email: "m@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 100,
+        status: "pending",
+        email: "m@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 100,
+        status: "pending",
+        email: "m@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 100,
+        status: "pending",
+        email: "m@example.com",
+      },
+      // ...
+    ];
+  }
+  const data = getData();
+
   const getTrans = async () => {
     try {
       const response = await axios.get("/api/plaid/transactions");
@@ -33,6 +74,7 @@ export default function Dashboard() {
       >
         Get Transactions
       </button>
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
