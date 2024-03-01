@@ -4,8 +4,8 @@ import { Payment, columns } from "@/components/custom-table/columns";
 import { DataTable } from "@/components/custom-table/data-table";
 import PieChartComponent from "@/components/charts/pie";
 import LineChartComponent from "@/components/charts/line";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
-import { get } from "http";
 
 export default function Dashboard() {
   function getData(): Payment[] {
@@ -56,25 +56,32 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
+    <div className="justify-center">
       <Navbar />
-      {/* <div className="flex flex-col h-screen">
-        <div className="flex flex-row ">
-          <div className="w-1/2 p-4">
-            <PieChartComponent />
-          </div>
-          <div className="w-1/2 p-4">
-            <LineChartComponent />
+      <div className="flex justify-center">
+        <Tabs defaultValue="overview" className="w-[400px]">
+          <TabsList>
+            <TabsTrigger value="overview">OverView</TabsTrigger>
+            <TabsTrigger value="transactions">Transactions</TabsTrigger>
+            <TabsTrigger value="balance">Balance</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <div className="pt-12">
+        <div className="pl-8 pr-8">
+          <DataTable columns={columns} data={data} />
+          <br />
+          <div className="flex justify-center">
+            <button
+              onClick={getTrans}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Get Transactions
+            </button>
           </div>
         </div>
-      </div> */}
-      <button
-        onClick={getTrans}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Get Transactions
-      </button>
-      <DataTable columns={columns} data={data} />
+      </div>
     </div>
   );
 }
