@@ -13,69 +13,69 @@ export default function Dashboard() {
     return [
       {
         id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "a@example.com",
+        amount: 101,
+        date: "2024-10-10",
+        transaction: "a@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 102,
+        date: "2021-10-11",
+        transaction: "b@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 103,
+        date: "2021-10-12",
+        transaction: "c@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 104,
+        date: "2022-10-13",
+        transaction: "d@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 105,
+        date: "2021-10-14",
+        transaction: "e@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 106,
+        date: "2023-10-15",
+        transaction: "f@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 107,
+        date: "2021-10-16",
+        transaction: "g@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 108,
+        date: "2021-10-17",
+        transaction: "h@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 109,
+        date: "2021-10-18",
+        transaction: "i@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 110,
+        date: "2021-10-19",
+        transaction: "j@example.com",
       },
       {
         id: "728ed52f",
         amount: 100,
-        status: "pending",
-        email: "b@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "c@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "d@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "e@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "f@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "g@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "h@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "i@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "j@example.com",
-      },
-      {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "k@example.com",
+        date: "2021-10-20",
+        transaction: "k@example.com",
       },
       // ...
     ];
@@ -103,9 +103,17 @@ export default function Dashboard() {
           </TabsList>
         </Tabs>
       </div>
+      <div className="bg-black p-8 pl-32">
+        <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+          Welcome back Parsa!
+        </h1>
+        <p className="text-gray-400 text-xl md:text-2xl">
+          Here is a list of your latest transactions!
+        </p>
+      </div>
 
-      <div className="pt-12">
-        <div className="pl-8 pr-8">
+      <div className="pl-12">
+        <div className="pl-20 pr-20">
           <DataTable columns={columns} data={data} />
           <br />
           <div className="flex justify-center">

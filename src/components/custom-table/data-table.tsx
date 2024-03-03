@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
+import { Settings2 } from "lucide-react";
 
 import {
   ColumnDef,
@@ -77,7 +78,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
+          placeholder="Filter transactions..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)
@@ -87,7 +88,10 @@ export function DataTable<TData, TValue>({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns
+              <div className="flex items-center">
+                <Settings2 className="h-4 w-4 mr-2" />
+                Transactions
+              </div>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
