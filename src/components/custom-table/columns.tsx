@@ -132,9 +132,24 @@ export const columns: ColumnDef<Payment>[] = [
               <DropdownMenuItem>View customer</DropdownMenuItem>
               <DropdownMenuItem>View payment details</DropdownMenuItem>
             </div>
-            {/* <DropdownMenuSeparator /> */}
           </DropdownMenuContent>
         </DropdownMenu>
+      );
+    },
+  },
+  {
+    accessorKey: "Catetory",
+    header: ({ column }) => {
+      return (
+        <div className="align-right justify-between">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Category
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
   },

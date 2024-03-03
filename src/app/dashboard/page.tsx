@@ -92,40 +92,42 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="justify-center">
-      <Navbar />
-      <div className="flex justify-center">
-        <Tabs defaultValue="overview" className="w-[400px]">
+    <Tabs defaultValue="overview" className="">
+      <div className="justify-center">
+        <Navbar />
+        <div className="flex justify-center">
           <TabsList>
             <TabsTrigger value="overview">OverView</TabsTrigger>
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="balance">Balance</TabsTrigger>
           </TabsList>
-        </Tabs>
-      </div>
-      <div className="bg-black p-8 pl-32">
-        <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
-          Welcome back Parsa!
-        </h1>
-        <p className="text-gray-400 text-xl md:text-2xl">
-          Here is a list of your latest transactions!
-        </p>
-      </div>
+        </div>
+        <div className="bg-black p-8 pl-32">
+          <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+            Welcome back Parsa!
+          </h1>
+          <p className="text-gray-400 text-xl md:text-2xl">
+            Here is a list of your latest transactions!
+          </p>
+        </div>
 
-      <div className="pl-12">
-        <div className="pl-20 pr-20">
-          <DataTable columns={columns} data={data} />
-          <br />
-          <div className="flex justify-center">
-            <button
-              onClick={getTrans}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Get Transactions
-            </button>
+        <div className="pl-12">
+          <div className="pl-20 pr-20">
+            <TabsContent value="transactions">
+              <DataTable columns={columns} data={data} />
+            </TabsContent>
+            <br />
+            <div className="flex justify-center">
+              <button
+                onClick={getTrans}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Get Transactions
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Tabs>
   );
 }
