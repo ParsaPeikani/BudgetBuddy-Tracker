@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import { Settings2 } from "lucide-react";
+import { RowDropBox } from "../row-size/row-size";
 
 import {
   ColumnDef,
@@ -43,6 +44,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  let [currentPage, setCurrentPage] = React.useState(1);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -50,6 +52,11 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  // Sets the number of rows to display
+  const handleRowChange = (row: string) => {
+    table.setPageSize(parseInt(row));
+  };
 
   const table = useReactTable({
     data,
@@ -72,16 +79,14 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter transactions..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("transaction")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("transaction")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -166,10 +171,35 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        <div className="flex items-center space-x-2 pr-12">
+          <h3 className="text-sm text-gray-600">Rows per page</h3>
+          <RowDropBox onRowChange={handleRowChange} />
+        </div>
+        <h3 className="pr-10">
+          Page {currentPage} of {table.getPageCount()}
+        </h3>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
+          onClick={() => {
+            table.previousPage();
+            setCurrentPage(1);
+          }}
+          disabled={!table.getCanPreviousPage()}
+        >
+          First
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            table.previousPage();
+            setCurrentPage(currentPage - 1);
+          }}
           disabled={!table.getCanPreviousPage()}
         >
           Previous
@@ -177,10 +207,24 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
+          onClick={() => {
+            table.nextPage();
+            setCurrentPage(currentPage + 1);
+          }}
           disabled={!table.getCanNextPage()}
         >
           Next
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            table.setPageSize(1);
+            setCurrentPage(table.getPageCount());
+          }}
+          disabled={!table.getCanNextPage()}
+        >
+          Last
         </Button>
       </div>
     </div>

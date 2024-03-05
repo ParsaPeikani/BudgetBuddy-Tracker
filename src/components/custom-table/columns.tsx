@@ -138,7 +138,7 @@ export const columns: ColumnDef<Payment>[] = [
     },
   },
   {
-    accessorKey: "Catetory",
+    accessorKey: "catetory",
     header: ({ column }) => {
       return (
         <div className="align-right justify-between">
@@ -154,7 +154,7 @@ export const columns: ColumnDef<Payment>[] = [
     },
   },
   {
-    accessorKey: "Verified",
+    accessorKey: "verified",
     header: ({ column }) => {
       return (
         <div className="align-right justify-between text-right">

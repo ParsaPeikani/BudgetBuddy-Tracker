@@ -77,6 +77,72 @@ export default function Dashboard() {
         date: "2021-10-20",
         transaction: "k@example.com",
       },
+      {
+        id: "728ed52f",
+        amount: 101,
+        date: "2024-10-10",
+        transaction: "a@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 102,
+        date: "2021-10-11",
+        transaction: "b@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 103,
+        date: "2021-10-12",
+        transaction: "c@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 104,
+        date: "2022-10-13",
+        transaction: "d@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 105,
+        date: "2021-10-14",
+        transaction: "e@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 106,
+        date: "2023-10-15",
+        transaction: "f@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 107,
+        date: "2021-10-16",
+        transaction: "g@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 108,
+        date: "2021-10-17",
+        transaction: "h@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 109,
+        date: "2021-10-18",
+        transaction: "i@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 110,
+        date: "2021-10-19",
+        transaction: "j@example.com",
+      },
+      {
+        id: "728ed52f",
+        amount: 100,
+        date: "2021-10-20",
+        transaction: "k@example.com",
+      },
       // ...
     ];
   }
@@ -113,7 +179,7 @@ export default function Dashboard() {
 
         <div className="pl-12">
           <div className="pl-20 pr-20">
-            <TabsContent value="transactions">
+            <TabsContent value="overview">
               <DataTable columns={columns} data={data} />
             </TabsContent>
             <br />
