@@ -106,42 +106,12 @@ export const columns: ColumnDef<Payment>[] = [
       return <div className="text-right pr-8 font-medium">{formatted}</div>;
     },
   },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const payment = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-4 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <div className="text-center">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            </div>
-            <div className="flex">
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Copy payment ID
-              </DropdownMenuItem>
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
   {
     accessorKey: "catetory",
     header: ({ column }) => {
       return (
-        <div className="align-right justify-between">
+        <div className="flex justify-around text-right -mr-40">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -157,7 +127,7 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "verified",
     header: ({ column }) => {
       return (
-        <div className="align-right justify-between text-right">
+        <div className=" justify-around text-right">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -165,6 +135,39 @@ export const columns: ColumnDef<Payment>[] = [
             Verified
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
+        </div>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const payment = row.original;
+
+      return (
+        <div className="flex justify-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-4 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <div className="text-right">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              </div>
+              <div className="flex">
+                <DropdownMenuItem
+                  onClick={() => navigator.clipboard.writeText(payment.id)}
+                >
+                  Copy payment ID
+                </DropdownMenuItem>
+                <DropdownMenuItem>View customer</DropdownMenuItem>
+                <DropdownMenuItem>View payment details</DropdownMenuItem>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       );
     },
