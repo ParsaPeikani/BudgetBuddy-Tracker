@@ -186,8 +186,8 @@ export function DataTable<TData, TValue>({
           variant="outline"
           size="sm"
           onClick={() => {
-            table.previousPage();
             setCurrentPage(1);
+            table.setPageIndex(0);
           }}
           disabled={!table.getCanPreviousPage()}
         >
@@ -219,8 +219,8 @@ export function DataTable<TData, TValue>({
           variant="outline"
           size="sm"
           onClick={() => {
-            table.setPageSize(1);
             setCurrentPage(table.getPageCount());
+            table.setPageIndex(table.getPageCount() - 1);
           }}
           disabled={!table.getCanNextPage()}
         >
