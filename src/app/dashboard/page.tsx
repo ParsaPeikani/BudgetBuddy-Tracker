@@ -179,7 +179,7 @@ export default function Dashboard() {
 
         <div className="pl-12">
           <div className="pl-20 pr-20">
-            <TabsContent value="overview">
+            <TabsContent value="transactions">
               <DataTable columns={columns} data={data} />
             </TabsContent>
             <br />
