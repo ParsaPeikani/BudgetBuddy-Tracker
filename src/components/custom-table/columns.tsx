@@ -21,6 +21,8 @@ export type Payment = {
   amount: number;
   date: string;
   transaction: string;
+  category: string[];
+  verified: boolean;
 };
 
 export const columns: ColumnDef<Payment>[] = [
