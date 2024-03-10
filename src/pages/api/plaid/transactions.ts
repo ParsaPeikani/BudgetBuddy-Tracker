@@ -2,6 +2,8 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, PlaidApi, Products, PlaidEnvironments } from "plaid";
+import Transaction from "@/Models/transaction";
+import connectDB from "@/pages/lib/connectDB";
 
 type ResponseData = {
   message: string;
@@ -40,11 +42,13 @@ type Transaction = {
   date: string; // Assuming date is a string, adjust if it's a Date object or other type
 };
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
+  await connectDB();
   Promise.resolve().then(async function () {
+
     // Set cursor to empty to receive all historical updates
     let cursor = null;
 
@@ -78,8 +82,39 @@ export default function handler(
       const compareTxnsByDateAscending = (a: Transaction, b: Transaction) =>
         new Date(a.date).getTime() - new Date(b.date).getTime();
 
-      // Return the 8 most recent transactions
-      const recently_added = added.sort(compareTxnsByDateAscending).slice(-8);
+      // Return the 200 most recent transactions
+      const recently_added = added.sort(compareTxnsByDateAscending).slice(-200);
+      // When moved to development, you can uncomment this code so that you can store in mongodb all your transactions
+      // The highest amount of transactions that you can get in one go is 199. If you want to get more transactions, you will have to make multiple requests
+
+      // for (const transaction of recently_added) {
+      //   const newTransaction = new Transaction({
+      //     transactionId: transaction.transaction_id,
+      //     accountId: transaction.account_id,
+      //     userId: req.query.userId,
+      //     amount: transaction.amount,
+      //     date: transaction.date,
+      //     category: transaction.category,
+      //     pending: transaction.pending,
+      //     merchantName: transaction.merchant_name,
+      //     paymentChannel: transaction.payment_channel,
+      //     currency: transaction.iso_currency_code,
+      //   });
+      //   newTransaction
+      //     .save()
+      //     .then((transaction: object) =>
+      //       console.log("New transaction created:")
+      //     )
+      //     .catch((err: any) => {
+      //       console.error("Error creating new transaction:", err);
+      //       res
+      //         .status(500)
+      //         .json({
+      //           message: "Error creating new transaction",
+      //           latest_transactions: [],
+      //         });
+      //     });
+      // }
 
       res
         .status(200)

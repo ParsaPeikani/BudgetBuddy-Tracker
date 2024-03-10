@@ -14,9 +14,8 @@ const transactionSchema = new Schema(
       required: true,
     },
     userId: {
-      type: Schema.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "User",
     },
     amount: {
       type: Number,

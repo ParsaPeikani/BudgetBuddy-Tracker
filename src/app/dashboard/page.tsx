@@ -6,8 +6,11 @@ import PieChartComponent from "@/components/charts/pie";
 import LineChartComponent from "@/components/charts/line";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
+import { useSession } from "@clerk/nextjs";
 
 export default function Dashboard() {
+  const { session } = useSession();
+  const user_id = session?.user.id;
   function getData(): Payment[] {
     // Fetch data from your API here.
     return [
@@ -150,7 +153,9 @@ export default function Dashboard() {
 
   const getTrans = async () => {
     try {
-      const response = await axios.get("/api/plaid/transactions");
+      const response = await axios.get(
+        `/api/plaid/transactions?userId=${user_id}`
+      );
       console.log(response.data.latest_transactions);
     } catch (error) {
       console.error("There was an error!", error);
@@ -172,6 +177,7 @@ export default function Dashboard() {
           <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
             Welcome back Parsa!
           </h1>
+          <h1></h1>
           <p className="text-gray-400 text-xl md:text-2xl">
             Here is a list of your latest transactions!
           </p>
@@ -183,14 +189,14 @@ export default function Dashboard() {
               <DataTable columns={columns} data={data} />
             </TabsContent>
             <br />
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
               <button
                 onClick={getTrans}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Get Transactions
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
