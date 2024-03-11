@@ -1,6 +1,6 @@
 "use client";
 import Navbar from "@/components/navbar/navbar";
-import { Payment, columns } from "@/components/custom-table/columns";
+import { Payment, getColumns } from "@/components/custom-table/columns";
 import { DataTable } from "@/components/custom-table/data-table";
 import PieChartComponent from "@/components/charts/pie";
 import LineChartComponent from "@/components/charts/line";
@@ -8,50 +8,58 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { set } from "mongoose";
 
 export default function Dashboard() {
   const { session } = useSession();
   const user_id = session?.user.id;
-
   const getTrans = async () => {
     try {
       const response = await axios.get(
         `/api/plaid/transactions?userId=${user_id}`
-      );
-      console.log(response.data.latest_transactions);
-    } catch (error) {
-      console.error("There was an error!", error);
-    }
-  };
-
-  const [transactions, setTransactions] = useState([]);
-
-  useEffect(() => {
-    // Fetch transactions from your API
-    const fetchTransactions = async () => {
-      const response = await axios.get(`/api/mongoDB/transactions`);
-      const data = response.data;
-      // console.log("These are the data: ", data);
-      return data;
-      // setTransactions(data); // Update state with the fetched transactions
+        );
+        console.log(response.data.latest_transactions);
+      } catch (error) {
+        console.error("There was an error!", error);
+      }
     };
-
-    fetchTransactions().then((fulltransactions) => {
-      const Columns = fulltransactions.map((transaction: any) => ({
-        id: transaction._id,
-        date: transaction.date,
-        transaction: transaction.merchantName,
-        amount: transaction.amount,
-        category: transaction.category[0],
-        verified: transaction.pending,
-      }));
-      setTransactions(Columns);
-      console.log("These are the columns: ", Columns);
-    });
-  }, []); // Empty dependency array means this effect runs once on mount
-
-  return (
-    <Tabs defaultValue="transactions" className="">
+    
+    const [transactions, setTransactions] = useState([]);
+    
+    useEffect(() => {
+      // Fetch transactions from your API
+      const fetchTransactions = async () => {
+        const response = await axios.get(`/api/mongoDB/transactions`);
+        const data = response.data;
+        // console.log("These are the data: ", data);
+        return data;
+        // setTransactions(data); // Update state with the fetched transactions
+      };
+      
+      fetchTransactions().then((fulltransactions) => {
+        const Columns = fulltransactions.map((transaction: any) => ({
+          id: transaction.transactionId,
+          date: transaction.date,
+          transaction: transaction.merchantName,
+          amount: transaction.amount,
+          category: transaction.category[0],
+          verified: transaction.pending,
+        }));
+        setTransactions(Columns);
+        // console.log("These are the columns: ", Columns);
+      });
+    }, []); // Empty dependency array means this effect runs once on mount
+    
+    const deleteTransaction = (transactionId: string) => {
+      // Delete transaction with the transactionId from the transactions array
+      const newTransactions = transactions.filter(
+        (transaction: any) => transaction.id !== transactionId
+        );
+        setTransactions(newTransactions);
+      }
+      const columns = getColumns(deleteTransaction);
+      return (
+        <Tabs defaultValue="transactions" className="">
       <div className="justify-center">
         <Navbar />
         <div className="flex justify-center">

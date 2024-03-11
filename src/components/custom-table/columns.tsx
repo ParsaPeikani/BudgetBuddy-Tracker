@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import axios from "axios";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -25,7 +26,15 @@ export type Payment = {
   verified: boolean;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+const deleteTransactionFromBackend = async (id: string) => {
+  const response = await axios.delete(
+    `/api/mongoDB/deleteTransaction?transactionId=${id}`
+  );
+};
+
+export const getColumns = (
+  deleteTransaction: (id: string) => Promise<void>
+): ColumnDef<Payment>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -87,7 +96,7 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "amount",
     header: ({ column }) => {
       return (
-        <div className="text-right ">
+        <div className="-ml-4">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -105,7 +114,7 @@ export const columns: ColumnDef<Payment>[] = [
         currency: "USD",
       }).format(amount);
 
-      return <div className="text-right pr-8 font-medium">{formatted}</div>;
+      return <div className="font-medium">{formatted}</div>;
     },
   },
 
@@ -113,7 +122,7 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "category",
     header: ({ column }) => {
       return (
-        <div className="text-right">
+        <div className="-ml-4">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -125,14 +134,14 @@ export const columns: ColumnDef<Payment>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="text-right">{row.getValue("category")}</div>;
+      return <div className="">{row.getValue("category")}</div>;
     },
   },
   {
     accessorKey: "verified",
     header: ({ column }) => {
       return (
-        <div className=" justify-around text-right -mr-9">
+        <div className=" justify-around -ml-4">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -146,15 +155,13 @@ export const columns: ColumnDef<Payment>[] = [
     // Display the boolean value of the verified property as verfiied or unverified
     cell: ({ row }) => {
       const verified = row.getValue("verified");
-      return (
-        <div className="text-right">{verified ? "Pending" : "Verified"}</div>
-      );
+      return <div className="">{verified ? "Pending" : "Verified"}</div>;
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const transaction = row.original;
 
       return (
         <div className="flex justify-end">
@@ -166,17 +173,20 @@ export const columns: ColumnDef<Payment>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <div className="text-right">
+              <div className="text-center">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
               </div>
               <div className="flex">
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem>View Details</DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => navigator.clipboard.writeText(payment.id)}
+                  onClick={() => [
+                    deleteTransactionFromBackend(transaction.id),
+                    deleteTransaction(transaction.id),
+                  ]}
                 >
-                  Copy payment ID
+                  Delete
                 </DropdownMenuItem>
-                <DropdownMenuItem>View customer</DropdownMenuItem>
-                <DropdownMenuItem>View payment details</DropdownMenuItem>
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
