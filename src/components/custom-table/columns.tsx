@@ -18,10 +18,10 @@ import {
 // You can use a Zod schema here if you want.
 export type Payment = {
   id: string;
-  amount: number;
   date: string;
   transaction: string;
-  category: string[];
+  amount: number;
+  category: string;
   verified: boolean;
 };
 
@@ -110,7 +110,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
 
   {
-    accessorKey: "catetory",
+    accessorKey: "category",
     header: ({ column }) => {
       return (
         <div className="flex justify-around text-right -mr-40">
