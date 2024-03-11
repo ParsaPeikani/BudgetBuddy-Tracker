@@ -63,7 +63,7 @@ export const columns: ColumnDef<Payment>[] = [
     },
     cell: ({ row }) => {
       const date = new Date(row.getValue("date"));
-      return <div className="pl-2">{date.toLocaleDateString()}</div>;
+      return <div className="pl-4">{date.toLocaleDateString()}</div>;
     },
   },
   {
@@ -80,7 +80,7 @@ export const columns: ColumnDef<Payment>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="pl-2">{row.getValue("transaction")}</div>;
+      return <div className="pl-4">{row.getValue("transaction")}</div>;
     },
   },
   {
@@ -113,7 +113,7 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "category",
     header: ({ column }) => {
       return (
-        <div className="flex justify-around text-right -mr-40">
+        <div className="text-right">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -124,12 +124,15 @@ export const columns: ColumnDef<Payment>[] = [
         </div>
       );
     },
+    cell: ({ row }) => {
+      return <div className="text-right">{row.getValue("category")}</div>;
+    },
   },
   {
     accessorKey: "verified",
     header: ({ column }) => {
       return (
-        <div className=" justify-around text-right">
+        <div className=" justify-around text-right -mr-9">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -138,6 +141,13 @@ export const columns: ColumnDef<Payment>[] = [
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
+      );
+    },
+    // Display the boolean value of the verified property as verfiied or unverified
+    cell: ({ row }) => {
+      const verified = row.getValue("verified");
+      return (
+        <div className="text-right">{verified ? "Pending" : "Verified"}</div>
       );
     },
   },
