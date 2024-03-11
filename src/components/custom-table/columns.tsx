@@ -10,13 +10,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+// This type is used to define the shape of our column data.
 export type Payment = {
   id: string;
   date: string;
@@ -26,6 +24,7 @@ export type Payment = {
   verified: boolean;
 };
 
+// This function is used to delete a transaction from the backend
 const deleteTransactionFromBackend = async (id: string) => {
   const response = await axios.delete(
     `/api/mongoDB/deleteTransaction?transactionId=${id}`
@@ -33,7 +32,7 @@ const deleteTransactionFromBackend = async (id: string) => {
 };
 
 export const getColumns = (
-  deleteTransaction: (id: string) => Promise<void>
+  deleteTransaction: (id: string) => void
 ): ColumnDef<Payment>[] => [
   {
     id: "select",
