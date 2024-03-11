@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -13,7 +14,64 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+import * as React from "react";
+import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
+import { Bar, BarChart, ResponsiveContainer } from "recharts";
 
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+
+const data = [
+  {
+    goal: 400,
+  },
+  {
+    goal: 300,
+  },
+  {
+    goal: 200,
+  },
+  {
+    goal: 300,
+  },
+  {
+    goal: 200,
+  },
+  {
+    goal: 278,
+  },
+  {
+    goal: 189,
+  },
+  {
+    goal: 239,
+  },
+  {
+    goal: 300,
+  },
+  {
+    goal: 200,
+  },
+  {
+    goal: 278,
+  },
+  {
+    goal: 189,
+  },
+  {
+    goal: 349,
+  },
+];
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // This type is used to define the shape of our column data.
 export type Payment = {
   id: string;
@@ -177,7 +235,9 @@ export const getColumns = (
               </div>
               <div className="flex">
                 <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>View Details</DropdownMenuItem>
+                {/* <DropdownMenuItem>View Details</DropdownMenuItem> */}
+                <DrawerDemo />
+
                 <DropdownMenuItem
                   onClick={() => [
                     deleteTransactionFromBackend(transaction.id),

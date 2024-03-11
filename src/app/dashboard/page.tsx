@@ -1,11 +1,13 @@
 "use client";
 import axios from "axios";
+import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar/navbar";
 import { Payment, getColumns } from "@/components/custom-table/columns";
 import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
 // import PieChartComponent from "@/components/charts/pie";
 // import LineChartComponent from "@/components/charts/line";
 
@@ -86,6 +88,7 @@ export default function Dashboard() {
               <DataTable columns={columns} data={transactions} />
             </TabsContent>
             <br />
+
             {/* <div className="flex justify-center">
               <button
                 onClick={getTrans}
