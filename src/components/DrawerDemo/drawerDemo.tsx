@@ -1,6 +1,8 @@
 import * as React from "react";
 import { GearIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Bar, BarChart, ResponsiveContainer } from "recharts";
+import { data } from "@/components/constants/Drawerdata";
+import { DateTimeFormatOptions } from "intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -10,57 +12,15 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import axios from "axios";
-import { captureRejectionSymbol } from "events";
+import { useEffect, useState } from "react";
 
-const data = [
-  {
-    goal: 400,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 239,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 349,
-  },
-];
-
-import { DateTimeFormatOptions } from "intl";
 export function DrawerDemo({ transaction, deleteTransaction }: any) {
-  console.log("sjldfjsldfjlksdjfloi", transaction);
+  // Define a state variable to store the fetched transaction
+  const [originalTransaction, setOriginalTransaction] = useState(null);
+  //   console.log("This is the transaction", transaction);
   const date = new Date(transaction.date);
 
   const options: DateTimeFormatOptions = {
@@ -69,15 +29,34 @@ export function DrawerDemo({ transaction, deleteTransaction }: any) {
     day: "numeric",
   };
   const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
-  console.log("This is the formatted date", formattedDate);
 
   const deleteTransactionFromBackend = async (id: string) => {
     const response = await axios.delete(
       `/api/mongoDB/deleteTransaction?transactionId=${id}`
     );
-    console.log("This is the response", response);
+    // console.log("This is the response", response);
   };
 
+  useEffect(() => {
+    const fetchTransaction = async () => {
+      try {
+        const response = await axios.get(
+          `/api/mongoDB/findTransaction?transactionId=${transaction.id}`
+        );
+        const data = response.data;
+        setOriginalTransaction(data); // Update state with the fetched transaction
+      } catch (error) {
+        console.error("Failed to fetch transaction:", error);
+        setOriginalTransaction(null); // Handle error, e.g., by resetting the state
+      }
+    };
+
+    if (transaction.id) {
+      fetchTransaction();
+    }
+  }, [transaction.id]); // Dependency array ensures this effect runs when transaction.id changes
+
+  //   console.log("This is the original transaction", originalTransaction);
   return (
     <Drawer>
       <DrawerTrigger asChild>

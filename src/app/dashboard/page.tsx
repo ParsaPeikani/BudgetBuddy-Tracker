@@ -7,7 +7,9 @@ import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
+import Loading from "./loading";
 // import PieChartComponent from "@/components/charts/pie";
 // import LineChartComponent from "@/components/charts/line";
 
@@ -28,26 +30,33 @@ export default function Dashboard() {
   //   };
 
   const [transactions, setTransactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch transactions from your API
-    const fetchTransactions = async () => {
-      const response = await axios.get(`/api/mongoDB/transactions`);
-      const data = response.data;
-      return data;
-    };
+    try {
+      // Fetch transactions from your API
+      const fetchTransactions = async () => {
+        const response = await axios.get(`/api/mongoDB/transactions`);
+        const data = response.data;
+        return data;
+      };
 
-    fetchTransactions().then((fulltransactions) => {
-      const Columns = fulltransactions.map((transaction: any) => ({
-        id: transaction.transactionId,
-        date: transaction.date,
-        transaction: transaction.merchantName,
-        amount: transaction.amount,
-        category: transaction.category[0],
-        verified: transaction.pending,
-      }));
-      setTransactions(Columns);
-    });
+      fetchTransactions().then((fulltransactions) => {
+        const Columns = fulltransactions.map((transaction: any) => ({
+          id: transaction.transactionId,
+          date: transaction.date,
+          transaction: transaction.merchantName,
+          amount: transaction.amount,
+          category: transaction.category[0],
+          verified: transaction.pending,
+        }));
+        setTransactions(Columns);
+      });
+    } catch (error) {
+      console.error("Failed to fetch transactions:", error);
+    } finally {
+      setIsLoading(false); // End loading
+    }
   }, []); // Empty dependency array means this effect runs once on mount
 
   const deleteTransaction = (transactionId: string) => {
@@ -85,7 +94,12 @@ export default function Dashboard() {
         <div className="pl-12">
           <div className="pl-20 pr-20">
             <TabsContent value="transactions">
-              <DataTable columns={columns} data={transactions} />
+              {/* <Loading /> */}
+              {isLoading ? (
+                <Loading />
+              ) : (
+                <DataTable columns={columns} data={transactions} />
+              )}
             </TabsContent>
             <br />
 
