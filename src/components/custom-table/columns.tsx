@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,64 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-import * as React from "react";
-import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
-import { Bar, BarChart, ResponsiveContainer } from "recharts";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-
-const data = [
-  {
-    goal: 400,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 239,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 349,
-  },
-];
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // This type is used to define the shape of our column data.
 export type Payment = {
   id: string;
@@ -245,6 +189,26 @@ export const getColumns = (
                   onClick={() => [
                     deleteTransactionFromBackend(transaction.id),
                     deleteTransaction(transaction.id),
+                    toast(
+                      `Your ${
+                        transaction.transaction ? transaction.transaction : ""
+                      } transaction has been deleted`,
+                      {
+                        description: new Date().toLocaleString("en-US", {
+                          weekday: "long", // "Sunday"
+                          year: "numeric", // "2023"
+                          month: "long", // "December"
+                          day: "2-digit", // "03"
+                          hour: "numeric", // "9"
+                          minute: "2-digit", // "00"
+                          hour12: true, // AM/PM
+                        }),
+                        action: {
+                          label: "Undo",
+                          onClick: () => console.log("Undo"),
+                        },
+                      }
+                    ),
                   ]}
                 >
                   Delete

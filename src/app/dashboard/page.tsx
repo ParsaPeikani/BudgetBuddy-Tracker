@@ -7,16 +7,13 @@ import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { Suspense } from "react";
-import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
 import Loading from "./loading";
 // import PieChartComponent from "@/components/charts/pie";
 // import LineChartComponent from "@/components/charts/line";
 
 export default function Dashboard() {
-  const { session } = useSession();
-  const user_id = session?.user.id;
-
+  // const { session } = useSession();
+  // const user_id = session?.user.id;
   // Uncomment this function to store the transactions in the database for the development environment
   // const getTrans = async () => {
   //   try {
