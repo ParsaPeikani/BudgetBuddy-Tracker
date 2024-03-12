@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
+import { GearIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Bar, BarChart, ResponsiveContainer } from "recharts";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import axios from "axios";
+import { captureRejectionSymbol } from "events";
 
 const data = [
   {
@@ -56,12 +58,16 @@ const data = [
   },
 ];
 
-export function DrawerDemo() {
-  const [goal, setGoal] = React.useState(350);
+export function DrawerDemo({ transaction, deleteTransaction }: any) {
+  console.log("sjldfjsldfjlksdjfloi", transaction);
+  const [goal, setGoal] = React.useState(`${transaction.amount}`);
 
-  function onClick(adjustment: number) {
-    setGoal(Math.max(200, Math.min(400, goal + adjustment)));
-  }
+  const deleteTransactionFromBackend = async (id: string) => {
+    const response = await axios.delete(
+      `/api/mongoDB/deleteTransaction?transactionId=${id}`
+    );
+    console.log("This is the response", response);
+  };
 
   return (
     <Drawer>
@@ -70,7 +76,7 @@ export function DrawerDemo() {
           variant="outline"
           className="flex bg-gray-300 border-none text-black font-normal "
         >
-          Open Drawer
+          Details
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -87,15 +93,14 @@ export function DrawerDemo() {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(-10)}
-                disabled={goal <= 200}
+                // onClick={() => onClick(-10)}
               >
-                <MinusIcon className="h-4 w-4" />
+                <GearIcon className="h-4 w-4" />
                 <span className="sr-only">Decrease</span>
               </Button>
               <div className="flex-1 text-center">
                 <div className="text-7xl font-bold tracking-tighter">
-                  {goal}
+                  {transaction.amount}
                 </div>
                 <div className="text-[0.70rem] uppercase text-muted-foreground">
                   Dollars
@@ -105,11 +110,12 @@ export function DrawerDemo() {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(10)}
-                disabled={goal >= 400}
+                onClick={() => [
+                  deleteTransactionFromBackend(transaction.id),
+                  deleteTransaction(transaction.id),
+                ]}
               >
-                <PlusIcon className="h-4 w-4" />
-                <span className="sr-only">Increase</span>
+                <TrashIcon className="h-4 w-4" />
               </Button>
             </div>
             <div className="mt-3 h-[120px]">
@@ -129,7 +135,6 @@ export function DrawerDemo() {
             </div>
           </div>
           <DrawerFooter>
-            <Button>Edit</Button>
             <DrawerClose asChild>
               <Button variant="outline">Close</Button>
             </DrawerClose>

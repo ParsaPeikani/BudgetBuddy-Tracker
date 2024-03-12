@@ -236,7 +236,10 @@ export const getColumns = (
               <div className="flex">
                 <DropdownMenuItem>Edit</DropdownMenuItem>
                 {/* <DropdownMenuItem>View Details</DropdownMenuItem> */}
-                <DrawerDemo />
+                <DrawerDemo
+                  transaction={transaction}
+                  deleteTransaction={deleteTransaction}
+                />
 
                 <DropdownMenuItem
                   onClick={() => [
