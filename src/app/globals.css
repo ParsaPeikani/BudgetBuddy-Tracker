@@ -74,3 +74,28 @@
     @apply bg-background text-foreground; /* This will now apply the updated black background */
   }
 }
+.signin-page,
+.signup-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensure the body takes up at least the full height of the viewport */
+}
+
+.cl-logoImage {
+  width: 70px;
+  height: 70px;
+}
+
+.cl-logoBox {
+  display: flex; /* Use Flexbox layout */
+  justify-content: center; /* Center horizontally */
+}
+
+.cl-headerTitle,
+.cl-headerSubtitle,
+.cl-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
