@@ -33,6 +33,7 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true); // Start loading
     try {
       // Fetch transactions from your API
       const fetchTransactions = async () => {
@@ -55,9 +56,11 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
     } finally {
-      setIsLoading(false); // End loading
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     }
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []);
 
   const deleteTransaction = (transactionId: string) => {
     // Delete transaction with the transactionId from the transactions array
@@ -95,7 +98,7 @@ export default function Dashboard() {
           <div className="pl-20 pr-20">
             <TabsContent value="transactions">
               {/* <Loading /> */}
-              {isLoading ? (
+              {isLoading || !transactions ? (
                 <Loading />
               ) : (
                 <DataTable columns={columns} data={transactions} />
