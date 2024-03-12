@@ -62,7 +62,7 @@ export function DrawerDemo({ transaction, deleteTransaction }: any) {
       <DrawerTrigger asChild>
         <Button
           variant="outline"
-          className="flex bg-gray-300 border-none text-black font-normal "
+          className="flex bg-black border-none text-white font-normal "
         >
           Details
         </Button>

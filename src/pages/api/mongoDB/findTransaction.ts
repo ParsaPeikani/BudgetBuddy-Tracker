@@ -10,7 +10,6 @@ export default async function handler(
   await connectDB();
 
   if (req.method === "GET") {
-    console.log("I amg etting there");
     const { transactionId } = req.query;
     try {
       const transactions = await Transaction.findOne({
