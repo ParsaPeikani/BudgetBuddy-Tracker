@@ -58,9 +58,18 @@ const data = [
   },
 ];
 
+import { DateTimeFormatOptions } from "intl";
 export function DrawerDemo({ transaction, deleteTransaction }: any) {
   console.log("sjldfjsldfjlksdjfloi", transaction);
-  const [goal, setGoal] = React.useState(`${transaction.amount}`);
+  const date = new Date(transaction.date);
+
+  const options: DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
+  console.log("This is the formatted date", formattedDate);
 
   const deleteTransactionFromBackend = async (id: string) => {
     const response = await axios.delete(
@@ -80,12 +89,18 @@ export function DrawerDemo({ transaction, deleteTransaction }: any) {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+        <div className="w-full max-w">
           <DrawerHeader>
-            <DrawerTitle className="text-center">Transaction</DrawerTitle>
+            {/* <DrawerTitle className="text-center">Transaction</DrawerTitle> */}
             <DrawerDescription className="text-center">
               These are more details about your transaction
             </DrawerDescription>
+            <div>
+              <h3 className="text-sm text-muted-foreground">Date</h3>
+              <h3 className="text-lg font-semibold tracking-tighter">
+                {formattedDate}
+              </h3>
+            </div>
           </DrawerHeader>
           <div className="p-4 pb-0">
             <div className="flex items-center justify-center space-x-2">
@@ -96,7 +111,6 @@ export function DrawerDemo({ transaction, deleteTransaction }: any) {
                 // onClick={() => onClick(-10)}
               >
                 <GearIcon className="h-4 w-4" />
-                <span className="sr-only">Decrease</span>
               </Button>
               <div className="flex-1 text-center">
                 <div className="text-7xl font-bold tracking-tighter">
