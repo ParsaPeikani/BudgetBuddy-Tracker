@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
-import { Settings2 } from "lucide-react";
+import { Settings2, Trash, Trash2 } from "lucide-react";
 import { RowDropBox } from "../row-size/row-size";
 
 import {
@@ -79,47 +79,62 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter transactions..."
-          value={
-            (table.getColumn("transaction")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("transaction")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              <div className="flex items-center">
-                <Settings2 className="h-4 w-4 mr-2" />
-                Transactions
-              </div>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div className="flex py-4 justify-between">
+        <div className="flex">
+          <Input
+            placeholder="Filter transactions..."
+            value={
+              (table.getColumn("transaction")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("transaction")?.setFilterValue(event.target.value)
+            }
+            className="w-72"
+          />
+        </div>
+
+        <div className="flex">
+          <Button
+            variant="outline"
+            className="flex"
+            onClick={() => {
+              console.log("Delete");
+            }}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-2">
+                <div className="flex items-center">
+                  <Settings2 className="h-4 w-4 mr-2" />
+                  Transactions
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
