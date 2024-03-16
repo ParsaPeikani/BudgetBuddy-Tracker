@@ -26,15 +26,20 @@ export type Payment = {
   verified: boolean;
 };
 
+// const [lastDeleted, setLastDeleted] = useState(null);
+
 // This function is used to delete a transaction from the backend
-const deleteTransactionFromBackend = async (id: string) => {
-  const response = await axios.delete(
-    `/api/mongoDB/deleteTransaction?transactionId=${id}`
-  );
-};
+// const deleteTransactionFromBackend = async (id: string) => {
+//   const response = await axios.delete(
+//     `/api/mongoDB/deleteTransaction?transactionId=${id}`
+//   );
+//   console.log("This is the response", response.data);
+// };
 
 export const getColumns = (
-  deleteTransaction: (id: string) => void
+  deleteTransaction: (id: string) => void,
+  deleteTransactionFromBackend: (id: string) => void,
+  restoreTransactionToBackend: () => void
 ): ColumnDef<Payment>[] => [
   {
     id: "select",
@@ -205,7 +210,7 @@ export const getColumns = (
                         }),
                         action: {
                           label: "Undo",
-                          onClick: () => console.log("Undo"),
+                          onClick: () => restoreTransactionToBackend(),
                         },
                       }
                     ),

@@ -12,12 +12,26 @@ export default async function handler(
   if (req.method === "DELETE") {
     const { transactionId } = req.query;
     try {
-      const transactions = await Transaction.deleteOne({
+      // First, find the transaction to ensure it exists and to fetch its data
+      const transaction = await Transaction.findOne({
         transactionId: transactionId,
       });
-      res.status(200).json(`Transaction with id: ${transactionId} deleted`);
+
+      if (!transaction) {
+        return res.status(404).json({ message: "Transaction not found" });
+      }
+
+      // Optionally, here you could perform a soft delete instead of a hard delete
+      // For now, we'll proceed with deleting it from the database
+      await Transaction.deleteOne({ transactionId: transactionId });
+
+      // Respond with the deleted transaction data
+      res.status(200).json({
+        message: `Transaction with id: ${transactionId} deleted`,
+        transaction,
+      });
     } catch (error) {
-      res.status(500).json({ message: "Error deleting transaction" });
+      res.status(500).json({ message: "Error processing transaction" });
     }
   }
 }

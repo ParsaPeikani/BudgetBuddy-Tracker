@@ -28,6 +28,7 @@ export default function Dashboard() {
 
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deletedTransaction, setDeletedTransaction] = useState(null);
 
   useEffect(() => {
     setIsLoading(true); // Start loading
@@ -67,8 +68,32 @@ export default function Dashboard() {
     setTransactions(newTransactions);
   };
 
+  // This function is used to delete a transaction from the backend
+  const deleteTransactionFromBackend = async (id: string) => {
+    const response = await axios.delete(
+      `/api/mongoDB/deleteTransaction?transactionId=${id}`
+    );
+    const data = response.data;
+    setDeletedTransaction(data.transaction);
+    console.log("This is the response", response.data);
+  };
+
+  const restoreTransactionToBackend = async () => {
+    // console.log("Testing, this is the id", id);
+    console.log("this is the deleted transaction", deletedTransaction);
+    const response = await axios.delete(
+      `/api/mongoDB/deleteTransaction?transaction=${deletedTransaction}`
+    );
+    const data = await response.data;
+    return data.transaction; // Assuming the API responds with the transaction data
+  };
+
   // Getting the column data from the getColumns function
-  const columns = getColumns(deleteTransaction);
+  const columns = getColumns(
+    deleteTransaction,
+    deleteTransactionFromBackend,
+    restoreTransactionToBackend
+  );
 
   return (
     <Tabs defaultValue="transactions" className="">
