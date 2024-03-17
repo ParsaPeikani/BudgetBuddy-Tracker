@@ -120,7 +120,8 @@ export default function Dashboard() {
             restoreTransactionToBackend(
               deletedTransaction,
               deletedTransactionIndex,
-              newTransactions
+              newTransactions,
+              data.transaction
             ),
         },
       }
@@ -131,20 +132,26 @@ export default function Dashboard() {
   const restoreTransactionToBackend = async (
     deletedTransaction: any,
     deletedTransactionIndex: number,
-    newTransactions: any
+    newTransactions: any,
+    originalTransaction: any
   ) => {
-    // Putting the deleted transaction back into the transactions array
-    newTransactions.splice(deletedTransactionIndex, 0, deletedTransaction);
-    setTransactions([...newTransactions]);
-    // console.log("Testing, this is the id", id);
-    // console.log("this is the deleted transaction", deletedTransaction);
-    // const response = await axios.post(
-    //   "/api/mongoDB/postTransaction",
-    //   deletedTransaction
-    // );
-    // const data = await response.data;
-    // console.log("This is the response", data);
-    // return data.transaction; // Assuming the API responds with the transaction data
+    try {
+      // Putting the deleted transaction back into the transactions array
+      newTransactions.splice(deletedTransactionIndex, 0, deletedTransaction);
+      setTransactions([...newTransactions]);
+
+      // Putting the deleted transaction back into the database
+      const response = await axios.post(
+        "/api/mongoDB/postTransaction",
+        originalTransaction
+      );
+      const data = await response.data;
+    } catch (error) {
+      console.error(
+        "There was an error storing the transaction from Undo!",
+        error
+      );
+    }
   };
 
   // Getting the column data from the getColumns function

@@ -11,7 +11,7 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const transactions = await Transaction.find({}); // Fetch all transactions
+      const transactions = await Transaction.find({}).sort({ date: -1 }); // Fetch all transactions
       res.status(200).json(transactions);
     } catch (error) {
       res.status(500).json({ message: "Error fetching transactions" });
