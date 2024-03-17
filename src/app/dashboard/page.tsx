@@ -141,11 +141,27 @@ export default function Dashboard() {
       setTransactions([...newTransactions]);
 
       // Putting the deleted transaction back into the database
-      const response = await axios.post(
-        "/api/mongoDB/postTransaction",
-        originalTransaction
-      );
-      const data = await response.data;
+      const response = await axios
+        .post("/api/mongoDB/postTransaction", originalTransaction)
+        .then(() => {
+          {
+            toast(
+              `Your ${
+                deletedTransaction.transaction
+                  ? deletedTransaction.transaction
+                  : ""
+              } transaction has been restored :)`,
+              {
+                position: "top-center",
+                style: {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }, // Centering the text
+              }
+            );
+          }
+        });
     } catch (error) {
       console.error(
         "There was an error storing the transaction from Undo!",

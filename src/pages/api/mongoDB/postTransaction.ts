@@ -11,7 +11,6 @@ export default async function handler(
 
   if (req.method === "POST") {
     // Assuming the transaction object is sent in the request body
-    console.log("this is hte request body data", req.body);
     const transactionData = req.body;
 
     try {
