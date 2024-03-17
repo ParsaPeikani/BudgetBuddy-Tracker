@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
+import { toast } from "sonner";
 // import PieChartComponent from "@/components/charts/pie";
 // import LineChartComponent from "@/components/charts/line";
 
@@ -25,12 +26,17 @@ export default function Dashboard() {
   //       console.error("There was an error!", error);
   //     }
   //   };
+  // interface Transaction {
+  //   id: string; // Assuming id is a string, adjust types accordingly
+  //   date: Date; // Adjust according to the actual data type, e.g., string or Date
+  //   transaction: string;
+  //   amount: number;
+  //   category: string;
+  //   verified: boolean;
+  // }
 
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<Payment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const [deletedTransaction, setDeletedTransaction] = useState(null);
-
-  let deletedTransaction: any;
 
   useEffect(() => {
     setIsLoading(true); // Start loading
@@ -63,42 +69,86 @@ export default function Dashboard() {
   }, []);
 
   const deleteTransaction = (transactionId: string) => {
+    // finding the index of the transaction with the transactionId
+    let deletedTransactionIndex = transactions.findIndex(
+      (transaction: any) => transaction.id === transactionId
+    );
+    const deletedTransaction = transactions[deletedTransactionIndex];
+
     // Delete transaction with the transactionId from the transactions array
     const newTransactions = transactions.filter(
       (transaction: any) => transaction.id !== transactionId
     );
+
     setTransactions(newTransactions);
+    deleteTransactionFromBackend(
+      transactionId,
+      deletedTransaction,
+      deletedTransactionIndex,
+      newTransactions
+    );
   };
 
   // This function is used to delete a transaction from the backend
-  const deleteTransactionFromBackend = async (id: string) => {
+  const deleteTransactionFromBackend = async (
+    id: string,
+    deletedTransaction: any,
+    deletedTransactionIndex: number,
+    newTransactions: any
+  ) => {
     const response = await axios.delete(
       `/api/mongoDB/deleteTransaction?transactionId=${id}`
     );
     const data = response.data;
-    // await setDeletedTransaction(data.transaction);
-    deletedTransaction = data.transaction;
-    console.log("This is the response", data.transaction);
+    toast(
+      `Your ${
+        data.transaction.transaction ? data.transaction.transaction : ""
+      } transaction has been deleted`,
+      {
+        description: new Date().toLocaleString("en-US", {
+          weekday: "long", // "Sunday"
+          year: "numeric", // "2023"
+          month: "long", // "December"
+          day: "2-digit", // "03"
+          hour: "numeric", // "9"
+          minute: "2-digit", // "00"
+          hour12: true, // AM/PM
+        }),
+        action: {
+          label: "Undo",
+          onClick: () =>
+            restoreTransactionToBackend(
+              deletedTransaction,
+              deletedTransactionIndex,
+              newTransactions
+            ),
+        },
+      }
+    ),
+      console.log("This is the response", data.transaction);
   };
 
-  const restoreTransactionToBackend = async () => {
+  const restoreTransactionToBackend = async (
+    deletedTransaction: any,
+    deletedTransactionIndex: number,
+    newTransactions: any
+  ) => {
+    // Putting the deleted transaction back into the transactions array
+    newTransactions.splice(deletedTransactionIndex, 0, deletedTransaction);
+    setTransactions([...newTransactions]);
     // console.log("Testing, this is the id", id);
-    console.log("this is the deleted transaction", deletedTransaction);
-    const response = await axios.post(
-      "/api/mongoDB/postTransaction",
-      deletedTransaction
-    );
-    const data = await response.data;
-    console.log("This is the response", data);
-    return data.transaction; // Assuming the API responds with the transaction data
+    // console.log("this is the deleted transaction", deletedTransaction);
+    // const response = await axios.post(
+    //   "/api/mongoDB/postTransaction",
+    //   deletedTransaction
+    // );
+    // const data = await response.data;
+    // console.log("This is the response", data);
+    // return data.transaction; // Assuming the API responds with the transaction data
   };
 
   // Getting the column data from the getColumns function
-  const columns = getColumns(
-    deleteTransaction,
-    deleteTransactionFromBackend,
-    restoreTransactionToBackend
-  );
+  const columns = getColumns(deleteTransaction);
 
   return (
     <Tabs defaultValue="transactions" className="">

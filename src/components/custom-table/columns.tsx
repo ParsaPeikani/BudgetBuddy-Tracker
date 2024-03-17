@@ -26,20 +26,8 @@ export type Payment = {
   verified: boolean;
 };
 
-// const [lastDeleted, setLastDeleted] = useState(null);
-
-// This function is used to delete a transaction from the backend
-// const deleteTransactionFromBackend = async (id: string) => {
-//   const response = await axios.delete(
-//     `/api/mongoDB/deleteTransaction?transactionId=${id}`
-//   );
-//   console.log("This is the response", response.data);
-// };
-
 export const getColumns = (
-  deleteTransaction: (id: string) => void,
-  deleteTransactionFromBackend: (id: string) => void,
-  restoreTransactionToBackend: () => void
+  deleteTransaction: (id: string) => void
 ): ColumnDef<Payment>[] => [
   {
     id: "select",
@@ -191,30 +179,7 @@ export const getColumns = (
                 />
 
                 <DropdownMenuItem
-                  onClick={() => [
-                    deleteTransactionFromBackend(transaction.id),
-                    deleteTransaction(transaction.id),
-                    toast(
-                      `Your ${
-                        transaction.transaction ? transaction.transaction : ""
-                      } transaction has been deleted`,
-                      {
-                        description: new Date().toLocaleString("en-US", {
-                          weekday: "long", // "Sunday"
-                          year: "numeric", // "2023"
-                          month: "long", // "December"
-                          day: "2-digit", // "03"
-                          hour: "numeric", // "9"
-                          minute: "2-digit", // "00"
-                          hour12: true, // AM/PM
-                        }),
-                        action: {
-                          label: "Undo",
-                          onClick: () => restoreTransactionToBackend(),
-                        },
-                      }
-                    ),
-                  ]}
+                  onClick={() => [deleteTransaction(transaction.id)]}
                 >
                   Delete
                 </DropdownMenuItem>
