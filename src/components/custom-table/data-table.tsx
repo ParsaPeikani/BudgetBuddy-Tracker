@@ -8,7 +8,6 @@ import { RowDropBox } from "../row-size/row-size";
 
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   SortingState,
   VisibilityState,
@@ -46,9 +45,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   let [currentPage, setCurrentPage] = React.useState(1);
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [filtering, setFiltering] = React.useState("");
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -59,19 +56,19 @@ export function DataTable<TData, TValue>({
   };
 
   const table = useReactTable({
-    data,
     columns,
+    data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setFiltering,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
+      globalFilter: filtering,
       columnVisibility,
       rowSelection,
     },
@@ -83,12 +80,8 @@ export function DataTable<TData, TValue>({
         <div className="flex">
           <Input
             placeholder="Filter transactions..."
-            value={
-              (table.getColumn("transaction")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("transaction")?.setFilterValue(event.target.value)
-            }
+            value={filtering}
+            onChange={(event) => setFiltering(event.target.value)}
             className="w-72"
           />
         </div>

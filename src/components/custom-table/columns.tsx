@@ -82,6 +82,7 @@ export const getColumns = (
         </Button>
       );
     },
+    enableColumnFilter: true,
     cell: ({ row }) => {
       return <div className="pl-4">{row.getValue("transaction")}</div>;
     },

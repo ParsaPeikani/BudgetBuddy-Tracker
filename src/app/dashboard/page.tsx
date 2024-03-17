@@ -52,7 +52,7 @@ export default function Dashboard() {
         const Columns = fulltransactions.map((transaction: any) => ({
           id: transaction.transactionId,
           date: transaction.date,
-          transaction: transaction.merchantName,
+          transaction: transaction.merchantName || "",
           amount: transaction.amount,
           category: transaction.category[0],
           verified: transaction.pending,
