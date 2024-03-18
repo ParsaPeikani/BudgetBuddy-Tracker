@@ -10,21 +10,20 @@ export default async function handler(
   await connectDB();
 
   if (req.method === "DELETE") {
-    const deletedTransactionsWithIndex = req.body;
+    const deletedTransactions = req.body;
     try {
       let fullDeletedTransactionData = [];
       // First store all the transaction in an array to send to the client for undo
-      for (let i = 0; i < deletedTransactionsWithIndex.length; i++) {
-        const transactionId = deletedTransactionsWithIndex[i].transaction.id;
+      for (let i = 0; i < deletedTransactions.length; i++) {
+        const transactionId = deletedTransactions[i].id;
         const transaction = await Transaction.findOne({
           transactionId: transactionId,
         });
         fullDeletedTransactionData.push(transaction);
       }
       // Respond with the deleted transaction data
-      for (let i = 0; i < deletedTransactionsWithIndex.length; i++) {
-        const transactionId = deletedTransactionsWithIndex[i].transaction.id;
-        console.log("This is the transactionId", transactionId);
+      for (let i = 0; i < deletedTransactions.length; i++) {
+        const transactionId = deletedTransactions[i].id;
         await Transaction.deleteOne({ transactionId: transactionId });
       }
       res.status(200).json({

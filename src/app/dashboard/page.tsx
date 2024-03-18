@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import Loading from "./loading";
 import { toast } from "sonner";
 import { networkInterfaces } from "os";
+import { of } from "svix/dist/openapi/rxjsStub";
 // import PieChartComponent from "@/components/charts/pie";
 // import LineChartComponent from "@/components/charts/line";
 
@@ -71,25 +72,19 @@ export default function Dashboard() {
 
   const deleteTransaction = (transactionId: string) => {
     // finding the index of the transaction with the transactionId
-    let deletedTransactionIndex = transactions.findIndex(
+    const deletedTransaction = transactions.find(
       (transaction: any) => transaction.id === transactionId
     );
-    const deletedTransaction = transactions[deletedTransactionIndex];
-    console.log("thi is the index", deletedTransactionIndex);
 
     // Delete transaction with the transactionId from the transactions array
-    console.log("thi is the transaction originral: ", transactions);
     const newTransactions = transactions.filter(
       (transaction: any) => transaction.id !== transactionId
     );
-    console.log("this is the transaction id", transactionId);
 
     setTransactions([...newTransactions]);
-    console.log("this is the new transaction array", newTransactions);
     deleteTransactionFromBackend(
       transactionId,
       deletedTransaction,
-      deletedTransactionIndex,
       newTransactions
     );
   };
@@ -98,14 +93,12 @@ export default function Dashboard() {
   const deleteTransactionFromBackend = async (
     id: string,
     deletedTransaction: any = null,
-    deletedTransactionIndex: number = 0,
     newTransactions: any = null
   ) => {
     const response = await axios.delete(
       `/api/mongoDB/deleteTransaction?transactionId=${id}`
     );
     const data = response.data;
-    console.log("this is the new transactons array", newTransactions);
 
     toast(
       `Your ${
@@ -126,138 +119,21 @@ export default function Dashboard() {
           onClick: () =>
             restoreTransactionToBackend(
               deletedTransaction,
-              deletedTransactionIndex,
               newTransactions,
               data.transaction
             ),
         },
       }
-    ),
-      console.log("This is the response", data.transaction);
-  };
-
-  const deleteAllSelectedRows = async (table: any) => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    console.log("this is the selected rows", selectedRows);
-
-    const deletedTransactionsWithIndex = selectedRows.map((row: any) => {
-      const index = transactions.findIndex(
-        (t: any) => t.id === (row.original as { id: string }).id
-      );
-      return {
-        index,
-        transaction: row.original,
-      };
-    });
-    console.log(
-      "this is the deleted transactions with indexes",
-      deletedTransactionsWithIndex
     );
-
-    // Now you can use deletedTransactionsWithIndex to filter out transactions or for other operations
-    const newTransactions = transactions.filter(
-      (transaction: any) =>
-        !deletedTransactionsWithIndex.some(
-          (item: any) => item.transaction.id === transaction.id
-        )
-    );
-
-    setTransactions(newTransactions);
-
-    await deleteMultipleTransactionsFromBackend(
-      deletedTransactionsWithIndex,
-      newTransactions
-    );
-
-    table.resetRowSelection();
-  };
-
-  const deleteMultipleTransactionsFromBackend = async (
-    deletedTransactionsWithIndex: any,
-    updatedTransactions: any
-  ) => {
-    try {
-      console.log("before", deletedTransactionsWithIndex);
-      const response = await axios.delete(
-        "/api/mongoDB/deleteMultipleTransactions",
-        {
-          data: deletedTransactionsWithIndex,
-        }
-      );
-      const fullDeletedTransactionData =
-        response.data.fullDeletedTransactionData;
-      console.log("this is the response from the backend", response.data);
-      toast(`Multiple transactions have been deleted!`, {
-        description: new Date().toLocaleString("en-US", {
-          weekday: "long", // "Sunday"
-          year: "numeric", // "2023"
-          month: "long", // "December"
-          day: "2-digit", // "03"
-          hour: "numeric", // "9"
-          minute: "2-digit", // "00"
-          hour12: true, // AM/PM
-        }),
-        action: {
-          label: "Undo",
-          onClick: () =>
-            restoreMultipleTransactionsToBackend(
-              deletedTransactionsWithIndex,
-              updatedTransactions,
-              fullDeletedTransactionData
-            ),
-        },
-      });
-    } catch (error) {
-      console.error("There was an error deleting the transaction!", error);
-    }
-  };
-
-  const restoreMultipleTransactionsToBackend = async (
-    deletedTransactionIndex: any,
-    updatedTransactions: any,
-    fullDeletedTransactionData: any
-  ) => {
-    let newTransactions = [...updatedTransactions];
-    try {
-      for (let i = 0; i < deletedTransactionIndex.length; i++) {
-        const deletedTransaction = deletedTransactionIndex[i].transaction;
-        newTransactions = [...newTransactions, deletedTransaction];
-      }
-      newTransactions.sort(
-        (a: any, b: any) =>
-          new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      setTransactions([...newTransactions]);
-      for (let i = 0; i < fullDeletedTransactionData.length; i++) {
-        const transaction = fullDeletedTransactionData[i];
-        await axios.post("/api/mongoDB/postTransaction", transaction);
-      }
-      toast(`Multiple transactions have been restored :)`, {
-        position: "top-center",
-        style: {
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }, // Centering the text
-      });
-    } catch (e) {
-      console.error("There was an error storing the transaction from Undo!", e);
-    }
   };
 
   const restoreTransactionToBackend = async (
     deletedTransaction: any,
-    deletedTransactionIndex: number,
     newTransactions: any,
     originalTransaction: any
   ) => {
     try {
-      // Putting the deleted transaction back into the transactions array
-      // newTransactions.splice(deletedTransactionIndex, 0, deletedTransaction);
-      // setTransactions([...newTransactions]);
-      // Add the deleted transaction back into the transactions array without specifying an index
       const currentTransactions = [...transactions];
-      console.log("these are the restore transactions", transactions);
 
       if (!currentTransactions.some((t) => t.id === deletedTransaction.id)) {
         newTransactions = [...newTransactions, deletedTransaction];
@@ -271,9 +147,6 @@ export default function Dashboard() {
       } else {
         setTransactions(currentTransactions);
       }
-
-      // Update the transactions state with the newly sorted array
-
       // Putting the deleted transaction back into the database
       const response = await axios
         .post("/api/mongoDB/postTransaction", originalTransaction)
@@ -301,6 +174,96 @@ export default function Dashboard() {
         "There was an error storing the transaction from Undo!",
         error
       );
+    }
+  };
+
+  const deleteAllSelectedRows = async (table: any) => {
+    const selectedRows = table.getFilteredSelectedRowModel().rows;
+
+    const deletedTransactions = selectedRows.map((row: any) => {
+      return row.original;
+    });
+
+    // Now you can use deletedTransactions to filter out transactions or for other operations
+    const newTransactions = transactions.filter(
+      (transaction: any) =>
+        !deletedTransactions.some((item: any) => item.id === transaction.id)
+    );
+
+    setTransactions(newTransactions);
+
+    await deleteMultipleTransactionsFromBackend(
+      deletedTransactions,
+      newTransactions
+    );
+
+    table.resetRowSelection();
+  };
+
+  const deleteMultipleTransactionsFromBackend = async (
+    deletedTransactions: any,
+    updatedTransactions: any
+  ) => {
+    try {
+      const response = await axios.delete(
+        "/api/mongoDB/deleteMultipleTransactions",
+        {
+          data: deletedTransactions,
+        }
+      );
+      const fullDeletedTransactionData =
+        response.data.fullDeletedTransactionData;
+      toast(`Multiple transactions have been deleted!`, {
+        description: new Date().toLocaleString("en-US", {
+          weekday: "long", // "Sunday"
+          year: "numeric", // "2023"
+          month: "long", // "December"
+          day: "2-digit", // "03"
+          hour: "numeric", // "9"
+          minute: "2-digit", // "00"
+          hour12: true, // AM/PM
+        }),
+        action: {
+          label: "Undo",
+          onClick: () =>
+            restoreMultipleTransactionsToBackend(
+              deletedTransactions,
+              updatedTransactions,
+              fullDeletedTransactionData
+            ),
+        },
+      });
+    } catch (error) {
+      console.error("There was an error deleting the transaction!", error);
+    }
+  };
+
+  const restoreMultipleTransactionsToBackend = async (
+    deletedTransactions: any,
+    updatedTransactions: any,
+    fullDeletedTransactionData: any
+  ) => {
+    try {
+      let newTransactions = [...updatedTransactions, ...deletedTransactions];
+      newTransactions.sort(
+        (a: any, b: any) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      setTransactions([...newTransactions]);
+
+      for (const deletedTransaction of fullDeletedTransactionData) {
+        await axios.post("/api/mongoDB/postTransaction", deletedTransaction);
+      }
+      toast(`Multiple transactions have been restored :)`, {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }, // Centering the text
+      });
+    } catch (e) {
+      console.error("There was an error storing the transaction from Undo!", e);
     }
   };
 
