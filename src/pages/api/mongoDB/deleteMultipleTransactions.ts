@@ -12,6 +12,15 @@ export default async function handler(
   if (req.method === "DELETE") {
     const deletedTransactionsWithIndex = req.body;
     try {
+      let fullDeletedTransactionData = [];
+      // First store all the transaction in an array to send to the client for undo
+      for (let i = 0; i < deletedTransactionsWithIndex.length; i++) {
+        const transactionId = deletedTransactionsWithIndex[i].transaction.id;
+        const transaction = await Transaction.findOne({
+          transactionId: transactionId,
+        });
+        fullDeletedTransactionData.push(transaction);
+      }
       // Respond with the deleted transaction data
       for (let i = 0; i < deletedTransactionsWithIndex.length; i++) {
         const transactionId = deletedTransactionsWithIndex[i].transaction.id;
@@ -20,7 +29,7 @@ export default async function handler(
       }
       res.status(200).json({
         message: `Transactions Deleted Successfully`,
-        deletedTransactionsWithIndex,
+        fullDeletedTransactionData,
       });
     } catch (error) {
       res.status(500).json({ message: "Error Deleting Transactions" });

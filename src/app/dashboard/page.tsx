@@ -9,6 +9,7 @@ import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import { toast } from "sonner";
+import { networkInterfaces } from "os";
 // import PieChartComponent from "@/components/charts/pie";
 // import LineChartComponent from "@/components/charts/line";
 
@@ -163,13 +164,17 @@ export default function Dashboard() {
 
     setTransactions(newTransactions);
 
-    await deleteMultipleTransactionsFromBackend(deletedTransactionsWithIndex);
+    await deleteMultipleTransactionsFromBackend(
+      deletedTransactionsWithIndex,
+      newTransactions
+    );
 
     table.resetRowSelection();
   };
 
   const deleteMultipleTransactionsFromBackend = async (
-    deletedTransactionsWithIndex: any
+    deletedTransactionsWithIndex: any,
+    updatedTransactions: any
   ) => {
     try {
       console.log("before", deletedTransactionsWithIndex);
@@ -179,6 +184,8 @@ export default function Dashboard() {
           data: deletedTransactionsWithIndex,
         }
       );
+      const fullDeletedTransactionData =
+        response.data.fullDeletedTransactionData;
       console.log("this is the response from the backend", response.data);
       toast(`Multiple transactions have been deleted!`, {
         description: new Date().toLocaleString("en-US", {
@@ -193,7 +200,11 @@ export default function Dashboard() {
         action: {
           label: "Undo",
           onClick: () =>
-            restoreMultipleTransactionsToBackend(deletedTransactionsWithIndex),
+            restoreMultipleTransactionsToBackend(
+              deletedTransactionsWithIndex,
+              updatedTransactions,
+              fullDeletedTransactionData
+            ),
         },
       });
     } catch (error) {
@@ -202,8 +213,37 @@ export default function Dashboard() {
   };
 
   const restoreMultipleTransactionsToBackend = async (
-    deletedTransactionIndex: any
-  ) => {};
+    deletedTransactionIndex: any,
+    updatedTransactions: any,
+    fullDeletedTransactionData: any
+  ) => {
+    let newTransactions = [...updatedTransactions];
+    try {
+      for (let i = 0; i < deletedTransactionIndex.length; i++) {
+        const deletedTransaction = deletedTransactionIndex[i].transaction;
+        newTransactions = [...newTransactions, deletedTransaction];
+      }
+      newTransactions.sort(
+        (a: any, b: any) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      setTransactions([...newTransactions]);
+      for (let i = 0; i < fullDeletedTransactionData.length; i++) {
+        const transaction = fullDeletedTransactionData[i];
+        await axios.post("/api/mongoDB/postTransaction", transaction);
+      }
+      toast(`Multiple transactions have been restored :)`, {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }, // Centering the text
+      });
+    } catch (e) {
+      console.error("There was an error storing the transaction from Undo!", e);
+    }
+  };
 
   const restoreTransactionToBackend = async (
     deletedTransaction: any,
