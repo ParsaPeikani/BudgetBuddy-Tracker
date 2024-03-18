@@ -163,7 +163,7 @@ export default function Dashboard() {
 
     setTransactions(newTransactions);
 
-    deleteMultipleTransactionsFromBackend(deletedTransactionsWithIndex);
+    await deleteMultipleTransactionsFromBackend(deletedTransactionsWithIndex);
 
     table.resetRowSelection();
   };
@@ -172,40 +172,38 @@ export default function Dashboard() {
     deletedTransactionsWithIndex: any
   ) => {
     try {
-      const response = await axios.post(
+      console.log("before", deletedTransactionsWithIndex);
+      const response = await axios.delete(
         "/api/mongoDB/deleteMultipleTransactions",
-        deletedTransactionsWithIndex
-      );
-      console.log("this is the response from the backend", response.data);
-      toast(
-        `Your ${
-          response.data.transaction.merchantName
-            ? response.data.transaction.merchantName
-            : ""
-        } transactions have been deleted`,
         {
-          description: new Date().toLocaleString("en-US", {
-            weekday: "long", // "Sunday"
-            year: "numeric", // "2023"
-            month: "long", // "December"
-            day: "2-digit", // "03"
-            hour: "numeric", // "9"
-            minute: "2-digit", // "00"
-            hour12: true, // AM/PM
-          }),
-          action: {
-            label: "Undo",
-            onClick: () =>
-              restoreMultipleTransactionsToBackend(
-                deletedTransactionsWithIndex
-              ),
-          },
+          data: deletedTransactionsWithIndex,
         }
       );
+      console.log("this is the response from the backend", response.data);
+      toast(`Multiple transactions have been deleted!`, {
+        description: new Date().toLocaleString("en-US", {
+          weekday: "long", // "Sunday"
+          year: "numeric", // "2023"
+          month: "long", // "December"
+          day: "2-digit", // "03"
+          hour: "numeric", // "9"
+          minute: "2-digit", // "00"
+          hour12: true, // AM/PM
+        }),
+        action: {
+          label: "Undo",
+          onClick: () =>
+            restoreMultipleTransactionsToBackend(deletedTransactionsWithIndex),
+        },
+      });
     } catch (error) {
       console.error("There was an error deleting the transaction!", error);
     }
   };
+
+  const restoreMultipleTransactionsToBackend = async (
+    deletedTransactionIndex: any
+  ) => {};
 
   const restoreTransactionToBackend = async (
     deletedTransaction: any,
