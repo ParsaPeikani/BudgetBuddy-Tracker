@@ -4,7 +4,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {

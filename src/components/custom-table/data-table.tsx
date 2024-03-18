@@ -37,11 +37,15 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  deleteAllSelectedRows: (
+    table: any
+  ) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  deleteAllSelectedRows,
 }: DataTableProps<TData, TValue>) {
   let [currentPage, setCurrentPage] = React.useState(1);
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -74,6 +78,19 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  // const deleteAllSelectedRows = () => {
+  //   const selectedRows = table.getFilteredSelectedRowModel().rows;
+  //   const idsAndIndexesToDelete = selectedRows.map(row => ({
+  //     id: (row.original as { id: string }).id,
+  //     index: transactions.findIndex(t => t.id === (row.original as { id: string }).id)
+  //   }));
+  //   for (let i = 0; i < selectedRows.length; i++) {
+  //     console.log("Deleting", (selectedRows[i].original as { id: string }).id);
+  //     deleteTransaction((selectedRows[i].original as { id: string }).id);
+  //   }
+  //   table.resetRowSelection();
+  // };
+  // console.log("result", table.getFilteredSelectedRowModel().rows);
   return (
     <div>
       <div className="flex py-4 justify-between">
@@ -87,15 +104,19 @@ export function DataTable<TData, TValue>({
         </div>
 
         <div className="flex">
-          <Button
-            variant="outline"
-            className="flex"
-            onClick={() => {
-              console.log("Delete");
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          {table.getFilteredSelectedRowModel().rows.length > 0 && (
+            <Button
+              variant="outline"
+              className="flex"
+              onClick={() => {
+                console.log("Delete");
+                deleteAllSelectedRows(table);
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-2">

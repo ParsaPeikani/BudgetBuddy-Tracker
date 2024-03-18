@@ -17,11 +17,18 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export function DrawerDemo({ transaction, deleteTransaction }: any) {
+export function DrawerDemo({
+  transaction,
+  deleteTransaction,
+}: {
+  transaction: any;
+  deleteTransaction: Function;
+}) {
   // Define a state variable to store the fetched transaction
   const [originalTransaction, setOriginalTransaction] = useState(null);
   //   console.log("This is the transaction", transaction);
-  const date = new Date(transaction.date);
+  // const date = new Date(transaction.date);
+  const date = transaction.date ? new Date(transaction.date) : new Date();
 
   const options: DateTimeFormatOptions = {
     year: "numeric",
@@ -29,13 +36,6 @@ export function DrawerDemo({ transaction, deleteTransaction }: any) {
     day: "numeric",
   };
   const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
-
-  const deleteTransactionFromBackend = async (id: string) => {
-    const response = await axios.delete(
-      `/api/mongoDB/deleteTransaction?transactionId=${id}`
-    );
-    // console.log("This is the response", response);
-  };
 
   useEffect(() => {
     const fetchTransaction = async () => {
@@ -103,10 +103,7 @@ export function DrawerDemo({ transaction, deleteTransaction }: any) {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => [
-                  deleteTransactionFromBackend(transaction.id),
-                  deleteTransaction(transaction.id),
-                ]}
+                onClick={() => [deleteTransaction(transaction.id)]}
               >
                 <TrashIcon className="h-4 w-4" />
               </Button>
