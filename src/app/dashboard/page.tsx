@@ -15,27 +15,27 @@ import { of } from "svix/dist/openapi/rxjsStub";
 // import LineChartComponent from "@/components/charts/line";
 
 export default function Dashboard() {
-  // const { session } = useSession();
-  // const user_id = session?.user.id;
+  const { session } = useSession();
+  const user_id = session?.user.id;
   // Uncomment this function to store the transactions in the database for the development environment
-  // const getTrans = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `/api/plaid/transactions?userId=${user_id}`
-  //       );
-  //       console.log(response.data.latest_transactions);
-  //     } catch (error) {
-  //       console.error("There was an error!", error);
-  //     }
-  //   };
-  // interface Transaction {
-  //   id: string; // Assuming id is a string, adjust types accordingly
-  //   date: Date; // Adjust according to the actual data type, e.g., string or Date
-  //   transaction: string;
-  //   amount: number;
-  //   category: string;
-  //   verified: boolean;
-  // }
+  const getTrans = async () => {
+    try {
+      const response = await axios.get(
+        `/api/plaid/transactions?userId=${user_id}`
+      );
+      console.log(response.data.latest_transactions);
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+  };
+  interface Transaction {
+    id: string; // Assuming id is a string, adjust types accordingly
+    date: Date; // Adjust according to the actual data type, e.g., string or Date
+    transaction: string;
+    amount: number;
+    category: string;
+    verified: boolean;
+  }
 
   const [transactions, setTransactions] = useState<Payment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
