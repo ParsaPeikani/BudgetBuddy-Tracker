@@ -47,7 +47,7 @@ export function DrawerDemo({
           `/api/mongoDB/findTransaction?transactionId=${transaction.id}`
         );
         const data = response.data;
-        console.log("this is the data", data);
+        // console.log("this is the data", data);
         setOriginalTransaction(data); // Update state with the fetched transaction
       } catch (error) {
         console.error("Failed to fetch transaction:", error);
