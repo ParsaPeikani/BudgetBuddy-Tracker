@@ -21,9 +21,11 @@ import { Payment } from "../custom-table/columns";
 export function DrawerDemo({
   transaction,
   deleteTransaction,
+  title,
 }: {
   transaction: any;
   deleteTransaction: Function;
+  title: string;
 }) {
   // Define a state variable to store the fetched transaction
   const [originalTransaction, setOriginalTransaction] = useState<any>(null);
@@ -66,7 +68,7 @@ export function DrawerDemo({
           variant="outline"
           className="flex bg-black border-none text-white font-normal "
         >
-          Details
+          {title}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -82,7 +84,9 @@ export function DrawerDemo({
             </DrawerDescription>
             <div className="flex justify-between">
               <div>
-                <h3 className="text-sm text-muted-foreground">Date</h3>
+                <h3 className="text-sm text-center text-muted-foreground">
+                  Date
+                </h3>
                 <h3 className="text-lg font-semibold tracking-tighter">
                   {formattedDate}
                 </h3>
@@ -104,18 +108,25 @@ export function DrawerDemo({
               </div>
             </div>
           </DrawerHeader>
-          <div className="p-4 pb-0">
-            <div className="flex items-center justify-center space-x-2">
+          <div className="">
+            <div className="flex items-center justify-center bg-black rounded-lg shadow-2xl">
               <div className="flex-1 text-center">
-                <div className="text-7xl font-bold tracking-tighter">
-                  {originalTransaction?.amount}
+                <div className="text-6xl font-bold text-gray-200 tracking-tighter shadow-lg">
+                  ${originalTransaction?.amount}
                 </div>
-                <div className="text-[0.70rem] uppercase text-muted-foreground">
+                <div className="text-sm font-light text-gray-500 mt-3">
                   Dollars ({originalTransaction?.currency})
                 </div>
+                <h3 className="text-md text-gray-400 mt-5 bg-gray-900 p-3 rounded-md inline-block shadow">
+                  This transaction was made{" "}
+                  {originalTransaction?.paymentChannel === "in store"
+                    ? "in-store"
+                    : "online"}
+                </h3>
               </div>
             </div>
-            <div className="flex justify-between">
+
+            {/* <div className="flex justify-between">
               <div>
                 <h3 className="text-sm text-muted-foreground">
                   Transaction Id
@@ -124,7 +135,7 @@ export function DrawerDemo({
                   {originalTransaction?.transactionId}
                 </h3>
               </div>
-            </div>
+            </div> */}
             <div className="mt-3 h-[120px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data}>
@@ -143,9 +154,11 @@ export function DrawerDemo({
           </div>
           <DrawerFooter>
             <div className="flex w-full mb-2">
-              <Button className="flex-1 mr-1" variant="secondary">
-                Edit
-              </Button>{" "}
+              <DrawerClose asChild>
+                <Button variant="outline" className="flex-1">
+                  Close
+                </Button>
+              </DrawerClose>
               <Button
                 className="flex-1 ml-1"
                 variant="delete"
@@ -154,9 +167,6 @@ export function DrawerDemo({
                 Delete
               </Button>{" "}
             </div>
-            <DrawerClose asChild>
-              <Button variant="outline">Close</Button>
-            </DrawerClose>
           </DrawerFooter>
         </div>
       </DrawerContent>

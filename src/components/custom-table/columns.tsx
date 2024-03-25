@@ -83,7 +83,20 @@ export const getColumns = (
     },
     enableColumnFilter: true,
     cell: ({ row }) => {
-      return <div className="pl-4">{row.getValue("transaction")}</div>;
+      const transaction = row.original;
+      return (
+        <div className="pl-4" onClick={() => console.log("CLicked")}>
+          <DrawerDemo
+            transaction={transaction}
+            deleteTransaction={deleteTransaction}
+            title={
+              row.getValue("transaction")
+                ? row.getValue("transaction")
+                : "Unknown"
+            }
+          />
+        </div>
+      );
     },
   },
   {
@@ -176,6 +189,7 @@ export const getColumns = (
                 <DrawerDemo
                   transaction={transaction}
                   deleteTransaction={deleteTransaction}
+                  title="Details"
                 />
 
                 <DropdownMenuItem
