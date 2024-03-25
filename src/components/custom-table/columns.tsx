@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
+import { Edit } from "@/components/edit/edit";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -13,7 +14,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import axios from "axios";
 
 // This type is used to define the shape of our column data.
 export type Payment = {
@@ -184,14 +184,12 @@ export const getColumns = (
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
               </div>
               <div className="flex">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                {/* <DropdownMenuItem>View Details</DropdownMenuItem> */}
+                <Edit transaction={transaction} />
                 <DrawerDemo
                   transaction={transaction}
                   deleteTransaction={deleteTransaction}
                   title="Details"
                 />
-
                 <DropdownMenuItem
                   onClick={() => [deleteTransaction(transaction.id)]}
                 >
