@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 ////////////////////////////
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +36,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 /////////////////////////////
 
 // Define your form validation schema using Zod
@@ -55,9 +56,12 @@ export function Edit({ transaction }: { transaction: any }) {
       amount: transaction.amount,
       date: new Date(transaction.date),
       category: transaction.category,
-      verified: transaction.verified,
+      verified: !transaction.verified,
     },
   });
+
+  const [checkedBox, setCheckedBox] = useState(!transaction.verified);
+
   useEffect(() => {
     setValue("date", new Date(transaction.date));
   }, [transaction.date, setValue]);
@@ -65,6 +69,9 @@ export function Edit({ transaction }: { transaction: any }) {
   const onSubmit = (data: any) => {
     console.log(data);
     // Proceed with your submission logic here...
+  };
+  const onError = (errors: any) => {
+    console.error("Form submission errors:", errors);
   };
   console.log("This is the transaction: ", transaction);
   return (
@@ -85,32 +92,47 @@ export function Edit({ transaction }: { transaction: any }) {
             you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 py-4">
+        <form
+          onSubmit={handleSubmit(onSubmit, onError)}
+          className="grid gap-4 py-4"
+        >
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                placeholder="Enter Transaction Name"
-                defaultValue={`${
-                  transaction.transaction ? transaction.transaction : "Unknown"
-                }`}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Amount
-              </Label>
-              <Input
-                id="username"
-                placeholder="Enter Transaction Amount"
-                defaultValue={`${transaction.amount}`}
-                className="col-span-3"
-              />
-            </div>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    {...field}
+                    id="name"
+                    placeholder="Enter Transaction Name"
+                    className="col-span-3"
+                  />
+                </div>
+              )}
+            />
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field }) => (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="amount" className="text-right">
+                    Amount
+                  </Label>
+                  <Input
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number here
+                    id="amount"
+                    placeholder="Enter Transaction Amount"
+                    type="number"
+                    className="col-span-3"
+                  />
+                </div>
+              )}
+            />
             <Controller
               name="date"
               control={control}
@@ -124,7 +146,7 @@ export function Edit({ transaction }: { transaction: any }) {
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="flex w-full justify-between bg-black text-white"
+                          className="flex w-full justify-between bg-black text-white hover:bg-primary hover:text-white"
                         >
                           {field.value
                             ? format(field.value, "PPP")
@@ -150,39 +172,59 @@ export function Edit({ transaction }: { transaction: any }) {
                 </div>
               )}
             />
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Categories
-              </Label>
-              <Input
-                id="username"
-                placeholder="Enter Transaction Category"
-                defaultValue={`${transaction.category}`}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Verified
-              </Label>
-              <Input
-                id="username"
-                placeholder="Enter Transaction Status"
-                defaultValue={`${transaction.verified}`}
-                className="col-span-3"
-              />
-            </div>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="category" className="text-right">
+                    Categories
+                  </Label>
+                  <Input
+                    {...field}
+                    id="category"
+                    placeholder="Enter Transaction Category"
+                    className="col-span-3"
+                  />
+                </div>
+              )}
+            />
+            <Controller
+              name="verified"
+              control={control}
+              render={({ field: { onChange, value, ref } }) => {
+                console.log("this is the value", value); // This will log 'true' or 'false'
+                return (
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="verified" className="text-right">
+                      Verified
+                    </Label>
+                    <div className="col-span-3 flex items-center">
+                      <Input
+                        id="category"
+                        type="checkbox"
+                        defaultChecked={value}
+                        onChange={(e) => {
+                          onChange(e.target.checked);
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              }}
+            />
           </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              type="submit"
+              // onClick={() => console.log("Submitting the form")}
+            >
+              Save changes
+            </Button>
+          </DialogFooter>
         </form>
-        <DialogFooter>
-          <Button
-            variant="outline"
-            type="submit"
-            onClick={() => console.log("Submitting the form")}
-          >
-            Save changes
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
