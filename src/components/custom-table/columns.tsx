@@ -26,7 +26,8 @@ export type Payment = {
 };
 
 export const getColumns = (
-  deleteTransaction: (id: string) => void
+  deleteTransaction: (id: string) => void,
+  updateTransaction: (transaction: Payment) => void
 ): ColumnDef<Payment>[] => [
   {
     id: "select",
@@ -184,7 +185,10 @@ export const getColumns = (
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
               </div>
               <div className="flex">
-                <Edit transaction={transaction} />
+                <Edit
+                  transaction={transaction}
+                  updateTransaction={updateTransaction}
+                />
                 <DrawerDemo
                   transaction={transaction}
                   deleteTransaction={deleteTransaction}

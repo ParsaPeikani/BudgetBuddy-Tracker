@@ -267,8 +267,22 @@ export default function Dashboard() {
     }
   };
 
+  const updateTransaction = async (data: any) => {
+    // console.log("hello how are you, these are the data: ", data);
+    transactions.map((transaction: any) => {
+      if (transaction.id === data.id) {
+        transaction.transaction = data.transaction;
+        transaction.amount = data.amount;
+        transaction.date = data.date;
+        transaction.category = data.category;
+        transaction.verified = data.verified;
+      }
+    });
+    setTransactions([...transactions]);
+  };
+
   // Getting the column data from the getColumns function
-  const columns = getColumns(deleteTransaction);
+  const columns = getColumns(deleteTransaction, updateTransaction);
 
   return (
     <Tabs defaultValue="transactions" className="">

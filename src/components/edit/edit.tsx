@@ -44,7 +44,13 @@ const transactionSchema = z.object({
   verified: z.boolean(),
 });
 
-export function Edit({ transaction }: { transaction: any }) {
+export function Edit({
+  transaction,
+  updateTransaction,
+}: {
+  transaction: any;
+  updateTransaction: (transaction: any) => void;
+}) {
   const form = useForm({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
@@ -60,7 +66,9 @@ export function Edit({ transaction }: { transaction: any }) {
 
   const onSubmit = (data: any) => {
     console.log("These are the date: ", data);
-    // Proceed with your submission logic here...
+    data.amount = Number(data.amount);
+    data.id = transaction.id;
+    updateTransaction(data);
   };
   const onError = (errors: any) => {
     console.error("Form submission errors:", errors);
