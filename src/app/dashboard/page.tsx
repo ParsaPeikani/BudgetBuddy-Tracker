@@ -268,17 +268,29 @@ export default function Dashboard() {
   };
 
   const updateTransaction = async (data: any) => {
-    // console.log("hello how are you, these are the data: ", data);
     transactions.map((transaction: any) => {
       if (transaction.id === data.id) {
-        transaction.transaction = data.transaction;
+        transaction.transaction = data.name;
         transaction.amount = data.amount;
         transaction.date = data.date;
         transaction.category = data.category;
-        transaction.verified = data.verified;
+        transaction.verified = !data.verified;
       }
     });
     setTransactions([...transactions]);
+    try {
+      await axios.post("/api/mongoDB/updateTransaction", data);
+      toast(`${data.name ? data.name : ""} Transaction has been updated :)`, {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }, // Centering the text
+      });
+    } catch (error) {
+      console.error("There was an error updating the transaction!", error);
+    }
   };
 
   // Getting the column data from the getColumns function
