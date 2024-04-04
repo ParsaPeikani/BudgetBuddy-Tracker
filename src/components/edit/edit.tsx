@@ -65,9 +65,6 @@ export function Edit({
   const [checkedBox, setCheckedBox] = useState(!transaction.verified);
 
   const onSubmit = (data: any) => {
-    console.log("These are the date: ", data);
-    console.log(data.date);
-    console.log(transaction.date);
     data.amount = Number(data.amount);
     if (
       data.amount === transaction.amount &&
@@ -86,7 +83,6 @@ export function Edit({
       });
       return;
     }
-
     data.id = transaction.id;
     updateTransaction(data); // Remove the second argument here
   };

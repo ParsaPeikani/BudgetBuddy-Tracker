@@ -90,11 +90,7 @@ export const getColumns = (
           <DrawerDemo
             transaction={transaction}
             deleteTransaction={deleteTransaction}
-            title={
-              row.getValue("transaction")
-                ? row.getValue("transaction")
-                : "Unknown"
-            }
+            title={row.getValue("transaction")}
           />
         </div>
       );

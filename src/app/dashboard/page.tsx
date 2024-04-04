@@ -54,7 +54,9 @@ export default function Dashboard() {
         const Columns = fulltransactions.map((transaction: any) => ({
           id: transaction.transactionId,
           date: new Date(transaction.date).toLocaleDateString(),
-          transaction: transaction.merchantName || "",
+          transaction: transaction.merchantName
+            ? transaction.merchantName
+            : "UnKnown",
           amount: transaction.amount,
           category: transaction.category[0],
           verified: transaction.pending,
@@ -272,7 +274,7 @@ export default function Dashboard() {
       if (transaction.id === data.id) {
         transaction.transaction = data.name;
         transaction.amount = data.amount;
-        transaction.date = data.date;
+        transaction.date = new Date(data.date).toLocaleDateString();
         transaction.category = data.category;
         transaction.verified = !data.verified;
       }
