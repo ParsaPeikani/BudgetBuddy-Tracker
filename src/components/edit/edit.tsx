@@ -58,7 +58,7 @@ export function Edit({
       amount: transaction.amount.toString(),
       date: new Date(transaction.date),
       category: transaction.category,
-      verified: !transaction.verified,
+      verified: transaction.verified === "Verified" ? true : false,
     },
   });
 
@@ -71,7 +71,7 @@ export function Edit({
       data.name === transaction.transaction &&
       new Date(data.date).getTime() === new Date(transaction.date).getTime() &&
       data.category === transaction.category &&
-      data.verified === !transaction.verified
+      data.verified === (transaction.verified === "Verified" ? true : false)
     ) {
       toast("No changes has been made :)", {
         position: "top-center",

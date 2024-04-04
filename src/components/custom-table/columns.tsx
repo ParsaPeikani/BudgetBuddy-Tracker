@@ -158,8 +158,7 @@ export const getColumns = (
     },
     // Display the boolean value of the verified property as verfiied or unverified
     cell: ({ row }) => {
-      const verified = row.getValue("verified");
-      return <div className="">{verified ? "Pending" : "Verified"}</div>;
+      return <div className="">{row.getValue("verified")}</div>;
     },
   },
   {

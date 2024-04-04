@@ -59,7 +59,7 @@ export default function Dashboard() {
             : "UnKnown",
           amount: transaction.amount,
           category: transaction.category[0],
-          verified: transaction.pending,
+          verified: transaction.pending ? "Pending" : "Verified",
         }));
         setTransactions(Columns);
       });
@@ -276,7 +276,7 @@ export default function Dashboard() {
         transaction.amount = data.amount;
         transaction.date = new Date(data.date).toLocaleDateString();
         transaction.category = data.category;
-        transaction.verified = !data.verified;
+        transaction.verified = data.verified ? "Verified" : "Pending";
       }
     });
     setTransactions([...transactions]);
