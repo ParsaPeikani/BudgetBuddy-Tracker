@@ -32,7 +32,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { useState } from "react";
 
 // Define your form validation schema using Zod
@@ -66,9 +66,29 @@ export function Edit({
 
   const onSubmit = (data: any) => {
     console.log("These are the date: ", data);
+    console.log(data.date);
+    console.log(transaction.date);
     data.amount = Number(data.amount);
+    if (
+      data.amount === transaction.amount &&
+      data.name === transaction.transaction &&
+      new Date(data.date).getTime() === new Date(transaction.date).getTime() &&
+      data.category === transaction.category &&
+      data.verified === !transaction.verified
+    ) {
+      toast("No changes has been made :)", {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      });
+      return;
+    }
+
     data.id = transaction.id;
-    updateTransaction(data);
+    updateTransaction(data); // Remove the second argument here
   };
   const onError = (errors: any) => {
     console.error("Form submission errors:", errors);
