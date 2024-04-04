@@ -53,7 +53,7 @@ export default function Dashboard() {
       fetchTransactions().then((fulltransactions) => {
         const Columns = fulltransactions.map((transaction: any) => ({
           id: transaction.transactionId,
-          date: transaction.date,
+          date: new Date(transaction.date).toLocaleDateString(),
           transaction: transaction.merchantName || "",
           amount: transaction.amount,
           category: transaction.category[0],

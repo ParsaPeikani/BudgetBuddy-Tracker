@@ -65,8 +65,8 @@ export const getColumns = (
       );
     },
     cell: ({ row }) => {
-      const date = new Date(row.getValue("date"));
-      return <div className="pl-4">{date.toLocaleDateString()}</div>;
+      // const date = new Date(row.getValue("date"));
+      return <div className="pl-4">{row.getValue("date")}</div>;
     },
   },
   {
