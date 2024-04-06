@@ -9,35 +9,41 @@ import {
   Rectangle,
 } from "recharts";
 
+let foodData = 0;
+let shoppingData = 0;
+let travelData = 0;
+let transferData = 0;
+let othersData = 0;
+
 const data = [
   {
     name: "Food",
-    uv: 8000,
-    pv: 2400,
+    uv: 200,
+    pv: foodData,
     amt: 2400,
   },
   {
     name: "Shopping",
-    uv: 3000,
-    pv: 1398,
+    uv: 100,
+    pv: shoppingData,
     amt: 2210,
   },
   {
     name: "Travel",
-    uv: 2000,
-    pv: 9800,
+    uv: 500,
+    pv: travelData,
     amt: 2290,
   },
   {
     name: "Transfer",
-    uv: 2780,
-    pv: 3908,
+    uv: 300,
+    pv: transferData,
     amt: 2000,
   },
   {
     name: "Others",
-    uv: 1890,
-    pv: 4800,
+    uv: 20,
+    pv: othersData,
     amt: 2181,
   },
 ];
@@ -116,41 +122,43 @@ const renderCustomAxisTick = ({ x, y, payload }) => {
 };
 
 function getIntroOfPage(label) {
-  if (label === "Page A") {
-    return "Page A is about men's clothing";
+  if (label === "Food") {
+    return "These are your expenses on foods.";
   }
-  if (label === "Page B") {
-    return "Page B is about women's dress";
+  if (label === "Shopping") {
+    return "These are your expenses on shopping.";
   }
-  if (label === "Page C") {
-    return "Page C is about women's bag";
+  if (label === "Travel") {
+    return "These are your expenses on travel.";
   }
-  if (label === "Page D") {
-    return "Page D is about household goods";
+  if (label === "Transfer") {
+    return "These are your expenses on transfering money.";
   }
-  if (label === "Page E") {
-    return "Page E is about food";
-  }
-  if (label === "Page F") {
-    return "Page F is about baby food";
+  if (label === "Others") {
+    return "These are your expenses on other things.";
   }
 }
 
-function CustomTooltip({ payload, label, active }) {
-  if (active) {
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+}: {
+  active: boolean;
+  payload: any[];
+  label: string;
+}) => {
+  if (active && payload && payload.length) {
     return (
-      <div className="-yelow-500">
+      <div className="custom-tooltip">
         <p className="label">{`${label} : ${payload[0].value}`}</p>
-        <p className="intro">{getIntroOfPage(label)}</p>
-        <p className="desc text-yellow-500">
-          Anything you want can be displayed here.
-        </p>
+        <p className="intro text-yellow-500">{getIntroOfPage(label)}</p>
       </div>
     );
   }
 
   return null;
-}
+};
 // Categories: Food, payment, travel, Transfer, Others
 const renderBarChart = () => (
   <BarChart
@@ -169,22 +177,13 @@ const renderBarChart = () => (
     <CartesianGrid strokeDasharray="3 3" />
     <Legend layout="horizontal" align="center" verticalAlign="top" />
 
-    <Tooltip cursor={{ fill: "rgba(255, 255, 255, 0.1)" }} />
+    <Tooltip
+      cursor={{ fill: "rgba(255, 255, 255, 0.1)" }}
+      content={<CustomTooltip />}
+    />
     <Bar dataKey="uv" fill="#00C5C8" />
     <Bar dataKey="pv" fill="#FF6B6B" />
   </BarChart>
 );
 
 export default renderBarChart;
-
-// const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
-//   return (
-//     <text
-//       x={x + width / 2}
-//       y={y}
-//       fill="#666"
-//       textAnchor="middle"
-//       dy={-6}
-//     >{`value: ${value}`}</text>
-//   );
-// };
