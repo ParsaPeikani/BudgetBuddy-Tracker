@@ -9,10 +9,17 @@ import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import { toast } from "sonner";
+import renderLineChart from "@/components/charts/lineChart";
 import { networkInterfaces } from "os";
 import { of } from "svix/dist/openapi/rxjsStub";
+import dynamic from "next/dynamic";
 // import PieChartComponent from "@/components/charts/pie";
 // import LineChartComponent from "@/components/charts/line";
+
+const DynamicLineChart = dynamic(
+  () => import("@/components/charts/lineChart"), // No need to destructure
+  { ssr: false }
+);
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -299,7 +306,7 @@ export default function Dashboard() {
   const columns = getColumns(deleteTransaction, updateTransaction);
 
   return (
-    <Tabs defaultValue="transactions" className="">
+    <Tabs defaultValue="overview" className="">
       <div className="justify-center">
         <Navbar />
         <div className="flex justify-center">
@@ -309,29 +316,41 @@ export default function Dashboard() {
             <TabsTrigger value="balance">Balance</TabsTrigger>
           </TabsList>
         </div>
-        <div className="bg-black p-8 pl-32">
-          <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
-            Welcome back Parsa!
-          </h1>
-          <h1></h1>
-          <p className="text-gray-400 text-xl md:text-2xl">
-            Here is a list of your latest transactions!
-          </p>
-        </div>
 
-        <div className="pl-12">
-          <div className="pl-20 pr-20">
+        <div>
+          <div>
+            <TabsContent value="overview">
+              <div className="bg-black p-8 pl-20">
+                <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                  Welcome back Parsa!
+                </h1>
+              </div>
+              <div>
+                <div className="flex justify-left">
+                  <DynamicLineChart />
+                </div>
+              </div>
+            </TabsContent>
             <TabsContent value="transactions">
-              {/* <Loading /> */}
-              {isLoading || !transactions ? (
-                <Loading />
-              ) : (
-                <DataTable
-                  columns={columns}
-                  data={transactions}
-                  deleteAllSelectedRows={deleteAllSelectedRows}
-                />
-              )}
+              <div className="bg-black p-8 pl-20">
+                <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                  Welcome back Parsa!
+                </h1>
+                <p className="text-gray-400 text-xl md:text-2xl">
+                  Here is a list of your latest transactions!
+                </p>
+              </div>
+              <div className="pl-20 pr-20">
+                {isLoading || !transactions ? (
+                  <Loading />
+                ) : (
+                  <DataTable
+                    columns={columns}
+                    data={transactions}
+                    deleteAllSelectedRows={deleteAllSelectedRows}
+                  />
+                )}
+              </div>
             </TabsContent>
             <br />
 

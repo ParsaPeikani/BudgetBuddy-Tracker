@@ -40,7 +40,7 @@
     "react-dom": "^18",
     "react-google-charts": "^4.0.1",
     "react-hook-form": "^7.51.1",
-    "recharts": "^2.12.2",
+    "recharts": "^2.12.4",
     "shadcn-ui": "^0.8.0",
     "sonner": "^1.4.3",
     "svix": "^1.17.0",
