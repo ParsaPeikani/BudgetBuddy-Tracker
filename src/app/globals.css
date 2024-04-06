@@ -99,3 +99,22 @@
   justify-content: center;
   align-items: center;
 }
+
+.custom-tooltip {
+  background-color: #333; /* Dark background for the tooltip */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  padding: 10px; /* Padding inside the tooltip */
+  color: #e0e0e0; /* Light text color for readability */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean font */
+}
+
+.custom-tooltip .label {
+  margin: 0; /* Remove default margin */
+  color: #e0e0e0; /* Light text color, same as the general tooltip text for consistency */
+}
+
+.custom-tooltip .intro {
+  color: #ffd700; /* Adjusted to use a CSS color name, making the intro text stand out */
+  font-weight: bold; /* Optionally make the intro text bold for emphasis */
+}

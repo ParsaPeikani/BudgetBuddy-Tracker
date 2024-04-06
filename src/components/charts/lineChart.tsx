@@ -23,32 +23,32 @@ console.log("hellosdf");
 const data = [
   {
     name: "Food",
-    uv: 2000,
-    pv: foodData,
+    Budgeted: 2000,
+    Actual: foodData,
     amt: 2400,
   },
   {
     name: "Shopping",
-    uv: 2000,
-    pv: shoppingData,
+    Budgeted: 2000,
+    Actual: shoppingData,
     amt: 2210,
   },
   {
     name: "Travel",
-    uv: 500,
-    pv: travelData,
+    Budgeted: 500,
+    Actual: travelData,
     amt: 2290,
   },
   {
     name: "Transfer",
-    uv: 300,
-    pv: transferData,
+    Budgeted: 300,
+    Actual: transferData,
     amt: 2000,
   },
   {
     name: "Others",
-    uv: 200,
-    pv: othersData,
+    Budgeted: 200,
+    Actual: othersData,
     amt: 2181,
   },
 ];
@@ -157,7 +157,12 @@ const CustomTooltip = ({
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="label">{`${label} : ${payload[0].value}`}</p>
+        <p className="label">{`Expected ${label} : ${parseFloat(
+          payload[0].value
+        ).toFixed(2)}`}</p>
+        <p className="label">{`Budgeted ${label} : ${parseFloat(
+          payload[1].value
+        ).toFixed(2)}`}</p>
         <p className="intro text-yellow-500">{getIntroOfPage(label)}</p>
       </div>
     );
@@ -187,11 +192,11 @@ const getFilteredData = (transactions: any) => {
     }
   });
 
-  data[0].pv = foodData;
-  data[1].pv = shoppingData;
-  data[2].pv = travelData;
-  data[3].pv = -transferData;
-  data[4].pv = othersData;
+  data[0].Actual = foodData;
+  data[1].Actual = shoppingData;
+  data[2].Actual = travelData;
+  data[3].Actual = -transferData;
+  data[4].Actual = othersData;
 };
 
 // Categories: Food, payment, travel, Transfer, Others
@@ -202,29 +207,45 @@ export default function RenderBarChart({
 }): ReturnType<React.FC> {
   getFilteredData(transactions);
   return (
-    <BarChart
-      width={800}
-      height={400}
-      data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 25,
-      }}
-    >
-      <XAxis dataKey="name" tick={renderCustomAxisTick} />
-      <YAxis />
-      <CartesianGrid strokeDasharray="3 3" />
-      <Legend layout="horizontal" align="center" verticalAlign="top" />
+    <div>
+      <h2
+        style={{
+          textAlign: "center",
+          color: "#E0E0E0", // Light grey color; consider using pure white (#FFF) if the glow isn't distinct enough
+          textShadow: "0 0 8px rgba(255, 255, 255, 0.4)", // White glow effect
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          fontSize: "24px",
+          fontWeight: "normal",
+          marginBottom: "20px",
+        }}
+      >
+        Budgeted vs. Actual Expenses
+      </h2>
 
-      <Tooltip
-        cursor={{ fill: "rgba(255, 255, 255, 0.1)" }}
-        content={<CustomTooltip />}
-      />
-      <Bar dataKey="uv" fill="#00C5C8" />
-      <Bar dataKey="pv" fill="#FF6B6B" />
-    </BarChart>
+      <BarChart
+        width={800}
+        height={400}
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 25,
+        }}
+      >
+        <XAxis dataKey="name" tick={renderCustomAxisTick} />
+        <YAxis />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Legend layout="horizontal" align="center" verticalAlign="top" />
+
+        <Tooltip
+          cursor={{ fill: "rgba(255, 255, 255, 0.1)" }}
+          content={<CustomTooltip />}
+        />
+        <Bar dataKey="Budgeted" fill="#00C5C8" />
+        <Bar dataKey="Actual" fill="#FF6B6B" />
+      </BarChart>
+    </div>
   );
 }
 
