@@ -330,7 +330,7 @@ export default function Dashboard() {
               </div>
               <div>
                 <div className="flex justify-left">
-                  <DynamicLineChart />
+                  <DynamicLineChart transactions={transactions} />
                 </div>
               </div>
             </TabsContent>

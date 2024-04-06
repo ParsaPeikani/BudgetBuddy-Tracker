@@ -1,5 +1,7 @@
 "use client";
 
+import { use, useEffect } from "react";
+
 import {
   CartesianGrid,
   XAxis,
@@ -8,6 +10,7 @@ import {
   Legend,
   Rectangle,
 } from "recharts";
+import axios from "axios";
 
 let foodData = 0;
 let shoppingData = 0;
@@ -15,16 +18,18 @@ let travelData = 0;
 let transferData = 0;
 let othersData = 0;
 
+console.log("hellosdf");
+
 const data = [
   {
     name: "Food",
-    uv: 200,
+    uv: 2000,
     pv: foodData,
     amt: 2400,
   },
   {
     name: "Shopping",
-    uv: 100,
+    uv: 2000,
     pv: shoppingData,
     amt: 2210,
   },
@@ -42,13 +47,14 @@ const data = [
   },
   {
     name: "Others",
-    uv: 20,
+    uv: 200,
     pv: othersData,
     amt: 2181,
   },
 ];
 
 import { BarChart, Bar } from "recharts";
+
 const renderCustomAxisTick = ({ x, y, payload }) => {
   let path = "";
   let iconWidth = 20; // Default icon width
@@ -159,31 +165,67 @@ const CustomTooltip = ({
 
   return null;
 };
+
+const getFilteredData = (transactions: any) => {
+  transactions.forEach((transaction) => {
+    switch (transaction.category) {
+      case "Food and Drink":
+        foodData += transaction.amount;
+        break;
+      case "Payment":
+        shoppingData += transaction.amount;
+        break;
+      case "Travel":
+        travelData += transaction.amount;
+        break;
+      case "Transfer":
+        transferData += transaction.amount;
+        break;
+      default:
+        othersData += transaction.amount;
+        break;
+    }
+  });
+
+  data[0].pv = foodData;
+  data[1].pv = shoppingData;
+  data[2].pv = travelData;
+  data[3].pv = -transferData;
+  data[4].pv = othersData;
+};
+
 // Categories: Food, payment, travel, Transfer, Others
-const renderBarChart = () => (
-  <BarChart
-    width={800}
-    height={400}
-    data={data}
-    margin={{
-      top: 5,
-      right: 30,
-      left: 20,
-      bottom: 25,
-    }}
-  >
-    <XAxis dataKey="name" tick={renderCustomAxisTick} />
-    <YAxis />
-    <CartesianGrid strokeDasharray="3 3" />
-    <Legend layout="horizontal" align="center" verticalAlign="top" />
+export default function RenderBarChart({
+  transactions,
+}: {
+  transactions: any;
+}): ReturnType<React.FC> {
+  getFilteredData(transactions);
+  return (
+    <BarChart
+      width={800}
+      height={400}
+      data={data}
+      margin={{
+        top: 5,
+        right: 30,
+        left: 20,
+        bottom: 25,
+      }}
+    >
+      <XAxis dataKey="name" tick={renderCustomAxisTick} />
+      <YAxis />
+      <CartesianGrid strokeDasharray="3 3" />
+      <Legend layout="horizontal" align="center" verticalAlign="top" />
 
-    <Tooltip
-      cursor={{ fill: "rgba(255, 255, 255, 0.1)" }}
-      content={<CustomTooltip />}
-    />
-    <Bar dataKey="uv" fill="#00C5C8" />
-    <Bar dataKey="pv" fill="#FF6B6B" />
-  </BarChart>
-);
+      <Tooltip
+        cursor={{ fill: "rgba(255, 255, 255, 0.1)" }}
+        content={<CustomTooltip />}
+      />
+      <Bar dataKey="uv" fill="#00C5C8" />
+      <Bar dataKey="pv" fill="#FF6B6B" />
+    </BarChart>
+  );
+}
 
-export default renderBarChart;
+// export default renderBarChart;
