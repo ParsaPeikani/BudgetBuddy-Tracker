@@ -6,15 +6,16 @@ import { Payment, getColumns } from "@/components/custom-table/columns";
 import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import Loading from "./loading";
+import { Suspense, useEffect, useState } from "react";
+import { TableLoading } from "@/components/loading/loading";
+import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import renderLineChart from "@/components/charts/lineChart";
 import { networkInterfaces } from "os";
 import { of } from "svix/dist/openapi/rxjsStub";
 import dynamic from "next/dynamic";
-// import PieChartComponent from "@/components/charts/pie";
-// import LineChartComponent from "@/components/charts/line";
+import SelectMonth from "@/components/selectMonth/selectMonth";
+import SelectYear from "@/components/selectYear/selectYear";
 
 const DynamicLineChart = dynamic(
   () => import("@/components/charts/lineChart"), // No need to destructure
@@ -320,17 +321,29 @@ export default function Dashboard() {
         <div>
           <div>
             <TabsContent value="overview">
-              <div className="bg-black p-8 pl-20">
-                <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
-                  Welcome back Parsa!
-                </h1>
-                <p className="text-gray-400 text-xl md:text-2xl">
-                  Here are your charts :)
-                </p>
+              <div className="flex justify-between bg-black p-8 pl-20">
+                <div>
+                  <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                    Welcome back Parsa!
+                  </h1>
+                  <p className="text-gray-400 text-xl md:text-2xl">
+                    Here are your charts :)
+                  </p>
+                </div>
+                <div className="flex">
+                  <div className="mr-2">
+                    <SelectYear />
+                  </div>
+                  <SelectMonth />
+                </div>
               </div>
               <div>
                 <div className="flex justify-left">
-                  <DynamicLineChart transactions={transactions} />
+                  {isLoading ? (
+                    <ChartLoading /> // This will show the Loading component while data is being fetched
+                  ) : (
+                    <DynamicLineChart transactions={transactions} />
+                  )}
                 </div>
               </div>
             </TabsContent>
@@ -343,9 +356,16 @@ export default function Dashboard() {
                   Here is a list of your latest transactions!
                 </p>
               </div>
+              {/* <div className="pl-20 pr-20">
+                  <DataTable
+                    columns={columns}
+                    data={transactions}
+                    deleteAllSelectedRows={deleteAllSelectedRows}
+                  />
+                </div> */}
               <div className="pl-20 pr-20">
                 {isLoading || !transactions ? (
-                  <Loading />
+                  <TableLoading />
                 ) : (
                   <DataTable
                     columns={columns}
