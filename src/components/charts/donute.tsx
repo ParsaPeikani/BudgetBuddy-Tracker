@@ -47,34 +47,51 @@ export default function MyResponsivePie({ data }: { data: any[] }) {
     }
   }
   return (
-    <ResponsivePie
-      data={testingdata}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-      innerRadius={0.5}
-      padAngle={0.7}
-      cornerRadius={3}
-      activeOuterRadiusOffset={8}
-      borderWidth={1}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", 0.2]],
-      }}
-      arcLinkLabelsSkipAngle={10}
-      arcLinkLabelsTextColor="#333333"
-      arcLinkLabelsThickness={2}
-      arcLinkLabelsColor={{ from: "color" }}
-      arcLabelsSkipAngle={10}
-      arcLabelsTextColor={{
-        from: "color",
-        modifiers: [["darker", 2]],
-      }}
-      theme={{
-        labels: {
-          text: {
-            fontSize: 20, // Sets font size for labels
+    <div style={{ height: "450px" }}>
+      <h2
+        style={{
+          textAlign: "center",
+          color: "#E0E0E0", // Light grey color; consider using pure white (#FFF) if the glow isn't distinct enough
+          textShadow: "0 0 8px rgba(255, 255, 255, 0.4)", // White glow effect
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          fontSize: "24px",
+          fontWeight: "normal",
+          marginBottom: "20px",
+        }}
+      >
+        Number of each Transaction Category
+      </h2>
+      <ResponsivePie
+        data={testingdata}
+        margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+        innerRadius={0.5}
+        padAngle={0.7}
+        cornerRadius={3}
+        activeOuterRadiusOffset={8}
+        borderWidth={1}
+        borderColor={{
+          from: "color",
+          modifiers: [["darker", 0.2]],
+        }}
+        arcLinkLabelsSkipAngle={10}
+        arcLinkLabelsTextColor="#333333"
+        arcLinkLabelsThickness={2}
+        arcLinkLabelsColor={{ from: "color" }}
+        arcLabelsSkipAngle={10}
+        arcLabelsTextColor={{
+          from: "color",
+          modifiers: [["darker", 2]],
+        }}
+        theme={{
+          labels: {
+            text: {
+              fontSize: 20, // Sets font size for labels
+            },
           },
-        },
-      }}
-    />
+        }}
+        animate={true}
+        motionConfig="gentle"
+      />
+    </div>
   );
 }

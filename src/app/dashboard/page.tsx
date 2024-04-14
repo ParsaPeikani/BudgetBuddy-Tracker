@@ -77,7 +77,7 @@ export default function Dashboard() {
     } finally {
       setTimeout(() => {
         setIsLoading(false);
-      }, 500);
+      });
     }
   }, []);
 
@@ -345,10 +345,7 @@ export default function Dashboard() {
               </div>
               <div className="flex justify-between">
                 {isLoading ? (
-                  <div
-                    className="w-full flex justify-center items-center"
-                    style={{ height: "500px" }}
-                  >
+                  <div className="w-full flex justify-center items-center">
                     <ChartLoading />
                   </div>
                 ) : (
@@ -356,7 +353,7 @@ export default function Dashboard() {
                     <div className="flex-1 flex justify-left">
                       <DynamicLineChart transactions={transactions} />
                     </div>
-                    <div className="flex-1" style={{ height: "500px" }}>
+                    <div className="flex-1">
                       <MyResponsivePie data={transactions} />
                     </div>
                   </>
