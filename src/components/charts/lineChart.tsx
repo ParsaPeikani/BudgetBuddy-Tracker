@@ -1,7 +1,5 @@
 "use client";
 
-import { use, useEffect } from "react";
-
 import {
   CartesianGrid,
   XAxis,
