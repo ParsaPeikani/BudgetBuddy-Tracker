@@ -304,39 +304,6 @@ export default function Dashboard() {
     }
   };
 
-  const testingdata = [
-    {
-      id: "erlang",
-      label: "erlang",
-      value: 19,
-      color: "hsl(114, 70%, 50%)",
-    },
-    {
-      id: "make",
-      label: "make",
-      value: 208,
-      color: "hsl(224, 70%, 50%)",
-    },
-    {
-      id: "haskell",
-      label: "haskell",
-      value: 591,
-      color: "hsl(169, 70%, 50%)",
-    },
-    {
-      id: "sass",
-      label: "sass",
-      value: 475,
-      color: "hsl(95, 70%, 50%)",
-    },
-    {
-      id: "go",
-      label: "go",
-      value: 463,
-      color: "hsl(279, 70%, 50%)",
-    },
-  ];
-
   // Getting the column data from the getColumns function
   const columns = getColumns(deleteTransaction, updateTransaction);
 
@@ -356,7 +323,7 @@ export default function Dashboard() {
           <div>
             <TabsContent value="balance">
               <div style={{ height: "400px" }}>
-                <MyResponsivePie data={testingdata} />
+                <MyResponsivePie data={transactions} />
               </div>
             </TabsContent>
             <TabsContent value="overview">
@@ -377,27 +344,20 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="flex justify-between">
-                {" "}
-                {/* This div wraps the condition for loading or displaying charts */}
                 {isLoading ? (
                   <div
                     className="w-full flex justify-center items-center"
                     style={{ height: "500px" }}
                   >
-                    <ChartLoading />{" "}
-                    {/* This will show the Loading component while data is being fetched */}
+                    <ChartLoading />
                   </div>
                 ) : (
                   <>
                     <div className="flex-1 flex justify-left">
-                      {" "}
-                      {/* This div is for the dynamic line chart */}
                       <DynamicLineChart transactions={transactions} />
                     </div>
                     <div className="flex-1" style={{ height: "500px" }}>
-                      {" "}
-                      {/* This div is for the pie chart with defined height */}
-                      <MyResponsivePie data={testingdata} />
+                      <MyResponsivePie data={transactions} />
                     </div>
                   </>
                 )}
