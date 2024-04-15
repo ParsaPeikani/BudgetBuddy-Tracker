@@ -123,7 +123,7 @@ const renderCustomAxisTick = ({ x, y, payload }) => {
   );
 };
 
-function getIntroOfPage(label) {
+function getIntroOfPage(label: string) {
   if (label === "Food") {
     return "These are your expenses on foods.";
   }
@@ -168,7 +168,7 @@ const CustomTooltip = ({
 };
 
 const getFilteredData = (transactions: any) => {
-  transactions.forEach((transaction) => {
+  transactions.forEach((transaction: any) => {
     switch (transaction.category) {
       case "Food and Drink":
         foodData += transaction.amount;

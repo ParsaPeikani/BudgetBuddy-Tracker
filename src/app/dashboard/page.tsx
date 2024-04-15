@@ -12,8 +12,6 @@ import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import renderLineChart from "@/components/charts/lineChart";
 import dynamic from "next/dynamic";
-import SelectMonth from "@/components/selectMonth/selectMonth";
-import SelectYear from "@/components/selectYear/selectYear";
 import MyResponsivePie from "@/components/charts/donute";
 import { SelectDate } from "@/components/SelectDate/selectDate";
 
@@ -342,15 +340,7 @@ export default function Dashboard() {
                     Here are your charts :)
                   </p>
                 </div>
-                <div className="flex">
-                  <div className="mr-4">
-                    <Button variant="outline">Submit</Button>
-                  </div>
-                  <div className="mr-2">
-                    <SelectYear />
-                  </div>
-                  <SelectMonth />
-                </div>
+                <SelectDate />
               </div>
               <div className="flex justify-between">
                 {isLoading ? (
