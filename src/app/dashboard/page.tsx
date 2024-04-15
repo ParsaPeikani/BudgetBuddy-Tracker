@@ -11,12 +11,11 @@ import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import renderLineChart from "@/components/charts/lineChart";
-import { networkInterfaces } from "os";
-import { of } from "svix/dist/openapi/rxjsStub";
 import dynamic from "next/dynamic";
 import SelectMonth from "@/components/selectMonth/selectMonth";
 import SelectYear from "@/components/selectYear/selectYear";
 import MyResponsivePie from "@/components/charts/donute";
+import { SelectDate } from "@/components/SelectDate/selectDate";
 
 const DynamicLineChart = dynamic(
   () => import("@/components/charts/lineChart"), // No need to destructure
@@ -322,8 +321,15 @@ export default function Dashboard() {
         <div>
           <div>
             <TabsContent value="balance">
-              <div style={{ height: "400px" }}>
-                <MyResponsivePie data={transactions} />
+              <div className="flex justify-between bg-black p-8 pl-20">
+                <div>
+                  <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                    Welcome back Parsa!
+                  </h1>
+                  <p className="text-gray-400 text-xl md:text-2xl">
+                    Here is your current balance 🤫
+                  </p>
+                </div>
               </div>
             </TabsContent>
             <TabsContent value="overview">
@@ -337,6 +343,9 @@ export default function Dashboard() {
                   </p>
                 </div>
                 <div className="flex">
+                  <div className="mr-4">
+                    <Button variant="outline">Submit</Button>
+                  </div>
                   <div className="mr-2">
                     <SelectYear />
                   </div>
@@ -350,10 +359,10 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <>
-                    <div className="flex-1 flex justify-left">
+                    <div className="flex-1 flex justify-left w-1/2">
                       <DynamicLineChart transactions={transactions} />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 w-1/2">
                       <MyResponsivePie data={transactions} />
                     </div>
                   </>

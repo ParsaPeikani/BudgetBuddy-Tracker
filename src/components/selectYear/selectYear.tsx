@@ -14,7 +14,7 @@ export default function SelectYear() {
   return (
     <Select>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a Year" />
+        <SelectValue placeholder="All Years" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

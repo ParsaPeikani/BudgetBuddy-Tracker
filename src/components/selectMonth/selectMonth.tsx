@@ -14,7 +14,7 @@ export default function SelectMonth() {
   return (
     <Select>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a Month" />
+        <SelectValue placeholder="All Months" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

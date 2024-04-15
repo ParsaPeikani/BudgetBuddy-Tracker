@@ -8,15 +8,13 @@ import {
   Legend,
   Rectangle,
 } from "recharts";
-import axios from "axios";
+import { useState, useEffect } from "react";
 
 let foodData = 0;
 let shoppingData = 0;
 let travelData = 0;
 let transferData = 0;
 let othersData = 0;
-
-console.log("hellosdf");
 
 const data = [
   {
@@ -204,6 +202,25 @@ export default function RenderBarChart({
   transactions: any;
 }): ReturnType<React.FC> {
   getFilteredData(transactions);
+  const [chartDimensions, setChartDimensions] = useState({
+    width: window.innerWidth / 2, // Half of the window width
+    height: window.innerHeight / 2, // A third of the window height
+  });
+  useEffect(() => {
+    const handleResize = () => {
+      // Update the dimensions based on the window size
+      setChartDimensions({
+        width: window.innerWidth / 2,
+        height: window.innerHeight / 2,
+      });
+    };
+
+    // Set the resize listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the listener when the component unmounts
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <div>
       <h2
@@ -221,8 +238,8 @@ export default function RenderBarChart({
       </h2>
 
       <BarChart
-        width={800}
-        height={400}
+        width={chartDimensions.width}
+        height={chartDimensions.height}
         data={data}
         margin={{
           top: 5,
@@ -233,7 +250,7 @@ export default function RenderBarChart({
       >
         <XAxis dataKey="name" tick={renderCustomAxisTick} />
         <YAxis />
-        <CartesianGrid strokeDasharray="3 3" />
+        {/* <CartesianGrid strokeDasharray="3 3" /> */}
         <Legend layout="horizontal" align="center" verticalAlign="top" />
 
         <Tooltip
