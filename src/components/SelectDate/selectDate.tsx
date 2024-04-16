@@ -25,13 +25,17 @@ const FormSchema = z.object({
   }),
 });
 
-export function SelectDate() {
+export function SelectDate({
+  getNewTransactions,
+}: {
+  getNewTransactions: (data: any) => void;
+}) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("these are the data: ", data);
+    getNewTransactions(data);
   }
 
   return (

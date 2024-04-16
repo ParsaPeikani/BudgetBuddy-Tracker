@@ -301,6 +301,33 @@ export default function Dashboard() {
     }
   };
 
+  const getNewTransactions = async (data: any) => {
+    console.log("these are the data that I am getting: ", data);
+    try {
+      await axios
+        .get(
+          `/api/mongoDB/newTransactions?year=${data.year}&month=${data.month}`
+        )
+        .then((newdata) => {
+          console.log("these are the data from the backend: ", newdata.data);
+          const newColumns = newdata.data.map((transaction: any) => ({
+            id: transaction.transactionId,
+            date: new Date(transaction.date).toLocaleDateString(),
+            transaction: transaction.merchantName
+              ? transaction.merchantName
+              : "UnKnown",
+            amount: transaction.amount,
+            category: transaction.category[0],
+            verified: transaction.pending ? "Pending" : "Verified",
+          }));
+          console.log("this is the new colums: ", newColumns);
+          setTransactions(newColumns);
+        });
+    } catch (error) {
+      console.error("There was an error fetching the transactions!", error);
+    }
+  };
+
   // Getting the column data from the getColumns function
   const columns = getColumns(deleteTransaction, updateTransaction);
 
@@ -340,7 +367,7 @@ export default function Dashboard() {
                     Here are your charts :)
                   </p>
                 </div>
-                <SelectDate />
+                <SelectDate getNewTransactions={getNewTransactions} />
               </div>
               <div className="flex justify-between">
                 {isLoading ? (
