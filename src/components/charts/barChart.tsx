@@ -14,7 +14,7 @@ export default function BarChart() {
       data={data}
       keys={["actual", "budget"]} // Representing actual and budgeted expenses
       indexBy="category"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 130, bottom: 50, left: 100 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
@@ -28,7 +28,7 @@ export default function BarChart() {
         tickRotation: 0,
         legend: "Category",
         legendPosition: "middle",
-        legendOffset: 32,
+        legendOffset: 42,
       }}
       axisLeft={{
         tickSize: 5,
@@ -36,11 +36,32 @@ export default function BarChart() {
         tickRotation: 0,
         legend: "Value",
         legendPosition: "middle",
-        legendOffset: -40,
+        legendOffset: -50,
       }}
       labelSkipWidth={12}
       labelSkipHeight={12}
       labelTextColor={{ from: "color", modifiers: [["darker", 1.6]] }}
+      theme={{
+        axis: {
+          ticks: {
+            text: {
+              fontSize: 14, // Setting font size for axis ticks
+              fill: "#999", // Setting text color for axis ticks
+            },
+          },
+          legend: {
+            text: {
+              fontSize: 15, // Setting font size for legends
+              fill: "#333", // Setting text color for legends
+            },
+          },
+        },
+        legends: {
+          text: {
+            fontSize: 15, // Specify the desired font size here
+          },
+        },
+      }}
       legends={[
         {
           dataFrom: "keys",
@@ -49,6 +70,7 @@ export default function BarChart() {
           justify: false,
           translateX: 120,
           translateY: 0,
+          itemTextColor: "#999",
           itemsSpacing: 2,
           itemWidth: 100,
           itemHeight: 20,
@@ -65,9 +87,9 @@ export default function BarChart() {
           ],
         },
       ]}
+      animate={true}
+      motionConfig="gentle"
       groupMode="grouped"
-      role="application"
-      ariaLabel="Nivo bar chart example"
       barAriaLabel={(e) => `${e.id} in ${e.indexValue}: ${e.value}`}
     />
   );
