@@ -376,7 +376,7 @@ export default function Dashboard() {
                 ) : (
                   <>
                     <div className="flex-1 flex justify-left w-1/2">
-                      <BarChart />
+                      <BarChart transactions={transactions} />
                       {/* <DynamicLineChart transactions={transactions} /> */}
                     </div>
                     <div className="flex-1 w-1/2">

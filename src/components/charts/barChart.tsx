@@ -1,13 +1,33 @@
 import { ResponsiveBar } from "@nivo/bar";
 
-export default function BarChart() {
+export default function BarChart({ transactions }: { transactions: any }) {
   const data = [
-    { category: "Food", actual: 110, budget: 200 },
-    { category: "Shopping", actual: 75, budget: 100 },
-    { category: "Travel", actual: 200, budget: 300 },
-    { category: "Transfer", actual: 150, budget: 150 },
-    { category: "Other", actual: 50, budget: 80 },
+    { category: "Food", actual: 0, budget: 200 },
+    { category: "Shopping", actual: 0, budget: 100 },
+    { category: "Travel", actual: 0, budget: 300 },
+    { category: "Transfer", actual: 0, budget: 150 },
+    { category: "Other", actual: 0, budget: 80 },
   ];
+
+  for (let i = 0; i < transactions.length; i++) {
+    if (transactions[i].category === "Food and Drink") {
+      data[0].actual += 1;
+    } else if (transactions[i].category === "Payment") {
+      data[1].actual += transactions[i].amount;
+    } else if (transactions[i].category === "Travel") {
+      data[2].actual += transactions[i].amount;
+    } else if (transactions[i].category === "Transfer") {
+      data[3].actual += transactions[i].amount;
+    } else {
+      data[4].actual += transactions[i].amount;
+    }
+  }
+
+  data[0].actual = Number(data[0].actual.toFixed(2));
+  data[1].actual = Number(data[1].actual.toFixed(2));
+  data[2].actual = Number(data[2].actual.toFixed(2));
+  data[3].actual = Number(data[3].actual.toFixed(2));
+  data[4].actual = Number(data[4].actual.toFixed(2));
 
   return (
     <ResponsiveBar
