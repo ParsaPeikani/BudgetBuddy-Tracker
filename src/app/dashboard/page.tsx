@@ -6,21 +6,13 @@ import { Payment, getColumns } from "@/components/custom-table/columns";
 import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import BarChart from "@/components/charts/barChart";
-import renderLineChart from "@/components/charts/lineChart";
-import dynamic from "next/dynamic";
 import MyResponsivePie from "@/components/charts/donute";
 import { SelectDate } from "@/components/SelectDate/selectDate";
-import { response } from "express";
-
-// const DynamicLineChart = dynamic(
-//   () => import("@/components/charts/lineChart"), // No need to destructure
-//   { ssr: false }
-// );
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -377,7 +369,6 @@ export default function Dashboard() {
                   <>
                     <div className="flex-1 flex justify-left w-1/2">
                       <BarChart transactions={transactions} />
-                      {/* <DynamicLineChart transactions={transactions} /> */}
                     </div>
                     <div className="flex-1 w-1/2">
                       <MyResponsivePie data={transactions} />
@@ -396,13 +387,6 @@ export default function Dashboard() {
                   Here is a list of your latest transactions!
                 </p>
               </div>
-              {/* <div className="pl-20 pr-20">
-                  <DataTable
-                    columns={columns}
-                    data={transactions}
-                    deleteAllSelectedRows={deleteAllSelectedRows}
-                  />
-                </div> */}
               <div className="pl-20 pr-20">
                 {isLoading || !transactions ? (
                   <TableLoading />
