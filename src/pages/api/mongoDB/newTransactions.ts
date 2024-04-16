@@ -40,7 +40,6 @@ export default async function handler(
         const newMonth: number = month_to_number[month] || 1;
         startDate = moment([year, newMonth - 1]);
         const endDate = moment(startDate).endOf("month");
-        console.log("hello hello", startDate.toDate(), endDate.toDate());
 
         // Construct the query
         const query = {
@@ -50,10 +49,8 @@ export default async function handler(
           },
         };
         // Execute the query
-        const results = await Transaction.find(query);
-        console.log("these are the results: ", results);
-        //   const transactions = await Transaction.find({}).sort({ date: -1 }); // Fetch all transactions
-          res.status(200).json(results);
+        const results = await Transaction.find(query).sort({ date: -1 });
+        res.status(200).json(results);
       }
     } catch (error) {
       res.status(500).json({ message: "Error fetching transactions" });

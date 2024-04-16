@@ -342,9 +342,11 @@ export default function Dashboard() {
             <TabsTrigger value="balance">Balance</TabsTrigger>
           </TabsList>
         </div>
-
         <div>
           <div>
+            <div className="flex justify-center pt-5">
+              <SelectDate getNewTransactions={getNewTransactions} />
+            </div>
             <TabsContent value="balance">
               <div className="flex justify-between bg-black p-8 pl-20">
                 <div>
@@ -367,7 +369,6 @@ export default function Dashboard() {
                     Here are your charts :)
                   </p>
                 </div>
-                <SelectDate getNewTransactions={getNewTransactions} />
               </div>
               <div className="flex justify-between">
                 {isLoading ? (
