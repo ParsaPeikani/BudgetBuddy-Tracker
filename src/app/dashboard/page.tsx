@@ -14,6 +14,7 @@ import renderLineChart from "@/components/charts/lineChart";
 import dynamic from "next/dynamic";
 import MyResponsivePie from "@/components/charts/donute";
 import { SelectDate } from "@/components/SelectDate/selectDate";
+import { response } from "express";
 
 const DynamicLineChart = dynamic(
   () => import("@/components/charts/lineChart"), // No need to destructure
@@ -49,26 +50,7 @@ export default function Dashboard() {
   useEffect(() => {
     setIsLoading(true); // Start loading
     try {
-      // Fetch transactions from your API
-      const fetchTransactions = async () => {
-        const response = await axios.get(`/api/mongoDB/transactions`);
-        const data = response.data;
-        return data;
-      };
-
-      fetchTransactions().then((fulltransactions) => {
-        const Columns = fulltransactions.map((transaction: any) => ({
-          id: transaction.transactionId,
-          date: new Date(transaction.date).toLocaleDateString(),
-          transaction: transaction.merchantName
-            ? transaction.merchantName
-            : "UnKnown",
-          amount: transaction.amount,
-          category: transaction.category[0],
-          verified: transaction.pending ? "Pending" : "Verified",
-        }));
-        setTransactions(Columns);
-      });
+      fetchTransactions();
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
     } finally {
@@ -77,6 +59,22 @@ export default function Dashboard() {
       });
     }
   }, []);
+
+  // Fetch transactions from your API
+  const fetchTransactions = async () => {
+    const response = await axios.get(`/api/mongoDB/transactions`);
+    const Columns = response.data.map((transaction: any) => ({
+      id: transaction.transactionId,
+      date: new Date(transaction.date).toLocaleDateString(),
+      transaction: transaction.merchantName
+        ? transaction.merchantName
+        : "UnKnown",
+      amount: transaction.amount,
+      category: transaction.category[0],
+      verified: transaction.pending ? "Pending" : "Verified",
+    }));
+    setTransactions(Columns);
+  };
 
   const deleteTransaction = (transactionId: string) => {
     // finding the index of the transaction with the transactionId
@@ -342,7 +340,10 @@ export default function Dashboard() {
         <div>
           <div>
             <div className="flex justify-center pt-5">
-              <SelectDate getNewTransactions={getNewTransactions} />
+              <SelectDate
+                getNewTransactions={getNewTransactions}
+                fetchTransactions={fetchTransactions}
+              />
             </div>
             <TabsContent value="balance">
               <div className="flex justify-between bg-black p-8 pl-20">

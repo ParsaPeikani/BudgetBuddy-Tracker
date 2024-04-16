@@ -27,8 +27,10 @@ const FormSchema = z.object({
 
 export function SelectDate({
   getNewTransactions,
+  fetchTransactions,
 }: {
   getNewTransactions: (data: any) => void;
+  fetchTransactions: () => void;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -62,17 +64,18 @@ export function SelectDate({
     });
   }
 
-  function testing() {
+  function Reset() {
     form.reset({
       year: "",
       month: "",
     });
+    fetchTransactions();
     console.log("testing");
   }
 
   return (
     <div className="flex">
-      <Button variant="outline" className="mr-4" onClick={() => testing()}>
+      <Button variant="outline" className="mr-4" onClick={() => Reset()}>
         Reset
       </Button>
       <Form {...form}>
