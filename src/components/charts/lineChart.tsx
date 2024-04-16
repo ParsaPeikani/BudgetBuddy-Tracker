@@ -248,8 +248,8 @@ export default function RenderBarChart({
           bottom: 25,
         }}
       >
-        <XAxis dataKey="name" tick={renderCustomAxisTick} />
-        <YAxis />
+        {/* <XAxis dataKey="name" tick={renderCustomAxisTick} /> */}
+        {/* <YAxis /> */}
         {/* <CartesianGrid strokeDasharray="3 3" /> */}
         <Legend layout="horizontal" align="center" verticalAlign="top" />
 

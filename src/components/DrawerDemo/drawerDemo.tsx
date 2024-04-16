@@ -29,8 +29,6 @@ export function DrawerDemo({
 }) {
   // Define a state variable to store the fetched transaction
   const [originalTransaction, setOriginalTransaction] = useState<any>(null);
-  //   console.log("This is the transaction", transaction);
-  // const date = new Date(transaction.date);
   const date = transaction.date ? new Date(transaction.date) : new Date();
 
   const options: DateTimeFormatOptions = {
@@ -47,7 +45,6 @@ export function DrawerDemo({
           `/api/mongoDB/findTransaction?transactionId=${transaction.id}`
         );
         const data = response.data;
-        // console.log("this is the data", data);
         setOriginalTransaction(data); // Update state with the fetched transaction
       } catch (error) {
         console.error("Failed to fetch transaction:", error);
@@ -60,7 +57,6 @@ export function DrawerDemo({
     }
   }, [transaction.id]); // Dependency array ensures this effect runs when transaction.id changes
 
-  //   console.log("This is the original transaction", originalTransaction);
   return (
     <Drawer>
       <DrawerTrigger asChild>

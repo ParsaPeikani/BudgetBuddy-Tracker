@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^4.29.5",
     "@clerk/themes": "^1.7.9",
     "@hookform/resolvers": "^3.3.4",
+    "@nivo/bar": "^0.85.1",
     "@nivo/core": "^0.85.1",
     "@nivo/pie": "^0.85.1",
     "@radix-ui/react-checkbox": "^1.0.4",

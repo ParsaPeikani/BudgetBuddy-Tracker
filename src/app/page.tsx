@@ -9,7 +9,6 @@ export default function Home() {
     // e.preventDefault(); // Stop the link from triggering a page navigation
     try {
       const response = await axios.post("/api/hello", { name: "parsa" });
-      console.log(response.data.message); // "Hello from Next.js!"
     } catch (error) {
       console.error("There was an error!", error);
     }

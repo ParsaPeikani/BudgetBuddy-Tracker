@@ -86,7 +86,7 @@ export const getColumns = (
     cell: ({ row }) => {
       const transaction = row.original;
       return (
-        <div className="pl-4" onClick={() => console.log("CLicked")}>
+        <div className="pl-4">
           <DrawerDemo
             transaction={transaction}
             deleteTransaction={deleteTransaction}

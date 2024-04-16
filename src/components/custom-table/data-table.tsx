@@ -37,9 +37,7 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  deleteAllSelectedRows: (
-    table: any
-  ) => void;
+  deleteAllSelectedRows: (table: any) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -78,19 +76,6 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  // const deleteAllSelectedRows = () => {
-  //   const selectedRows = table.getFilteredSelectedRowModel().rows;
-  //   const idsAndIndexesToDelete = selectedRows.map(row => ({
-  //     id: (row.original as { id: string }).id,
-  //     index: transactions.findIndex(t => t.id === (row.original as { id: string }).id)
-  //   }));
-  //   for (let i = 0; i < selectedRows.length; i++) {
-  //     console.log("Deleting", (selectedRows[i].original as { id: string }).id);
-  //     deleteTransaction((selectedRows[i].original as { id: string }).id);
-  //   }
-  //   table.resetRowSelection();
-  // };
-  // console.log("result", table.getFilteredSelectedRowModel().rows);
   return (
     <div>
       <div className="flex py-4 justify-between">
@@ -109,7 +94,6 @@ export function DataTable<TData, TValue>({
               variant="outline"
               className="flex"
               onClick={() => {
-                console.log("Delete");
                 deleteAllSelectedRows(table);
               }}
             >

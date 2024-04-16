@@ -37,7 +37,6 @@ export function SelectDate({
   });
 
   function onValid(data: z.infer<typeof FormSchema>) {
-    console.log("Valid data:", data);
     if (!data.year || !data.month) {
       toast("Select both year and month please ;)", {
         position: "top-center",
@@ -53,7 +52,6 @@ export function SelectDate({
   }
 
   function onInvalid(errors: any) {
-    console.log("Invalid data:", errors);
     toast("Select both year and month please ;)", {
       position: "top-center",
       style: {
@@ -70,7 +68,6 @@ export function SelectDate({
       month: "",
     });
     fetchTransactions();
-    console.log("testing");
   }
 
   return (

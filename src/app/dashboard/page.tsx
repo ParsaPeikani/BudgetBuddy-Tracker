@@ -10,16 +10,17 @@ import { Suspense, useEffect, useState } from "react";
 import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
+import BarChart from "@/components/charts/barChart";
 import renderLineChart from "@/components/charts/lineChart";
 import dynamic from "next/dynamic";
 import MyResponsivePie from "@/components/charts/donute";
 import { SelectDate } from "@/components/SelectDate/selectDate";
 import { response } from "express";
 
-const DynamicLineChart = dynamic(
-  () => import("@/components/charts/lineChart"), // No need to destructure
-  { ssr: false }
-);
+// const DynamicLineChart = dynamic(
+//   () => import("@/components/charts/lineChart"), // No need to destructure
+//   { ssr: false }
+// );
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -30,7 +31,6 @@ export default function Dashboard() {
       const response = await axios.get(
         `/api/plaid/transactions?userId=${user_id}`
       );
-      console.log(response.data.latest_transactions);
     } catch (error) {
       console.error("There was an error!", error);
     }
@@ -376,7 +376,8 @@ export default function Dashboard() {
                 ) : (
                   <>
                     <div className="flex-1 flex justify-left w-1/2">
-                      <DynamicLineChart transactions={transactions} />
+                      <BarChart />
+                      {/* <DynamicLineChart transactions={transactions} /> */}
                     </div>
                     <div className="flex-1 w-1/2">
                       <MyResponsivePie data={transactions} />
