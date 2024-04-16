@@ -117,7 +117,7 @@ export default function MyResponsivePie({ data }: { data: any[] }) {
               direction: "row",
               justify: false,
               translateX: 0,
-              translateY: 40,
+              translateY: 55,
               itemsSpacing: 0,
               itemWidth: 100,
               itemHeight: 18,

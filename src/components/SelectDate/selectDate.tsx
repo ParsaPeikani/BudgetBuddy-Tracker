@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
   year: z.string({
@@ -34,9 +34,32 @@ export function SelectDate({
     resolver: zodResolver(FormSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("testing 2");
+  function onValid(data: z.infer<typeof FormSchema>) {
+    console.log("Valid data:", data);
+    if (!data.year || !data.month) {
+      toast("Select both year and month please ;)", {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      });
+      return;
+    }
     getNewTransactions(data);
+  }
+
+  function onInvalid(errors: any) {
+    console.log("Invalid data:", errors);
+    toast("Select both year and month please ;)", {
+      position: "top-center",
+      style: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      },
+    });
   }
 
   function testing() {
@@ -53,7 +76,7 @@ export function SelectDate({
         Reset
       </Button>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex">
+        <form onSubmit={form.handleSubmit(onValid, onInvalid)} className="flex">
           <Button type="submit" variant="outline" className="mr-4">
             Submit
           </Button>
