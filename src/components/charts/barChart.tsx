@@ -29,7 +29,7 @@ export default function BarChart({ transactions }: { transactions: any }) {
   data[0].actual = Number(data[0].actual.toFixed(2));
   data[1].actual = Number(data[1].actual.toFixed(2));
   data[2].actual = Number(data[2].actual.toFixed(2));
-  data[3].actual = Number(data[3].actual.toFixed(2));
+  data[3].actual = Number(data[3].actual.toFixed(2)) * -1;
   data[4].actual = Number(data[4].actual.toFixed(2));
 
   return (
@@ -52,7 +52,7 @@ export default function BarChart({ transactions }: { transactions: any }) {
           data={data}
           keys={["actual", "budget"]} // Representing actual and budgeted expenses
           indexBy="category"
-          margin={{ top: 50, right: 130, bottom: 50, left: 100 }}
+          margin={{ top: 50, right: 130, bottom: 55, left: 100 }}
           padding={0.3}
           valueScale={{ type: "linear" }}
           indexScale={{ type: "band", round: true }}
@@ -120,6 +120,7 @@ export default function BarChart({ transactions }: { transactions: any }) {
                   on: "hover",
                   style: {
                     itemOpacity: 1,
+                    itemTextColor: "#fff",
                   },
                 },
               ],
