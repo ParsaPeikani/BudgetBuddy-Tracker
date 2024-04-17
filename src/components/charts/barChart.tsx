@@ -3,34 +3,34 @@ import { ResponsiveBar } from "@nivo/bar";
 export default function BarChart({ transactions }: { transactions: any }) {
   // Initial data for the bar chart
   const data = [
-    { category: "Food", actual: 0, budget: 200 },
-    { category: "Shopping", actual: 0, budget: 100 },
-    { category: "Travel", actual: 0, budget: 300 },
-    { category: "Transfer", actual: 0, budget: 150 },
-    { category: "Other", actual: 0, budget: 80 },
+    { category: "Food", Actual: 0, Budget: 200 },
+    { category: "Shopping", Actual: 0, Budget: 100 },
+    { category: "Travel", Actual: 0, Budget: 300 },
+    { category: "Transfer", Actual: 0, Budget: 150 },
+    { category: "Other", Actual: 0, Budget: 80 },
   ];
 
-  // Calculating the actual amounts for each category
+  // Calculating the Actual amounts for each category
   for (let i = 0; i < transactions.length; i++) {
     if (transactions[i].category === "Food and Drink") {
-      data[0].actual += 1;
+      data[0].Actual += 1;
     } else if (transactions[i].category === "Payment") {
-      data[1].actual += transactions[i].amount;
+      data[1].Actual += transactions[i].amount;
     } else if (transactions[i].category === "Travel") {
-      data[2].actual += transactions[i].amount;
+      data[2].Actual += transactions[i].amount;
     } else if (transactions[i].category === "Transfer") {
-      data[3].actual += transactions[i].amount;
+      data[3].Actual += transactions[i].amount;
     } else {
-      data[4].actual += transactions[i].amount;
+      data[4].Actual += transactions[i].amount;
     }
   }
 
-  // Rounding off the actual values to 2 decimal places
-  data[0].actual = Number(data[0].actual.toFixed(2));
-  data[1].actual = Number(data[1].actual.toFixed(2));
-  data[2].actual = Number(data[2].actual.toFixed(2));
-  data[3].actual = Number(data[3].actual.toFixed(2)) * -1;
-  data[4].actual = Number(data[4].actual.toFixed(2));
+  // Rounding off the Actual values to 2 decimal places
+  data[0].Actual = Number(data[0].Actual.toFixed(2));
+  data[1].Actual = Number(data[1].Actual.toFixed(2));
+  data[2].Actual = Number(data[2].Actual.toFixed(2));
+  data[3].Actual = Number(data[3].Actual.toFixed(2)) * -1;
+  data[4].Actual = Number(data[4].Actual.toFixed(2));
 
   return (
     <div>
@@ -50,7 +50,7 @@ export default function BarChart({ transactions }: { transactions: any }) {
       <div style={{ height: "500px", width: "800px" }} className="-mt-10">
         <ResponsiveBar
           data={data}
-          keys={["actual", "budget"]} // Representing actual and budgeted expenses
+          keys={["Actual", "Budget"]} // Representing actual and budgeted expenses
           indexBy="category"
           margin={{ top: 50, right: 130, bottom: 55, left: 100 }}
           padding={0.3}

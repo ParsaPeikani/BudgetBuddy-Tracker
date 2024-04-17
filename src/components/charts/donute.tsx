@@ -117,6 +117,19 @@ export default function MyResponsivePie({ data }: { data: any[] }) {
           ]}
           animate={true}
           motionConfig="gentle"
+          tooltip={({ datum: { id, value, color } }) => (
+            <div
+              style={{
+                padding: 12,
+                color,
+                background: "#222222",
+              }}
+            >
+              <span>{`Number of ${id} Transactions: `}</span>
+              <br />
+              <strong>{Math.round((value * total) / 100)}</strong>
+            </div>
+          )}
         />
       </div>
     </div>
