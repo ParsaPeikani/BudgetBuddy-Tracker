@@ -57,7 +57,11 @@ export default function Dashboard() {
     const response = await axios.get(`/api/mongoDB/transactions`);
     const Columns = response.data.map((transaction: any) => ({
       id: transaction.transactionId,
-      date: new Date(transaction.date).toLocaleDateString(),
+      date: new Date(transaction.date).toLocaleDateString("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }),
       transaction: transaction.merchantName
         ? transaction.merchantName
         : "UnKnown",
