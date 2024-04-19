@@ -371,10 +371,10 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <>
-                    <div className="flex-1 flex justify-left w-1/2">
+                    <div className="flex-1 flex justify-left w-1/3">
                       <BarChart transactions={transactions} />
                     </div>
-                    <div className="flex-1 w-1/2">
+                    <div className="flex-1 w-1/3">
                       <MyResponsivePie data={transactions} />
                     </div>
                   </>

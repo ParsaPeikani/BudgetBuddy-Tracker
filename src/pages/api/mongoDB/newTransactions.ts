@@ -31,12 +31,12 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const month = req.query.month;
+      const month = req.query?.month;
       const year = Number(req.query.year);
       let startDate: any;
 
       let monthName: string;
-      if (typeof month === "string") {
+      if (typeof month === "string" && month.length > 0) {
         const newMonth: number = month_to_number[month] || 1;
         startDate = moment([year, newMonth - 1]);
         const endDate = moment(startDate).endOf("month");
@@ -49,6 +49,15 @@ export default async function handler(
           },
         };
         // Execute the query
+        const results = await Transaction.find(query).sort({ date: -1 });
+        res.status(200).json(results);
+      } else {
+        // MongoDB query to filter transactions by year
+        const query = {
+          $expr: {
+            $eq: [{ $year: "$date" }, year],
+          },
+        };
         const results = await Transaction.find(query).sort({ date: -1 });
         res.status(200).json(results);
       }

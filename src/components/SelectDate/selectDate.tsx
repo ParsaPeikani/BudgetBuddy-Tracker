@@ -37,8 +37,8 @@ export function SelectDate({
   });
 
   function onValid(data: z.infer<typeof FormSchema>) {
-    if (!data.year || !data.month) {
-      toast("Select both year and month please ;)", {
+    if (!data.year) {
+      toast("Select the year please ;)", {
         position: "top-center",
         style: {
           display: "flex",
