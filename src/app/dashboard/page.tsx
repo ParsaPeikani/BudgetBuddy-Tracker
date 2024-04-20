@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import BarChart from "@/components/charts/barChart";
 import MyResponsivePie from "@/components/charts/donute";
 import { SelectDate } from "@/components/SelectDate/selectDate";
+import { set } from "mongoose";
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -37,6 +38,7 @@ export default function Dashboard() {
   }
 
   const [transactions, setTransactions] = useState<Payment[]>([]);
+  const [chartTransactions, setChartTransactions] = useState<Payment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -70,6 +72,7 @@ export default function Dashboard() {
       verified: transaction.pending ? "Pending" : "Verified",
     }));
     setTransactions(Columns);
+    setChartTransactions(Columns);
   };
 
   const deleteTransaction = (transactionId: string) => {
@@ -313,6 +316,7 @@ export default function Dashboard() {
             verified: transaction.pending ? "Pending" : "Verified",
           }));
           setTransactions(newColumns);
+          setChartTransactions(newColumns);
         });
     } catch (error) {
       console.error("There was an error fetching the transactions!", error);
@@ -355,7 +359,7 @@ export default function Dashboard() {
             </TabsContent>
             <TabsContent value="overview">
               <div className="flex justify-between bg-black p-8 pl-20">
-                <div>
+                <div className="-mt-40">
                   <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
                     Welcome back Parsa!
                   </h1>
@@ -372,10 +376,10 @@ export default function Dashboard() {
                 ) : (
                   <>
                     <div className="flex-1 flex justify-left w-1/3">
-                      <BarChart transactions={transactions} />
+                      <BarChart transactions={chartTransactions} />
                     </div>
                     <div className="flex-1 w-1/3">
-                      <MyResponsivePie data={transactions} />
+                      <MyResponsivePie data={chartTransactions} />
                     </div>
                   </>
                 )}
@@ -383,12 +387,12 @@ export default function Dashboard() {
             </TabsContent>
 
             <TabsContent value="transactions">
-              <div className="bg-black p-8 pl-20">
+              <div className="bg-black p-8 pl-20 -mt-40">
                 <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
                   Welcome back Parsa!
                 </h1>
                 <p className="text-gray-400 text-xl md:text-2xl">
-                  Here is a list of your latest transactions!
+                  Here is a list of your transactions!
                 </p>
               </div>
               <div className="pl-20 pr-20">
