@@ -39,6 +39,8 @@ export default function Dashboard() {
   }
 
   const [transactions, setTransactions] = useState<Payment[]>([]);
+  const [month, setMonth] = useState<string>();
+  const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -75,6 +77,13 @@ export default function Dashboard() {
       category: transaction.category[0],
       verified: transaction.pending ? "Pending" : "Verified",
     }));
+    if (!latestYear) {
+      setMonth("All");
+      setYear("Transactions");
+    } else {
+      setMonth("");
+      setYear(new Date().getFullYear().toString());
+    }
     setTransactions(Columns);
   };
 
@@ -319,6 +328,8 @@ export default function Dashboard() {
             verified: transaction.pending ? "Pending" : "Verified",
           }));
           setTransactions(newColumns);
+          setMonth(data.month);
+          setYear(data.year);
         });
     } catch (error) {
       console.error("There was an error fetching the transactions!", error);
@@ -368,6 +379,18 @@ export default function Dashboard() {
                   <p className="text-gray-400 text-xl md:text-2xl">
                     Here are your charts :)
                   </p>
+                </div>
+                <div className="flex -mt-40 pt-10 pr-20">
+                  {month !== "" && (
+                    <h1 className="text-white text-4xl md:text-5xl font-extrabold mb-4 pr-10 tracking-tight">
+                      {month}
+                    </h1>
+                  )}
+                  {year !== "" && (
+                    <p className="text-white text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+                      {year}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="flex justify-between">
