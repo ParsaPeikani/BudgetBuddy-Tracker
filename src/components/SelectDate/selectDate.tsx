@@ -52,14 +52,31 @@ export function SelectDate({
   }
 
   function onInvalid(errors: any) {
-    toast("Select both year and month please ;)", {
-      position: "top-center",
-      style: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      },
-    });
+    const formData = form.getValues();
+    if (!formData.year && !formData.month) {
+      toast("Select both year and month please ;)", {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      });
+      return;
+    } else if (!formData.year) {
+      toast("Select the year please ;)", {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      });
+      return;
+    }
+
+    if (!formData.month) formData.month = "";
+    getNewTransactions(formData);
   }
 
   function Reset() {
