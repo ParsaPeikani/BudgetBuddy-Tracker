@@ -30,7 +30,7 @@ export function SelectDate({
   fetchTransactions,
 }: {
   getNewTransactions: (data: any) => void;
-  fetchTransactions: () => void;
+  fetchTransactions: (latestYear: boolean) => void;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -84,7 +84,7 @@ export function SelectDate({
       year: "",
       month: "",
     });
-    fetchTransactions();
+    fetchTransactions(true);
   }
 
   return (
@@ -164,7 +164,9 @@ export function SelectDate({
         </Form>
       </div>
       <div className="pt-4">
-        <Button variant="outline">Get All Transactions</Button>
+        <Button variant="outline" onClick={() => fetchTransactions(false)}>
+          Get All Transactions
+        </Button>
       </div>
     </div>
   );

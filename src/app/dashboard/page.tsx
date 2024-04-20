@@ -14,6 +14,7 @@ import BarChart from "@/components/charts/barChart";
 import MyResponsivePie from "@/components/charts/donute";
 import { SelectDate } from "@/components/SelectDate/selectDate";
 import { set } from "mongoose";
+import { late } from "zod";
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -38,7 +39,6 @@ export default function Dashboard() {
   }
 
   const [transactions, setTransactions] = useState<Payment[]>([]);
-  const [chartTransactions, setChartTransactions] = useState<Payment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -55,8 +55,12 @@ export default function Dashboard() {
   }, []);
 
   // Fetch transactions from your API
-  const fetchTransactions = async () => {
-    const response = await axios.get(`/api/mongoDB/transactions`);
+  const fetchTransactions = async (latestYear = true) => {
+    const response = await axios.get("/api/mongoDB/fetchTransactions", {
+      params: {
+        latestYear: latestYear,
+      },
+    });
     const Columns = response.data.map((transaction: any) => ({
       id: transaction.transactionId,
       date: new Date(transaction.date).toLocaleDateString("en-CA", {
@@ -72,7 +76,6 @@ export default function Dashboard() {
       verified: transaction.pending ? "Pending" : "Verified",
     }));
     setTransactions(Columns);
-    setChartTransactions(Columns);
   };
 
   const deleteTransaction = (transactionId: string) => {
@@ -316,7 +319,6 @@ export default function Dashboard() {
             verified: transaction.pending ? "Pending" : "Verified",
           }));
           setTransactions(newColumns);
-          setChartTransactions(newColumns);
         });
     } catch (error) {
       console.error("There was an error fetching the transactions!", error);
@@ -376,10 +378,10 @@ export default function Dashboard() {
                 ) : (
                   <>
                     <div className="flex-1 flex justify-left w-1/3">
-                      <BarChart transactions={chartTransactions} />
+                      <BarChart transactions={transactions} />
                     </div>
                     <div className="flex-1 w-1/3">
-                      <MyResponsivePie data={chartTransactions} />
+                      <MyResponsivePie data={transactions} />
                     </div>
                   </>
                 )}
