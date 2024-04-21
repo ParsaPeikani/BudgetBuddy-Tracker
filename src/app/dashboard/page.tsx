@@ -12,6 +12,7 @@ import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import BarChart from "@/components/charts/barChart";
 import MyResponsivePie from "@/components/charts/donute";
+import MonthlyBarChart from "@/components/charts/barChartHorizontal";
 import { SelectDate } from "@/components/SelectDate/selectDate";
 import { set } from "mongoose";
 import { late } from "zod";
@@ -399,15 +400,26 @@ export default function Dashboard() {
                     <ChartLoading />
                   </div>
                 ) : (
-                  <>
-                    <div className="flex-1 flex justify-left w-1/3">
-                      <BarChart transactions={transactions} month={month} year={year}/>
+                  <div className="flex justify-center mb-10">
+                    <div className=" w-1/3">
+                      <BarChart
+                        transactions={transactions}
+                        month={month}
+                        year={year}
+                      />
                     </div>
-                    <div className="flex-1 w-1/3">
+
+                    {/* <div className="flex-1 w-1/3">
                       <MyResponsivePie data={transactions} />
-                    </div>
-                  </>
+                    </div> */}
+                  </div>
                 )}
+              </div>
+              <div className="flex-1 justify-center">
+                <MyResponsivePie data={transactions} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <MonthlyBarChart />
               </div>
             </TabsContent>
 
