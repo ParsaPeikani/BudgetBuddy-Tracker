@@ -92,7 +92,7 @@ export default function BarChart({
       >
         Budgeted vs Actual Expenses
       </h2>
-      <div style={{ height: "500px", width: "800px" }} className="-mt-10">
+      <div style={{ height: "500px", width: "600px" }} className="-mt-10">
         <ResponsiveBar
           data={data}
           keys={["Actual", "Budget"]} // Representing actual and budgeted expenses

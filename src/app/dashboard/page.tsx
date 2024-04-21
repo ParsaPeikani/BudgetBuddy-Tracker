@@ -11,8 +11,11 @@ import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import BarChart from "@/components/charts/barChart";
+import MyLineChart from "@/components/charts/lineChart";
+
 import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/barChartHorizontal";
+import MyResponsiveLine from "@/components/charts/lineChart";
 import { SelectDate } from "@/components/SelectDate/selectDate";
 import { set } from "mongoose";
 import { late } from "zod";
@@ -336,6 +339,20 @@ export default function Dashboard() {
       console.error("There was an error fetching the transactions!", error);
     }
   };
+  const data = [
+    { month: "January", expenses: 120, income: 200 },
+    { month: "February", expenses: 210, income: 300 },
+    { month: "March", expenses: 140, income: 400 },
+    { month: "April", expenses: 170, income: 500 },
+    { month: "May", expenses: 250, income: 600 },
+    { month: "June", expenses: 220, income: 400 },
+    { month: "July", expenses: 300, income: 300 },
+    { month: "August", expenses: 250, income: 200 },
+    { month: "September", expenses: 200, income: 100 },
+    { month: "October", expenses: 230, income: 300 },
+    { month: "November", expenses: 190, income: 400 },
+    { month: "December", expenses: 220, income: 500 },
+  ];
 
   // Getting the column data from the getColumns function
   const columns = getColumns(deleteTransaction, updateTransaction);
@@ -394,13 +411,16 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
-              <div className="flex justify-between">
+              <div className="w-full">
+                <div className="flex-1 flex justify-center">
+                  <MonthlyBarChart />
+                </div>
                 {isLoading ? (
                   <div className="w-full flex justify-center items-center">
                     <ChartLoading />
                   </div>
                 ) : (
-                  <div className="flex justify-center mb-10">
+                  <div className="flex w-full mb-10">
                     <div className=" w-1/3">
                       <BarChart
                         transactions={transactions}
@@ -408,18 +428,14 @@ export default function Dashboard() {
                         year={year}
                       />
                     </div>
-
-                    {/* <div className="flex-1 w-1/3">
-                      <MyResponsivePie data={transactions} />
-                    </div> */}
+                    <div className="w-2/3" style={{ width: "1050px" }}>
+                      <MyLineChart data={data} />
+                    </div>
                   </div>
                 )}
               </div>
               <div className="flex-1 justify-center">
                 <MyResponsivePie data={transactions} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <MonthlyBarChart />
               </div>
             </TabsContent>
 
