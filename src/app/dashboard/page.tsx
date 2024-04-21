@@ -380,14 +380,14 @@ export default function Dashboard() {
                     Here are your charts :)
                   </p>
                 </div>
-                <div className="flex -mt-40 pt-10 pr-20">
+                <div className="flex justify-center items-center -mt-40 pt-10 w-2/6 bg-gradient-to-r from-black to-gray-800 via-transparent to-gray-800 to-black p-4 rounded-lg">
                   {month !== "" && (
-                    <h1 className="text-white text-4xl md:text-5xl font-extrabold mb-4 pr-10 tracking-tight">
+                    <h1 className="text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-blue-500 text-4xl md:text-6xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {month}
                     </h1>
                   )}
                   {year !== "" && (
-                    <p className="text-white text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+                    <p className="text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-pink-500 text-4xl md:text-6xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {year}
                     </p>
                   )}
