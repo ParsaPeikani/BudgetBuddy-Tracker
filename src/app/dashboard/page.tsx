@@ -380,7 +380,7 @@ export default function Dashboard() {
                     Here are your charts :)
                   </p>
                 </div>
-                <div className="flex justify-center items-center -mt-40 pt-10 w-2/6 bg-gradient-to-r from-black to-gray-800 via-transparent to-gray-800 to-black p-4 rounded-lg">
+                <div className="flex justify-center -mt-40 pt-10 w-2/6">
                   {month !== "" && (
                     <h1 className="text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-blue-500 text-4xl md:text-6xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {month}
@@ -401,7 +401,7 @@ export default function Dashboard() {
                 ) : (
                   <>
                     <div className="flex-1 flex justify-left w-1/3">
-                      <BarChart transactions={transactions} />
+                      <BarChart transactions={transactions} month={month} year={year}/>
                     </div>
                     <div className="flex-1 w-1/3">
                       <MyResponsivePie data={transactions} />

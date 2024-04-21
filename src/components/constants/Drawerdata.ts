@@ -39,3 +39,7 @@ export const data = [
     goal: 349,
   },
 ];
+
+export const yearlyBudgetData = [1000, 500, 1500, 750, 400];
+
+export const monthlyBudgetData = [200, 100, 300, 150, 80];

@@ -1,14 +1,59 @@
 import { ResponsiveBar } from "@nivo/bar";
 
-export default function BarChart({ transactions }: { transactions: any }) {
+import { yearlyBudgetData } from "../constants/Drawerdata";
+import { monthlyBudgetData } from "../constants/Drawerdata";
+
+export default function BarChart({
+  transactions,
+  month,
+  year,
+}: {
+  transactions: any;
+  month: string;
+  year: string;
+}) {
   // Initial data for the bar chart
   const data = [
-    { category: "Food", Actual: 0, Budget: 200 },
-    { category: "Shopping", Actual: 0, Budget: 100 },
-    { category: "Travel", Actual: 0, Budget: 300 },
-    { category: "Transfer", Actual: 0, Budget: 150 },
-    { category: "Other", Actual: 0, Budget: 80 },
+    { category: "Food", Actual: 0, Budget: 0 },
+    { category: "Shopping", Actual: 0, Budget: 0 },
+    { category: "Travel", Actual: 0, Budget: 0 },
+    { category: "Transfer", Actual: 0, Budget: 0 },
+    { category: "Other", Actual: 0, Budget: 0 },
   ];
+
+  if (month?.length === 0 && year?.length > 0) {
+    // Calculating the Budgeted amounts for each category
+    for (let i = 0; i < yearlyBudgetData.length; i++) {
+      if (i === 0) {
+        data[0].Budget = yearlyBudgetData[i];
+      } else if (i === 1) {
+        data[1].Budget = yearlyBudgetData[i];
+      } else if (i === 2) {
+        data[2].Budget = yearlyBudgetData[i];
+      } else if (i === 3) {
+        data[3].Budget = yearlyBudgetData[i];
+      } else {
+        data[4].Budget = yearlyBudgetData[i];
+      }
+    }
+  } else if (month?.length > 0 && year?.length > 0) {
+    if (month !== "All") {
+      // Calculating the Budgeted amounts for each category
+      for (let i = 0; i < monthlyBudgetData.length; i++) {
+        if (i === 0) {
+          data[0].Budget = monthlyBudgetData[i];
+        } else if (i === 1) {
+          data[1].Budget = monthlyBudgetData[i];
+        } else if (i === 2) {
+          data[2].Budget = monthlyBudgetData[i];
+        } else if (i === 3) {
+          data[3].Budget = monthlyBudgetData[i];
+        } else {
+          data[4].Budget = monthlyBudgetData[i];
+        }
+      }
+    }
+  }
 
   // Calculating the Actual amounts for each category
   for (let i = 0; i < transactions.length; i++) {
