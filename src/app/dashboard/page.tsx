@@ -413,8 +413,8 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
-              <div className="w-full">
-                <div className="flex-1 flex justify-center">
+              <div className="item-center">
+                <div className="flex justify-center">
                   <MonthlyBarChart
                     transactions={transactions}
                     month={month || ""}

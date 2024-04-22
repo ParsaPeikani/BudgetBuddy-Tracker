@@ -14,6 +14,14 @@ export function TableLoading() {
   );
 }
 
+export function MonthlyChartLoading() {
+  return (
+    <div className="flex flex-col space-y-3 items-center justify-center w-full">
+      <Skeleton className="h-[400px] w-full md:w-[90%] lg:w-[85%] rounded-xl" />
+    </div>
+  );
+}
+
 export function ChartLoading() {
   return (
     <div className="pt-20 flex w-full justify-center items-center">

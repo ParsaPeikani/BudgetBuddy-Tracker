@@ -1,4 +1,6 @@
 import { ResponsiveBar } from "@nivo/bar";
+import { MonthlyChartLoading } from "../loading/loading";
+import { useState, useEffect } from "react";
 
 const monthIndex: Record<string, number> = {
   January: 0,
@@ -30,6 +32,7 @@ export default function MonthlyBarChart({
   month: string;
   year: string;
 }) {
+  const [isLoading, setIsLoading] = useState(true);
   const MonthlyChartdata = [
     {
       month: "Janurary",
@@ -235,8 +238,20 @@ export default function MonthlyBarChart({
     );
     MonthlyChartdata[i].Other = Number(MonthlyChartdata[i].Other.toFixed(2));
   }
+  // Simulate data loading
+  useEffect(() => {
+    // Assume data is fetched here
+    setIsLoading(false); // Set loading to false once data is ready
+  }, []); // Empty dependency array to mimic componentDidMount
+
+  if (isLoading) {
+    return <MonthlyChartLoading />;
+  }
   return (
-    <div style={{ height: "500px", width: "1500px" }} className="mb-10">
+    <div
+      style={{ height: "500px", width: "1500px" }}
+      className="flext items-center justify-center mb-10"
+    >
       <h2
         style={{
           textAlign: "center",
