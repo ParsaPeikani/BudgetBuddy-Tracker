@@ -341,6 +341,22 @@ export default function Dashboard() {
       console.error("There was an error fetching the transactions!", error);
     }
   };
+
+  const postTrans = async () => {
+    try {
+      await axios.post("/api/mongoDB/postTransactions");
+      toast("Transactions have been posted successfully!", {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }, // Centering the text
+      });
+    } catch (error) {
+      console.error("There was an error posting the transactions!", error);
+    }
+  };
   const data = [
     { month: "January", expenses: 120, income: 200 },
     { month: "February", expenses: 210, income: 300 },
@@ -379,35 +395,35 @@ export default function Dashboard() {
               />
             </div>
             <TabsContent value="balance">
-              <div className="flex justify-between bg-black p-8 pl-20 -mt-40  ">
+              <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10">
                 <div>
-                  <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                  <h1 className="text-white text-3xl md:text-3xl font-bold mb-4 lg:pt-0 md:pt-24">
                     Welcome back Parsa!
                   </h1>
-                  <p className="text-gray-400 text-xl md:text-2xl">
+                  <p className="text-gray-400 lg:text-2xl md:text-md">
                     Here is your current balance 🤫
                   </p>
                 </div>
               </div>
             </TabsContent>
             <TabsContent value="overview">
-              <div className="flex justify-between bg-black p-8 pl-20">
+              <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
                 <div className="-mt-40">
-                  <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 lg:pt-0 md:pt-24">
                     Welcome back Parsa!
                   </h1>
-                  <p className="text-gray-400 text-xl md:text-2xl">
+                  <p className="text-gray-400 lg:text-2xl md:text-md">
                     Here are your charts :)
                   </p>
                 </div>
-                <div className="flex justify-center -mt-40 pt-10 w-2/6">
+                <div className="flex justify-center -mt-40 pt-10 w-2/6 md:pt-24">
                   {month !== "" && (
-                    <h1 className="text-stroke text-4xl md:text-6xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                    <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {month}
                     </h1>
                   )}
                   {year !== "" && (
-                    <p className="text-stroke text-4xl md:text-6xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                    <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {year}
                     </p>
                   )}
@@ -443,15 +459,15 @@ export default function Dashboard() {
             </TabsContent>
 
             <TabsContent value="transactions">
-              <div className="bg-black p-8 pl-20 -mt-40">
-                <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
+              <div className="bg-black p-8 lg:pl-20 -mt-40 md:pl-10">
+                <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 lg:pt-0 md:pt-24">
                   Welcome back Parsa!
                 </h1>
-                <p className="text-gray-400 text-xl md:text-2xl">
+                <p className="text-gray-400 lg:text-2xl md:text-md">
                   Here is a list of your transactions!
                 </p>
               </div>
-              <div className="pl-20 pr-20">
+              <div className="lg:pl-20 lg:pr-20 md:pl-10 md:pr-10">
                 {isLoading || !transactions ? (
                   <TableLoading />
                 ) : (
@@ -467,10 +483,10 @@ export default function Dashboard() {
 
             {/* <div className="flex justify-center">
               <button
-                onClick={getTrans}
+                onClick={postTrans}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Get Transactions
+                Post Transactions
               </button>
             </div> */}
           </div>

@@ -35,7 +35,7 @@ export default function MonthlyBarChart({
   const [isLoading, setIsLoading] = useState(true);
   const MonthlyChartdata = [
     {
-      month: "Janurary",
+      month: "Jan",
       Food: 0,
       FoodColor: "hsl(225, 70%, 50%)",
       Shopping: 0,
@@ -48,7 +48,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(262, 70%, 50%)",
     },
     {
-      month: "Feburary",
+      month: "Feb",
       Food: 0,
       FoodColor: "hsl(47, 70%, 50%)",
       Shopping: 0,
@@ -61,7 +61,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(249, 70%, 50%)",
     },
     {
-      month: "March",
+      month: "Mar",
       Food: 0,
       FoodColor: "hsl(255, 70%, 50%)",
       Shopping: 0,
@@ -74,7 +74,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(349, 70%, 50%)",
     },
     {
-      month: "April",
+      month: "Apr",
       Food: 0,
       FoodColor: "hsl(89, 70%, 50%)",
       Shopping: 0,
@@ -100,7 +100,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(64, 70%, 50%)",
     },
     {
-      month: "June",
+      month: "Jun",
       Food: 0,
       FoodColor: "hsl(124, 70%, 50%)",
       Shopping: 0,
@@ -113,7 +113,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(305, 70%, 50%)",
     },
     {
-      month: "July",
+      month: "Jul",
       Food: 0,
       FoodColor: "hsl(316, 70%, 50%)",
       Shopping: 0,
@@ -126,7 +126,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(103, 70%, 50%)",
     },
     {
-      month: "August",
+      month: "Aug",
       Food: 0,
       FoodColor: "hsl(225, 70%, 50%)",
       Shopping: 0,
@@ -139,7 +139,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(262, 70%, 50%)",
     },
     {
-      month: "September",
+      month: "Sep",
       Food: 0,
       FoodColor: "hsl(47, 70%, 50%)",
       Shopping: 0,
@@ -152,7 +152,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(249, 70%, 50%)",
     },
     {
-      month: "October",
+      month: "Oct",
       Food: 0,
       FoodColor: "hsl(255, 70%, 50%)",
       Shopping: 0,
@@ -165,7 +165,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(349, 70%, 50%)",
     },
     {
-      month: "November",
+      month: "Nov",
       Food: 0,
       FoodColor: "hsl(89, 70%, 50%)",
       Shopping: 0,
@@ -178,7 +178,7 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(323, 70%, 50%)",
     },
     {
-      month: "December",
+      month: "Dec",
       Food: 0,
       FoodColor: "hsl(22, 70%, 50%)",
       Shopping: 0,

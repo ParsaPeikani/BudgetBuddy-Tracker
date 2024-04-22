@@ -118,7 +118,6 @@ export function SelectDate({
                       <SelectItem value="2023">2023</SelectItem>
                       <SelectItem value="2022">2022</SelectItem>
                       <SelectItem value="2021">2021</SelectItem>
-                      <SelectItem value="2020">2020</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
