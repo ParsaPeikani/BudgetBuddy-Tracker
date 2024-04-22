@@ -1,7 +1,7 @@
 import { ResponsiveBar } from "@nivo/bar";
 
-import { yearlyBudgetData } from "../constants/Drawerdata";
-import { monthlyBudgetData } from "../constants/Drawerdata";
+import { yearlyBudgetData } from "../constants/constants";
+import { monthlyBudgetData } from "../constants/constants";
 
 export default function BarChart({
   transactions,

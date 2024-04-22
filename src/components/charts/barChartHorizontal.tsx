@@ -1,202 +1,228 @@
-// install (please try to align the version of installed @nivo packages)
-// yarn add @nivo/bar
 import { ResponsiveBar } from "@nivo/bar";
+// import { MonthlyChartdata } from "../constants/constants";
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
-export default function MonthlyBarChart() {
-  const data = [
+const monthIndex: Record<string, number> = {
+  January: 0,
+  February: 1,
+  March: 2,
+  April: 3,
+  May: 4,
+  June: 5,
+  July: 6,
+  August: 7,
+  September: 8,
+  October: 9,
+  November: 10,
+  December: 11,
+};
+
+export default function MonthlyBarChart({
+  transactions,
+  month,
+  year,
+}: {
+  transactions: any;
+  month: string;
+  year: string;
+}) {
+  const MonthlyChartdata = [
     {
-      country: "Janurary",
-      "hot dog": 119,
-      "hot dogColor": "hsl(264, 70%, 50%)",
-      burger: 111,
-      burgerColor: "hsl(225, 70%, 50%)",
-      sandwich: 37,
-      sandwichColor: "hsl(61, 70%, 50%)",
-      kebab: 139,
-      kebabColor: "hsl(25, 70%, 50%)",
-      fries: 73,
-      friesColor: "hsl(306, 70%, 50%)",
-      donut: 200,
-      donutColor: "hsl(262, 70%, 50%)",
+      month: "Janurary",
+      Food: 0,
+      FoodColor: "hsl(225, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(61, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(25, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(306, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(262, 70%, 50%)",
     },
     {
-      country: "Feburary",
-      "hot dog": 14,
-      "hot dogColor": "hsl(111, 70%, 50%)",
-      burger: 122,
-      burgerColor: "hsl(47, 70%, 50%)",
-      sandwich: 144,
-      sandwichColor: "hsl(182, 70%, 50%)",
-      kebab: 196,
-      kebabColor: "hsl(172, 70%, 50%)",
-      fries: 170,
-      friesColor: "hsl(39, 70%, 50%)",
-      donut: 9,
-      donutColor: "hsl(249, 70%, 50%)",
+      month: "Feburary",
+      Food: 0,
+      FoodColor: "hsl(47, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(182, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(172, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(39, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(249, 70%, 50%)",
     },
     {
-      country: "March",
-      "hot dog": 5,
-      "hot dogColor": "hsl(226, 70%, 50%)",
-      burger: 136,
-      burgerColor: "hsl(255, 70%, 50%)",
-      sandwich: 26,
-      sandwichColor: "hsl(199, 70%, 50%)",
-      kebab: 193,
-      kebabColor: "hsl(130, 70%, 50%)",
-      fries: 192,
-      friesColor: "hsl(71, 70%, 50%)",
-      donut: 11,
-      donutColor: "hsl(349, 70%, 50%)",
+      month: "March",
+      Food: 0,
+      FoodColor: "hsl(255, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(199, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(130, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(71, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(349, 70%, 50%)",
     },
     {
-      country: "April",
-      "hot dog": 47,
-      "hot dogColor": "hsl(70, 70%, 50%)",
-      burger: 23,
-      burgerColor: "hsl(89, 70%, 50%)",
-      sandwich: 9,
-      sandwichColor: "hsl(214, 70%, 50%)",
-      kebab: 195,
-      kebabColor: "hsl(242, 70%, 50%)",
-      fries: 174,
-      friesColor: "hsl(220, 70%, 50%)",
-      donut: 115,
-      donutColor: "hsl(323, 70%, 50%)",
+      month: "April",
+      Food: 0,
+      FoodColor: "hsl(89, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(214, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(242, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(220, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(323, 70%, 50%)",
     },
     {
-      country: "May",
-      "hot dog": 157,
-      "hot dogColor": "hsl(266, 70%, 50%)",
-      burger: 92,
-      burgerColor: "hsl(22, 70%, 50%)",
-      sandwich: 37,
-      sandwichColor: "hsl(92, 70%, 50%)",
-      kebab: 196,
-      kebabColor: "hsl(319, 70%, 50%)",
-      fries: 107,
-      friesColor: "hsl(128, 70%, 50%)",
-      donut: 83,
-      donutColor: "hsl(64, 70%, 50%)",
+      month: "May",
+      Food: 0,
+      FoodColor: "hsl(22, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(92, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(319, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(128, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(64, 70%, 50%)",
     },
     {
-      country: "June",
-      "hot dog": 35,
-      "hot dogColor": "hsl(352, 70%, 50%)",
-      burger: 189,
-      burgerColor: "hsl(124, 70%, 50%)",
-      sandwich: 47,
-      sandwichColor: "hsl(315, 70%, 50%)",
-      kebab: 167,
-      kebabColor: "hsl(359, 70%, 50%)",
-      fries: 20,
-      friesColor: "hsl(54, 70%, 50%)",
-      donut: 18,
-      donutColor: "hsl(305, 70%, 50%)",
+      month: "June",
+      Food: 0,
+      FoodColor: "hsl(124, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(315, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(359, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(54, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(305, 70%, 50%)",
     },
     {
-      country: "July",
-      "hot dog": 159,
-      "hot dogColor": "hsl(280, 70%, 50%)",
-      burger: 43,
-      burgerColor: "hsl(316, 70%, 50%)",
-      sandwich: 92,
-      sandwichColor: "hsl(88, 70%, 50%)",
-      kebab: 16,
-      kebabColor: "hsl(25, 70%, 50%)",
-      fries: 116,
-      friesColor: "hsl(347, 70%, 50%)",
-      donut: 26,
-      donutColor: "hsl(103, 70%, 50%)",
+      month: "July",
+      Food: 0,
+      FoodColor: "hsl(316, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(88, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(25, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(347, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(103, 70%, 50%)",
     },
     {
-      country: "August",
-      "hot dog": 119,
-      "hot dogColor": "hsl(264, 70%, 50%)",
-      burger: 111,
-      burgerColor: "hsl(225, 70%, 50%)",
-      sandwich: 37,
-      sandwichColor: "hsl(61, 70%, 50%)",
-      kebab: 139,
-      kebabColor: "hsl(25, 70%, 50%)",
-      fries: 73,
-      friesColor: "hsl(306, 70%, 50%)",
-      donut: 200,
-      donutColor: "hsl(262, 70%, 50%)",
+      month: "August",
+      Food: 0,
+      FoodColor: "hsl(225, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(61, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(25, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(306, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(262, 70%, 50%)",
     },
     {
-      country: "September",
-      "hot dog": 14,
-      "hot dogColor": "hsl(111, 70%, 50%)",
-      burger: 122,
-      burgerColor: "hsl(47, 70%, 50%)",
-      sandwich: 144,
-      sandwichColor: "hsl(182, 70%, 50%)",
-      kebab: 196,
-      kebabColor: "hsl(172, 70%, 50%)",
-      fries: 170,
-      friesColor: "hsl(39, 70%, 50%)",
-      donut: 9,
-      donutColor: "hsl(249, 70%, 50%)",
+      month: "September",
+      Food: 0,
+      FoodColor: "hsl(47, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(182, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(172, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(39, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(249, 70%, 50%)",
     },
     {
-      country: "October",
-      "hot dog": 5,
-      "hot dogColor": "hsl(226, 70%, 50%)",
-      burger: 136,
-      burgerColor: "hsl(255, 70%, 50%)",
-      sandwich: 26,
-      sandwichColor: "hsl(199, 70%, 50%)",
-      kebab: 193,
-      kebabColor: "hsl(130, 70%, 50%)",
-      fries: 192,
-      friesColor: "hsl(71, 70%, 50%)",
-      donut: 11,
-      donutColor: "hsl(349, 70%, 50%)",
+      month: "October",
+      Food: 0,
+      FoodColor: "hsl(255, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(199, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(130, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(71, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(349, 70%, 50%)",
     },
     {
-      country: "November",
-      "hot dog": 47,
-      "hot dogColor": "hsl(70, 70%, 50%)",
-      burger: 23,
-      burgerColor: "hsl(89, 70%, 50%)",
-      sandwich: 9,
-      sandwichColor: "hsl(214, 70%, 50%)",
-      kebab: 195,
-      kebabColor: "hsl(242, 70%, 50%)",
-      fries: 174,
-      friesColor: "hsl(220, 70%, 50%)",
-      donut: 115,
-      donutColor: "hsl(323, 70%, 50%)",
+      month: "November",
+      Food: 0,
+      FoodColor: "hsl(89, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(214, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(242, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(220, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(323, 70%, 50%)",
     },
     {
-      country: "December",
-      "hot dog": 157,
-      "hot dogColor": "hsl(266, 70%, 50%)",
-      burger: 92,
-      burgerColor: "hsl(22, 70%, 50%)",
-      sandwich: 37,
-      sandwichColor: "hsl(92, 70%, 50%)",
-      kebab: 196,
-      kebabColor: "hsl(319, 70%, 50%)",
-      fries: 107,
-      friesColor: "hsl(128, 70%, 50%)",
-      donut: 83,
-      donutColor: "hsl(64, 70%, 50%)",
+      month: "December",
+      Food: 0,
+      FoodColor: "hsl(22, 70%, 50%)",
+      Shopping: 0,
+      ShoppingColor: "hsl(92, 70%, 50%)",
+      Travel: 0,
+      TravelColor: "hsl(319, 70%, 50%)",
+      Transfer: 0,
+      TransferColor: "hsl(128, 70%, 50%)",
+      Other: 0,
+      OtherColor: "hsl(64, 70%, 50%)",
     },
   ];
+  console.log("these are the whole thing: ", transactions, month, year);
+  if (month?.length > 0 && year?.length > 0) {
+    if (month !== "All") {
+      for (let i = 0; i < transactions.length; i++) {
+        if (transactions[i].category === "Food and Drink") {
+          MonthlyChartdata[monthIndex[month]].Food += transactions[i].amount;
+        } else if (transactions[i].category === "Shopping") {
+          MonthlyChartdata[monthIndex[month]].Shopping +=
+            transactions[i].amount;
+        } else if (transactions[i].category === "Travel") {
+          MonthlyChartdata[monthIndex[month]].Travel += transactions[i].amount;
+        } else if (transactions[i].category === "Transfer") {
+          MonthlyChartdata[monthIndex[month]].Transfer +=
+            transactions[i].amount;
+        } else {
+          MonthlyChartdata[monthIndex[month]].Other += transactions[i].amount;
+        }
+      }
+    }
+  }
   return (
-    <div style={{ height: "500px", width: "1500px" }}>
+    <div style={{ height: "500px", width: "1500px" }} className="mb-10">
+      <h2
+        style={{
+          textAlign: "center",
+          color: "#E0E0E0",
+          textShadow: "0 0 8px rgba(255, 255, 255, 0.4)",
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          fontSize: "24px",
+          fontWeight: "normal",
+          marginBottom: "20px",
+        }}
+      >
+        Monthly Category Expenses
+      </h2>
       <ResponsiveBar
-        data={data}
-        keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
-        indexBy="country"
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        data={MonthlyChartdata}
+        keys={["Food", "Shopping", "Travel", "Transfer", "Other"]}
+        indexBy="month"
+        margin={{ top: 20, right: 130, bottom: 50, left: 70 }}
         padding={0.3}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
@@ -221,20 +247,6 @@ export default function MonthlyBarChart() {
             spacing: 10,
           },
         ]}
-        fill={[
-          {
-            match: {
-              id: "fries",
-            },
-            id: "dots",
-          },
-          {
-            match: {
-              id: "sandwich",
-            },
-            id: "lines",
-          },
-        ]}
         borderColor={{
           from: "color",
           modifiers: [["darker", 1.6]],
@@ -245,18 +257,18 @@ export default function MonthlyBarChart() {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: "country",
+          legend: "Month",
           legendPosition: "middle",
-          legendOffset: 32,
+          legendOffset: 42,
           truncateTickAt: 0,
         }}
         axisLeft={{
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: "food",
+          legend: "Categories Expenses",
           legendPosition: "middle",
-          legendOffset: -40,
+          legendOffset: -60,
           truncateTickAt: 0,
         }}
         labelSkipWidth={12}
@@ -284,19 +296,35 @@ export default function MonthlyBarChart() {
                 on: "hover",
                 style: {
                   itemOpacity: 1,
+                  itemTextColor: "#fff",
                 },
               },
             ],
           },
         ]}
-        // layout="horizontal"
-        // enableGridY={false}
-        // enableGridX={true}
+        theme={{
+          axis: {
+            ticks: {
+              text: {
+                fontSize: 14,
+                fill: "#999",
+              },
+            },
+            legend: {
+              text: {
+                fontSize: 15,
+                fill: "#333",
+              },
+            },
+          },
+          legends: {
+            text: {
+              fontSize: 15,
+            },
+          },
+        }}
         role="application"
         ariaLabel="Nivo bar chart demo"
-        barAriaLabel={(e) =>
-          e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-        }
       />
     </div>
   );

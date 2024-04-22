@@ -413,7 +413,11 @@ export default function Dashboard() {
               </div>
               <div className="w-full">
                 <div className="flex-1 flex justify-center">
-                  <MonthlyBarChart />
+                  <MonthlyBarChart
+                    transactions={transactions}
+                    month={month || ""}
+                    year={year || ""}
+                  />
                 </div>
                 {isLoading ? (
                   <div className="w-full flex justify-center items-center">
@@ -424,8 +428,8 @@ export default function Dashboard() {
                     <div className=" w-1/3">
                       <BarChart
                         transactions={transactions}
-                        month={month}
-                        year={year}
+                        month={month || ""}
+                        year={year || ""}
                       />
                     </div>
                     <div className="w-2/3" style={{ width: "1050px" }}>
