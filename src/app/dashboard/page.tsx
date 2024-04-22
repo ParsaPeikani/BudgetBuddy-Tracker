@@ -323,7 +323,11 @@ export default function Dashboard() {
         .then((newdata) => {
           const newColumns = newdata.data.map((transaction: any) => ({
             id: transaction.transactionId,
-            date: new Date(transaction.date).toLocaleDateString(),
+            date: new Date(transaction.date).toLocaleDateString("en-CA", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }),
             transaction: transaction.merchantName
               ? transaction.merchantName
               : "UnKnown",

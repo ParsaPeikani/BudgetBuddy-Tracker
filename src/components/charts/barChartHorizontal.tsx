@@ -16,6 +16,12 @@ const monthIndex: Record<string, number> = {
   December: 11,
 };
 
+function getMonthNumber(dateString: string) {
+  const parts = dateString.split("-"); // Split the date by '-'
+  const month = parseInt(parts[1], 10); // The month is the second part (0-based index), convert it to a number
+  return month; // Return the month as a number
+}
+
 export default function MonthlyBarChart({
   transactions,
   month,
@@ -183,25 +189,52 @@ export default function MonthlyBarChart({
       OtherColor: "hsl(64, 70%, 50%)",
     },
   ];
-  console.log("these are the whole thing: ", transactions, month, year);
-  if (month?.length > 0 && year?.length > 0) {
-    if (month !== "All") {
-      for (let i = 0; i < transactions.length; i++) {
-        if (transactions[i].category === "Food and Drink") {
-          MonthlyChartdata[monthIndex[month]].Food += transactions[i].amount;
-        } else if (transactions[i].category === "Shopping") {
-          MonthlyChartdata[monthIndex[month]].Shopping +=
-            transactions[i].amount;
-        } else if (transactions[i].category === "Travel") {
-          MonthlyChartdata[monthIndex[month]].Travel += transactions[i].amount;
-        } else if (transactions[i].category === "Transfer") {
-          MonthlyChartdata[monthIndex[month]].Transfer +=
-            transactions[i].amount;
-        } else {
-          MonthlyChartdata[monthIndex[month]].Other += transactions[i].amount;
-        }
+  if (month?.length > 0 && year?.length > 0 && month !== "All") {
+    for (let i = 0; i < transactions.length; i++) {
+      if (transactions[i].category === "Food and Drink") {
+        MonthlyChartdata[monthIndex[month]].Food += transactions[i].amount;
+      } else if (transactions[i].category === "Shopping") {
+        MonthlyChartdata[monthIndex[month]].Shopping += transactions[i].amount;
+      } else if (transactions[i].category === "Travel") {
+        MonthlyChartdata[monthIndex[month]].Travel += transactions[i].amount;
+      } else if (transactions[i].category === "Transfer") {
+        MonthlyChartdata[monthIndex[month]].Transfer += transactions[i].amount;
+      } else {
+        MonthlyChartdata[monthIndex[month]].Other += transactions[i].amount;
       }
     }
+  } else {
+    for (let i = 0; i < transactions.length; i++) {
+      if (transactions[i].category === "Food and Drink") {
+        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Food +=
+          transactions[i].amount;
+      } else if (transactions[i].category === "Shopping") {
+        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Shopping +=
+          transactions[i].amount;
+      } else if (transactions[i].category === "Travel") {
+        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Travel +=
+          transactions[i].amount;
+      } else if (transactions[i].category === "Transfer") {
+        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Transfer +=
+          transactions[i].amount;
+      } else {
+        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Other +=
+          transactions[i].amount;
+      }
+    }
+  }
+
+  // Round up all the values of the categories to 2 decimal places
+  for (let i = 0; i < MonthlyChartdata.length; i++) {
+    MonthlyChartdata[i].Food = Number(MonthlyChartdata[i].Food.toFixed(2));
+    MonthlyChartdata[i].Shopping = Number(
+      MonthlyChartdata[i].Shopping.toFixed(2)
+    );
+    MonthlyChartdata[i].Travel = Number(MonthlyChartdata[i].Travel.toFixed(2));
+    MonthlyChartdata[i].Transfer = Number(
+      MonthlyChartdata[i].Transfer.toFixed(2)
+    );
+    MonthlyChartdata[i].Other = Number(MonthlyChartdata[i].Other.toFixed(2));
   }
   return (
     <div style={{ height: "500px", width: "1500px" }} className="mb-10">
