@@ -1,5 +1,4 @@
 import { ResponsiveBar } from "@nivo/bar";
-// import { MonthlyChartdata } from "../constants/constants";
 
 const monthIndex: Record<string, number> = {
   January: 0,
@@ -17,9 +16,9 @@ const monthIndex: Record<string, number> = {
 };
 
 function getMonthNumber(dateString: string) {
-  const parts = dateString.split("-"); // Split the date by '-'
-  const month = parseInt(parts[1], 10); // The month is the second part (0-based index), convert it to a number
-  return month; // Return the month as a number
+  const parts = dateString.split("-");
+  const month = parseInt(parts[1], 10);
+  return month;
 }
 
 export default function MonthlyBarChart({
@@ -244,7 +243,7 @@ export default function MonthlyBarChart({
           color: "#E0E0E0",
           textShadow: "0 0 8px rgba(255, 255, 255, 0.4)",
           fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-          fontSize: "24px",
+          fontSize: "34px",
           fontWeight: "normal",
           marginBottom: "20px",
         }}

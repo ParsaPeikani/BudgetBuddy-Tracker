@@ -10,12 +10,10 @@ import { useEffect, useState } from "react";
 import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
-import BarChart from "@/components/charts/barChart";
-import MyLineChart from "@/components/charts/lineChart";
+import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 
 import MyResponsivePie from "@/components/charts/donute";
-import MonthlyBarChart from "@/components/charts/barChartHorizontal";
-import MyResponsiveLine from "@/components/charts/lineChart";
+import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import { SelectDate } from "@/components/SelectDate/selectDate";
 import { set } from "mongoose";
 import { late } from "zod";
@@ -428,22 +426,19 @@ export default function Dashboard() {
                     <ChartLoading />
                   </div>
                 ) : (
-                  <div className="flex w-full mb-10">
-                    <div className=" w-1/3">
-                      <BarChart
+                  <div className="flex justify-center mt-20">
+                    <div className=" w-1/2">
+                      <HorizontalBarChart
                         transactions={transactions}
                         month={month || ""}
                         year={year || ""}
                       />
                     </div>
-                    <div className="w-2/3" style={{ width: "1050px" }}>
-                      <MyLineChart data={data} />
+                    <div className="w-1/2">
+                      <MyResponsivePie data={transactions} />
                     </div>
                   </div>
                 )}
-              </div>
-              <div className="flex-1 justify-center">
-                <MyResponsivePie data={transactions} />
               </div>
             </TabsContent>
 

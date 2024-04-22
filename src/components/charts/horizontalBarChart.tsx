@@ -3,7 +3,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import { yearlyBudgetData } from "../constants/constants";
 import { monthlyBudgetData } from "../constants/constants";
 
-export default function BarChart({
+export default function HorizontalBarChart({
   transactions,
   month,
   year,
@@ -92,7 +92,7 @@ export default function BarChart({
       >
         Budgeted vs Actual Expenses
       </h2>
-      <div style={{ height: "500px", width: "600px" }} className="-mt-10">
+      <div style={{ height: "500px", width: "900px" }} className="-mt-10">
         <ResponsiveBar
           data={data}
           keys={["Actual", "Budget"]} // Representing actual and budgeted expenses
@@ -119,7 +119,7 @@ export default function BarChart({
             tickRotation: 0,
             legend: "Value",
             legendPosition: "middle",
-            legendOffset: -50,
+            legendOffset: -70,
           }}
           labelSkipWidth={12}
           labelSkipHeight={12}
@@ -128,20 +128,20 @@ export default function BarChart({
             axis: {
               ticks: {
                 text: {
-                  fontSize: 14, // Setting font size for axis ticks
-                  fill: "#999", // Setting text color for axis ticks
+                  fontSize: 14,
+                  fill: "#999",
                 },
               },
               legend: {
                 text: {
-                  fontSize: 15, // Setting font size for legends
-                  fill: "#333", // Setting text color for legends
+                  fontSize: 15,
+                  fill: "#333",
                 },
               },
             },
             legends: {
               text: {
-                fontSize: 15, // Specify the desired font size here
+                fontSize: 15,
               },
             },
           }}
@@ -171,6 +171,9 @@ export default function BarChart({
               ],
             },
           ]}
+          layout="horizontal"
+          enableGridY={false}
+          enableGridX={true}
           animate={true}
           motionConfig="gentle"
           groupMode="grouped"
