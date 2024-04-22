@@ -118,3 +118,8 @@
   color: #ffd700; /* Adjusted to use a CSS color name, making the intro text stand out */
   font-weight: bold; /* Optionally make the intro text bold for emphasis */
 }
+
+.text-stroke {
+  -webkit-text-stroke: 2px white;
+  color: black;
+}

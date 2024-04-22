@@ -379,7 +379,7 @@ export default function Dashboard() {
               />
             </div>
             <TabsContent value="balance">
-              <div className="flex justify-between bg-black p-8 pl-20">
+              <div className="flex justify-between bg-black p-8 pl-20 -mt-40  ">
                 <div>
                   <h1 className="text-white text-3xl md:text-4xl font-bold mb-4">
                     Welcome back Parsa!
@@ -402,12 +402,12 @@ export default function Dashboard() {
                 </div>
                 <div className="flex justify-center -mt-40 pt-10 w-2/6">
                   {month !== "" && (
-                    <h1 className="text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-blue-500 text-4xl md:text-6xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                    <h1 className="text-stroke text-4xl md:text-6xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {month}
                     </h1>
                   )}
                   {year !== "" && (
-                    <p className="text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-pink-500 text-4xl md:text-6xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                    <p className="text-stroke text-4xl md:text-6xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {year}
                     </p>
                   )}

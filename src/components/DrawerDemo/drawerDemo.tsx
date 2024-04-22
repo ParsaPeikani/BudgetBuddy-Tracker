@@ -1,5 +1,4 @@
 import * as React from "react";
-import { GearIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Bar, BarChart, ResponsiveContainer } from "recharts";
 import { data } from "@/components/constants/constants";
 import { DateTimeFormatOptions } from "intl";
