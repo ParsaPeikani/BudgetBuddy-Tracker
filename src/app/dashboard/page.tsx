@@ -11,6 +11,8 @@ import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
+import { CheckingComponent } from "@/components/balance/Checking";
+import { SavingComponent } from "@/components/balance/saving";
 
 import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
@@ -44,6 +46,11 @@ export default function Dashboard() {
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("balance"); // Default to 'balance'
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
 
   useEffect(() => {
     setIsLoading(true); // Start loading
@@ -376,7 +383,7 @@ export default function Dashboard() {
   const columns = getColumns(deleteTransaction, updateTransaction);
 
   return (
-    <Tabs defaultValue="overview" className="">
+    <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="">
       <div className="justify-center">
         <Navbar />
         <div className="flex justify-center">
@@ -388,12 +395,14 @@ export default function Dashboard() {
         </div>
         <div>
           <div>
-            <div className="flex justify-center pt-5">
-              <SelectDate
-                getNewTransactions={getNewTransactions}
-                fetchTransactions={fetchTransactions}
-              />
-            </div>
+            {activeTab !== "balance" && (
+              <div className="flex justify-center pt-5">
+                <SelectDate
+                  getNewTransactions={getNewTransactions}
+                  fetchTransactions={fetchTransactions}
+                />
+              </div>
+            )}
             <TabsContent value="balance">
               <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10">
                 <div>
@@ -404,6 +413,10 @@ export default function Dashboard() {
                     Here is your current balance 🤫
                   </p>
                 </div>
+              </div>
+              <div className="flex justify-center">
+                <CheckingComponent />
+                <SavingComponent />
               </div>
             </TabsContent>
             <TabsContent value="overview">
@@ -495,14 +508,14 @@ export default function Dashboard() {
             </TabsContent>
             <br />
 
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
               <button
                 onClick={postTrans}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Post Transactions
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
