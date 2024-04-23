@@ -92,12 +92,13 @@ export default function HorizontalBarChart({
       >
         Budgeted vs Actual Expenses
       </h2>
-      <div style={{ height: "500px", width: "900px" }} className="-mt-10">
+      {/* style={{ height: "400px", width: "600px" }} */}
+      <div className="md:h-[400px] md:w-[600px] lg:h-[550px] lg:w-[900px] -mt-10">
         <ResponsiveBar
           data={data}
           keys={["Actual", "Budget"]} // Representing actual and budgeted expenses
           indexBy="category"
-          margin={{ top: 50, right: 130, bottom: 55, left: 100 }}
+          margin={{ top: 50, right: 130, bottom: 65, left: 100 }}
           padding={0.3}
           valueScale={{ type: "linear" }}
           indexScale={{ type: "band", round: true }}
@@ -111,7 +112,7 @@ export default function HorizontalBarChart({
             tickRotation: 0,
             legend: "Category",
             legendPosition: "middle",
-            legendOffset: 42,
+            legendOffset: 52,
           }}
           axisLeft={{
             tickSize: 5,
