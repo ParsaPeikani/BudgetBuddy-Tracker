@@ -404,16 +404,14 @@ export default function Dashboard() {
               </div>
             )}
             <TabsContent value="balance">
-              <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10">
-                <div>
-                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
-                    Welcome back Parsa!
-                  </h1>
-                  <p className="text-gray-400 lg:text-2xl md:text-md">
-                    Here is your current balance 🤫
-                  </p>
-                </div>
+              <div className="flex flex-col items-center justify-center text-white mt-10">
+                <h1 className="text-6xl font-bold mb-4">50,000,000</h1>
+                <p className="text-gray-400 text-2xl mb-10">
+                  This is your current TD balance 🤫
+                </p>
               </div>
+
+              {/* <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10"></div> */}
               <div className="flex justify-center">
                 <CheckingComponent />
                 <SavingComponent />
