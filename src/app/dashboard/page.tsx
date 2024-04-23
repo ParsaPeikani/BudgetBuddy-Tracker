@@ -397,7 +397,7 @@ export default function Dashboard() {
             <TabsContent value="balance">
               <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10">
                 <div>
-                  <h1 className="text-white text-3xl md:text-3xl font-bold mb-4 lg:pt-0 md:pt-24">
+                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
                     Welcome back Parsa!
                   </h1>
                   <p className="text-gray-400 lg:text-2xl md:text-md">
@@ -409,14 +409,14 @@ export default function Dashboard() {
             <TabsContent value="overview">
               <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
                 <div className="-mt-40">
-                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 lg:pt-0 md:pt-24">
+                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
                     Welcome back Parsa!
                   </h1>
                   <p className="text-gray-400 lg:text-2xl md:text-md">
                     Here are your charts :)
                   </p>
                 </div>
-                <div className="flex justify-center -mt-40 pt-10 w-2/6 md:pt-24">
+                <div className="flex justify-center -mt-40 w-2/6 pt-24">
                   {month !== "" && (
                     <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
                       {month}
@@ -459,13 +459,27 @@ export default function Dashboard() {
             </TabsContent>
 
             <TabsContent value="transactions">
-              <div className="bg-black p-8 lg:pl-20 -mt-40 md:pl-10">
-                <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 lg:pt-0 md:pt-24">
-                  Welcome back Parsa!
-                </h1>
-                <p className="text-gray-400 lg:text-2xl md:text-md">
-                  Here is a list of your transactions!
-                </p>
+              <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
+                <div className="-mt-40">
+                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
+                    Welcome back Parsa!
+                  </h1>
+                  <p className="text-gray-400 lg:text-2xl md:text-md">
+                    Here is a list of your transactions :)
+                  </p>
+                </div>
+                <div className="flex justify-center -mt-40 w-2/6 pt-24">
+                  {month !== "" && (
+                    <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                      {month}
+                    </h1>
+                  )}
+                  {year !== "" && (
+                    <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                      {year}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="lg:pl-20 lg:pr-20 md:pl-10 md:pr-10">
                 {isLoading || !transactions ? (
@@ -481,14 +495,14 @@ export default function Dashboard() {
             </TabsContent>
             <br />
 
-            {/* <div className="flex justify-center">
+            <div className="flex justify-center">
               <button
                 onClick={postTrans}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Post Transactions
               </button>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
