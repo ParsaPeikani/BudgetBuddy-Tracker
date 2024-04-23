@@ -27,12 +27,13 @@ export default function MonthlyBarChart({
   transactions,
   month,
   year,
+  isLoading,
 }: {
   transactions: any;
   month: string;
   year: string;
+  isLoading: boolean;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
   const MonthlyChartdata = [
     {
       month: "Jan",
@@ -238,11 +239,6 @@ export default function MonthlyBarChart({
     );
     MonthlyChartdata[i].Other = Number(MonthlyChartdata[i].Other.toFixed(2));
   }
-  // Simulate data loading
-  useEffect(() => {
-    // Assume data is fetched here
-    setIsLoading(false); // Set loading to false once data is ready
-  }, []); // Empty dependency array to mimic componentDidMount
 
   if (isLoading) {
     return <MonthlyChartLoading />;

@@ -17,8 +17,6 @@ import { SavingComponent } from "@/components/balance/saving";
 import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import { SelectDate } from "@/components/SelectDate/selectDate";
-import { set } from "mongoose";
-import { late } from "zod";
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -46,7 +44,7 @@ export default function Dashboard() {
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("balance"); // Default to 'balance'
+  const [activeTab, setActiveTab] = useState("overview"); // Default to 'balance'
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -67,6 +65,7 @@ export default function Dashboard() {
 
   // Fetch transactions from your API
   const fetchTransactions = async (latestYear = true) => {
+    setIsLoading(true);
     const response = await axios.get("/api/mongoDB/fetchTransactions", {
       params: {
         latestYear: latestYear,
@@ -93,6 +92,7 @@ export default function Dashboard() {
       setMonth("");
       setYear(new Date().getFullYear().toString());
     }
+    setIsLoading(false);
     setTransactions(Columns);
   };
 
@@ -320,6 +320,7 @@ export default function Dashboard() {
   };
 
   const getNewTransactions = async (data: any) => {
+    setIsLoading(true);
     try {
       await axios
         .get(
@@ -343,41 +344,28 @@ export default function Dashboard() {
           setTransactions(newColumns);
           setMonth(data.month);
           setYear(data.year);
+          setIsLoading(false);
         });
     } catch (error) {
       console.error("There was an error fetching the transactions!", error);
     }
   };
 
-  const postTrans = async () => {
-    try {
-      await axios.post("/api/mongoDB/postTransactions");
-      toast("Transactions have been posted successfully!", {
-        position: "top-center",
-        style: {
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }, // Centering the text
-      });
-    } catch (error) {
-      console.error("There was an error posting the transactions!", error);
-    }
-  };
-  const data = [
-    { month: "January", expenses: 120, income: 200 },
-    { month: "February", expenses: 210, income: 300 },
-    { month: "March", expenses: 140, income: 400 },
-    { month: "April", expenses: 170, income: 500 },
-    { month: "May", expenses: 250, income: 600 },
-    { month: "June", expenses: 220, income: 400 },
-    { month: "July", expenses: 300, income: 300 },
-    { month: "August", expenses: 250, income: 200 },
-    { month: "September", expenses: 200, income: 100 },
-    { month: "October", expenses: 230, income: 300 },
-    { month: "November", expenses: 190, income: 400 },
-    { month: "December", expenses: 220, income: 500 },
-  ];
+  // const postTrans = async () => {
+  //   try {
+  //     await axios.post("/api/mongoDB/postTransactions");
+  //     toast("Transactions have been posted successfully!", {
+  //       position: "top-center",
+  //       style: {
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //       }, // Centering the text
+  //     });
+  //   } catch (error) {
+  //     console.error("There was an error posting the transactions!", error);
+  //   }
+  // };
 
   // Getting the column data from the getColumns function
   const columns = getColumns(deleteTransaction, updateTransaction);
@@ -446,6 +434,7 @@ export default function Dashboard() {
                     transactions={transactions}
                     month={month || ""}
                     year={year || ""}
+                    isLoading={isLoading}
                   />
                 </div>
                 {isLoading ? (
