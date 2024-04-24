@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function CheckingComponent() {
+export function CheckingComponent({ account }: { account: any }) {
   return (
     <Card className="w-1/2">
       <CardHeader>
@@ -26,11 +26,15 @@ export function CheckingComponent() {
             <div className="flex justify-between mb-4">
               <p className="font-medium">
                 Account Number:{" "}
-                <span className="font-normal text-gray-400">******0936</span>
+                <span className="font-normal text-gray-400">
+                  ******{account?.mask}
+                </span>
               </p>
               <p className="font-medium">
                 Balance:{" "}
-                <span className="font-normal text-gray-400">$12,345.67</span>
+                <span className="font-normal text-gray-400">
+                  ${account?.balances?.available}
+                </span>
               </p>
             </div>
             <div className="flex justify-between items-center">

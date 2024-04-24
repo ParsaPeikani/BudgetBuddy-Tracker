@@ -406,7 +406,10 @@ export default function Dashboard() {
             )}
             <TabsContent value="balance">
               <div className="flex flex-col items-center justify-center text-white mt-10">
-                <h1 className="text-6xl font-bold mb-4">50,000,000</h1>
+                <h1 className="text-6xl font-bold mb-4">
+                  {balances[0]?.account?.balances?.available +
+                    balances[1]?.account?.balances?.available}
+                </h1>
                 <p className="text-gray-400 text-2xl mb-10">
                   This is your current TD balance 🤫
                 </p>
@@ -414,7 +417,7 @@ export default function Dashboard() {
 
               {/* <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10"></div> */}
               <div className="flex justify-center">
-                <CheckingComponent />
+                <CheckingComponent account={balances[0]?.account} />
                 <SavingComponent />
               </div>
             </TabsContent>
