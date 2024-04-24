@@ -23,6 +23,7 @@ export function SavingComponent() {
         <div className="text-gray-500 text-lg">
           <p>Account Number: ******8611</p>
           <p>Balance: $12,345.67</p>
+          <p>Account ID: mJYRxLXP44s3P1zgZ35eFynAxPV3nQSBbz84m</p>
         </div>
         <div className="flex flex-col justify-center items-center p-5">
           <h1 className="text-white text-2xl font-bold">

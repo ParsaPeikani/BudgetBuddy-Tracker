@@ -1,5 +1,6 @@
 import * as React from "react";
 import { CheckingTable } from "./checkingTable";
+import { CheckingPopover } from "./checkingPopover";
 
 import {
   Card,
@@ -20,9 +21,15 @@ export function CheckingComponent() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-gray-500 text-lg">
-          <p>Account Number: ******0936</p>
-          <p>Balance: $12,345.67</p>
+        <div className="text-gray-500 text-lg flex justify-between">
+          <div>
+            <p>Account Number: ******0936</p>
+            <p>Balance: $12,345.67</p>
+            <p>Account ID: dkYXK7qB99SQRnwd9QE7IdgjVwvyg1FKYMo11</p>
+          </div>
+          <div className="flex">
+            <CheckingPopover />
+          </div>
         </div>
         <div className="flex flex-col justify-center items-center p-5">
           <h1 className="text-white text-2xl font-bold">

@@ -43,6 +43,6 @@ const tdTransactionSchema = new Schema(
 );
 
 const TDTransaction =
-  models.Transaction || model("TDTransaction", tdTransactionSchema);
+  models.TDTransaction || model("TDTransaction", tdTransactionSchema);
 
 export default TDTransaction;

@@ -3,6 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, PlaidApi, Products, PlaidEnvironments } from "plaid";
 import Transaction from "@/Models/transaction";
+import TDTransaction from "@/Models/tdTransactions";
 import connectDB from "@/pages/lib/connectDB";
 
 type ResponseData = {
@@ -88,34 +89,31 @@ export default async function handler(
       // When moved to development, you can uncomment this code so that you can store in mongodb all your transactions
       // The highest amount of transactions that you can get in one go is 199. If you want to get more transactions, you will have to make multiple requests
 
-      // for (const transaction of recently_added) {
-      //   const newTransaction = new Transaction({
-      //     transactionId: transaction.transaction_id,
-      //     accountId: transaction.account_id,
-      //     userId: req.query.userId,
-      //     amount: transaction.amount,
-      //     date: transaction.date,
-      //     category: transaction.category,
-      //     pending: transaction.pending,
-      //     merchantName: transaction.merchant_name,
-      //     paymentChannel: transaction.payment_channel,
-      //     currency: transaction.iso_currency_code,
-      //   });
-      //   newTransaction
-      //     .save()
-      //     .then((transaction: object) =>
-      //       console.log("New transaction created:")
-      //     )
-      //     .catch((err: any) => {
-      //       console.error("Error creating new transaction:", err);
-      //       res
-      //         .status(500)
-      //         .json({
-      //           message: "Error creating new transaction",
-      //           latest_transactions: [],
-      //         });
-      //     });
-      // }
+      for (const transaction of recently_added) {
+        const newTransaction = new TDTransaction({
+          accountId: transaction.account_id,
+          transactionId: transaction.transaction_id,
+          amount: transaction.amount,
+          date: transaction.date,
+          category: transaction.category,
+          pending: transaction.pending,
+          name: transaction.name,
+        });
+        newTransaction
+          .save()
+          .then((transaction: object) =>
+            console.log("New transaction created:")
+          )
+          .catch((err: any) => {
+            console.error("Error creating new transaction:", err);
+            res.status(500).json({
+              message: "Error creating new transaction",
+              latest_transactions: [],
+            });
+          });
+      }
+
+      console.log("Successfully stored transactions in the database");
 
       res
         .status(200)
