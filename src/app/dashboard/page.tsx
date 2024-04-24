@@ -11,7 +11,7 @@ import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
-import { CheckingComponent } from "@/components/balance/Checking";
+import { CheckingComponent } from "@/components/balance/checking";
 import { SavingComponent } from "@/components/balance/saving";
 
 import MyResponsivePie from "@/components/charts/donute";
@@ -44,7 +44,7 @@ export default function Dashboard() {
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview"); // Default to 'balance'
+  const [activeTab, setActiveTab] = useState("balance"); // Default to 'balance'
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -351,21 +351,25 @@ export default function Dashboard() {
     }
   };
 
-  // const postTrans = async () => {
-  //   try {
-  //     await axios.post("/api/mongoDB/postTransactions");
-  //     toast("Transactions have been posted successfully!", {
-  //       position: "top-center",
-  //       style: {
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //       }, // Centering the text
-  //     });
-  //   } catch (error) {
-  //     console.error("There was an error posting the transactions!", error);
-  //   }
-  // };
+  const postTrans = async () => {
+    try {
+      const response = await axios.get("/api/plaid/transactions");
+      console.log(
+        "Transactions have been posted successfully!",
+        response.data.latest_transactions
+      );
+      // toast("Transactions have been posted successfully!", {
+      //   position: "top-center",
+      //   style: {
+      //     display: "flex",
+      //     justifyContent: "center",
+      //     alignItems: "center",
+      //   }, // Centering the text
+      // });
+    } catch (error) {
+      console.error("There was an error getting the transactions!", error);
+    }
+  };
 
   // Getting the column data from the getColumns function
   const columns = getColumns(deleteTransaction, updateTransaction);
@@ -495,14 +499,14 @@ export default function Dashboard() {
             </TabsContent>
             <br />
 
-            {/* <div className="flex justify-center">
+            <div className="flex justify-center">
               <button
                 onClick={postTrans}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Post Transactions
               </button>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

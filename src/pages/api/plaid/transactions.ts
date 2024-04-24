@@ -46,9 +46,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
+  console.log("hello we are getting here");
   await connectDB();
   Promise.resolve().then(async function () {
-
     // Set cursor to empty to receive all historical updates
     let cursor = null;
 
@@ -83,7 +83,8 @@ export default async function handler(
         new Date(a.date).getTime() - new Date(b.date).getTime();
 
       // Return the 200 most recent transactions
-      const recently_added = added.sort(compareTxnsByDateAscending).slice(-200);
+      const recently_added = added.sort(compareTxnsByDateAscending).slice(-350);
+
       // When moved to development, you can uncomment this code so that you can store in mongodb all your transactions
       // The highest amount of transactions that you can get in one go is 199. If you want to get more transactions, you will have to make multiple requests
 
