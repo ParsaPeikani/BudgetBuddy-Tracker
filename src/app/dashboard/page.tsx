@@ -353,11 +353,8 @@ export default function Dashboard() {
 
   const postTrans = async () => {
     try {
-      const response = await axios.get("/api/plaid/transactions");
-      console.log(
-        "Transactions have been posted successfully!",
-        response.data.latest_transactions
-      );
+      const response = await axios.get("/api/plaid/balance");
+      console.log("Transactions have been posted successfully!", response.data);
       // toast("Transactions have been posted successfully!", {
       //   position: "top-center",
       //   style: {
