@@ -14,6 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { RowDropBox } from "../row-size/row-size";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -80,12 +81,198 @@ const data: Checking[] = [
     amount: 721,
     status: "pending",
   },
+  {
+    id: "m5gr84i9",
+    date: "2024-04-20",
+    name: "a",
+    amount: 316,
+    status: "verified",
+  },
+  {
+    id: "3u1reuv4",
+    date: "2024-04-21",
+    name: "b",
+    amount: 242,
+    status: "verified",
+  },
+  {
+    id: "derv1ws0",
+    date: "2024-04-22",
+    name: "c",
+    amount: 837,
+    status: "pending",
+  },
+  {
+    id: "5kma53ae",
+    date: "2024-04-23",
+    name: "d",
+    amount: 874,
+    status: "verified",
+  },
+  {
+    id: "bhqecj4p",
+    date: "2024-04-24",
+    name: "e",
+    amount: 721,
+    status: "pending",
+  },
+  {
+    id: "m5gr84i9",
+    date: "2024-04-20",
+    name: "a",
+    amount: 316,
+    status: "verified",
+  },
+  {
+    id: "3u1reuv4",
+    date: "2024-04-21",
+    name: "b",
+    amount: 242,
+    status: "verified",
+  },
+  {
+    id: "derv1ws0",
+    date: "2024-04-22",
+    name: "c",
+    amount: 837,
+    status: "pending",
+  },
+  {
+    id: "5kma53ae",
+    date: "2024-04-23",
+    name: "d",
+    amount: 874,
+    status: "verified",
+  },
+  {
+    id: "bhqecj4p",
+    date: "2024-04-24",
+    name: "e",
+    amount: 721,
+    status: "pending",
+  },
+  {
+    id: "m5gr84i9",
+    date: "2024-04-20",
+    name: "a",
+    amount: 316,
+    status: "verified",
+  },
+  {
+    id: "3u1reuv4",
+    date: "2024-04-21",
+    name: "b",
+    amount: 242,
+    status: "verified",
+  },
+  {
+    id: "derv1ws0",
+    date: "2024-04-22",
+    name: "c",
+    amount: 837,
+    status: "pending",
+  },
+  {
+    id: "5kma53ae",
+    date: "2024-04-23",
+    name: "d",
+    amount: 874,
+    status: "verified",
+  },
+  {
+    id: "bhqecj4p",
+    date: "2024-04-24",
+    name: "e",
+    amount: 721,
+    status: "pending",
+  },
+  {
+    id: "m5gr84i9",
+    date: "2024-04-20",
+    name: "a",
+    amount: 316,
+    status: "verified",
+  },
+  {
+    id: "3u1reuv4",
+    date: "2024-04-21",
+    name: "b",
+    amount: 242,
+    status: "verified",
+  },
+  {
+    id: "derv1ws0",
+    date: "2024-04-22",
+    name: "c",
+    amount: 837,
+    status: "pending",
+  },
+  {
+    id: "5kma53ae",
+    date: "2024-04-23",
+    name: "d",
+    amount: 874,
+    status: "verified",
+  },
+  {
+    id: "bhqecj4p",
+    date: "2024-04-24",
+    name: "e",
+    amount: 721,
+    status: "pending",
+  },
+  {
+    id: "m5gr84i9",
+    date: "2024-04-20",
+    name: "a",
+    amount: 316,
+    status: "verified",
+  },
+  {
+    id: "3u1reuv4",
+    date: "2024-04-21",
+    name: "b",
+    amount: 242,
+    status: "verified",
+  },
+  {
+    id: "derv1ws0",
+    date: "2024-04-22",
+    name: "c",
+    amount: 837,
+    status: "pending",
+  },
+  {
+    id: "5kma53ae",
+    date: "2024-04-23",
+    name: "d",
+    amount: 874,
+    status: "verified",
+  },
+  {
+    id: "bhqecj4p",
+    date: "2024-04-24",
+    name: "e",
+    amount: 721,
+    status: "pending",
+  },
 ];
 
 export const columns: ColumnDef<Checking>[] = [
   {
     accessorKey: "date",
-    header: "Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="-ml-4"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <div className="capitalize text-white">{row.getValue("date")}</div>
     ),
@@ -95,6 +282,7 @@ export const columns: ColumnDef<Checking>[] = [
     header: ({ column }) => {
       return (
         <Button
+          className="-ml-4"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -109,7 +297,18 @@ export const columns: ColumnDef<Checking>[] = [
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    header: ({ column }) => {
+      return (
+        <Button
+          className="-ml-4"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Amount
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
 
@@ -119,14 +318,23 @@ export const columns: ColumnDef<Checking>[] = [
         currency: "USD",
       }).format(amount);
 
-      return (
-        <div className="text-right font-medium text-white">{formatted}</div>
-      );
+      return <div className="font-medium text-white">{formatted}</div>;
     },
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="-ml-4"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <div className="capitalize text-white">{row.getValue("status")}</div>
     ),
@@ -134,10 +342,18 @@ export const columns: ColumnDef<Checking>[] = [
 ];
 
 export function CheckingTable() {
+  let [currentPage, setCurrentPage] = React.useState(1);
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [filtering, setFiltering] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  // Sets the number of rows to display
+  const handleRowChange = (row: string) => {
+    table.setPageSize(parseInt(row));
+  };
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -150,11 +366,13 @@ export function CheckingTable() {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    onGlobalFilterChange: setFiltering,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      globalFilter: filtering,
       columnFilters,
       columnVisibility,
       rowSelection,
@@ -166,11 +384,9 @@ export function CheckingTable() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter TD Checking transactions..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
+          value={filtering}
+          onChange={(event) => setFiltering(event.target.value)}
+          className="max-w-sm text-white"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -249,16 +465,35 @@ export function CheckingTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <div className="flex items-center space-x-2 pr-12">
+          <h3 className="text-sm text-gray-600">Rows per page</h3>
+          <div className="text-white">
+            <RowDropBox onRowChange={handleRowChange} />
+          </div>
         </div>
+        <h3 className="pr-10 text-white">
+          Page {currentPage} of {table.getPageCount()}
+        </h3>
         <div className="space-x-2 text-white">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              setCurrentPage(1);
+              table.setPageIndex(0);
+            }}
+            disabled={!table.getCanPreviousPage()}
+          >
+            First
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              table.previousPage();
+              setCurrentPage(currentPage - 1);
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
@@ -266,10 +501,24 @@ export function CheckingTable() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              table.nextPage();
+              setCurrentPage(currentPage + 1);
+            }}
             disabled={!table.getCanNextPage()}
           >
             Next
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setCurrentPage(table.getPageCount());
+              table.setPageIndex(table.getPageCount() - 1);
+            }}
+            disabled={!table.getCanNextPage()}
+          >
+            Last
           </Button>
         </div>
       </div>

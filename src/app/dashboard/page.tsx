@@ -481,7 +481,7 @@ export default function Dashboard() {
                     Welcome back Parsa!
                   </h1>
                   <p className="text-gray-400 lg:text-2xl md:text-md">
-                    Here is a list of your transactions :)
+                    Here is a list of your CIBC Credit Card transactions :)
                   </p>
                 </div>
                 <div className="flex justify-center -mt-40 w-2/6 pt-24">
