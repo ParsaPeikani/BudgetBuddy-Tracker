@@ -4,7 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function MonthlyChartLoading() {
   return (
     <div className="flex flex-col space-y-3 items-center justify-center w-full">
-      <Skeleton className="h-[400px] w-full md:w-[90%] lg:w-[85%] rounded-xl" />
+      <Skeleton className="h-[40px] w-full md:w-[90%] lg:w-[25%] rounded-xl mb-8" />
+      <Skeleton className="h-[450px] w-full md:w-[90%] lg:w-[85%] rounded-xl" />
     </div>
   );
 }
@@ -15,12 +16,18 @@ export function ChartLoading() {
     <div className="pt-20 flex w-full justify-center items-center">
       <div className="w-5/12 flex justify-center items-center mx-20">
         <div className="space-y-3 w-full">
+          <div className="flex justify-center">
+            <Skeleton className="h-[30px] w-[50%] rounded-xl" />
+          </div>
           <Skeleton className="h-[300px] w-full rounded-xl" />
         </div>
       </div>
 
       <div className="w-5/12 flex justify-center items-center mx-20">
         <div className="space-y-3 w-full">
+          <div className="flex justify-center">
+            <Skeleton className="h-[30px] w-[50%] rounded-xl" />
+          </div>
           <Skeleton className="h-[300px] w-full rounded-xl" />
         </div>
       </div>

@@ -54,7 +54,7 @@ export default function Dashboard() {
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
   const [isTdLoading, setIsTdLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("balance"); // Default to 'balance'
+  const [activeTab, setActiveTab] = useState("overview"); // Default to 'balance'
   const [balances, setBalances] = useState<any>([]);
 
   const handleTabChange = (value: string) => {
