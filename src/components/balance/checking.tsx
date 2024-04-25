@@ -1,6 +1,7 @@
 import * as React from "react";
 import { CheckingTable } from "./checkingTable";
 import { CheckingPopover } from "./checkingPopover";
+import { Checking } from "./checkingTable";
 
 import {
   Card,
@@ -11,7 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function CheckingComponent({ account }: { account: any }) {
+export function CheckingComponent({
+  account,
+  transactions,
+}: {
+  account: any;
+  transactions: Checking[];
+}) {
+  console.log("these are the transactions", transactions);
   return (
     <Card className="w-1/2">
       <CardHeader>

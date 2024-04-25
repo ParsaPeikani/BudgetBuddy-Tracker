@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar/navbar";
 import { Payment, getColumns } from "@/components/custom-table/columns";
+import { Checking } from "@/components/balance/checkingTable";
 import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
@@ -22,15 +23,15 @@ export default function Dashboard() {
   const { session } = useSession();
   const user_id = session?.user.id;
   // Uncomment this function to store the transactions in the database for the development environment
-  const getTrans = async () => {
-    try {
-      const response = await axios.get(
-        `/api/plaid/transactions?userId=${user_id}`
-      );
-    } catch (error) {
-      console.error("There was an error!", error);
-    }
-  };
+  // const getTrans = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `/api/plaid/transactions?userId=${user_id}`
+  //     );
+  //   } catch (error) {
+  //     console.error("There was an error!", error);
+  //   }
+  // };
   interface Transaction {
     id: string; // Assuming id is a string, adjust types accordingly
     date: Date; // Adjust according to the actual data type, e.g., string or Date
@@ -41,6 +42,7 @@ export default function Dashboard() {
   }
 
   const [transactions, setTransactions] = useState<Payment[]>([]);
+  const [tdTransactions, setTdTransactions] = useState<Checking[]>([]);
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
@@ -55,6 +57,7 @@ export default function Dashboard() {
     setIsLoading(true); // Start loading
     try {
       fetchTransactions();
+      fetchTDTransactions();
       fetchBalances();
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
@@ -64,6 +67,26 @@ export default function Dashboard() {
       });
     }
   }, []);
+
+  // Fetch transactions from your API
+  const fetchTDTransactions = async () => {
+    // setIsLoading(true);
+    const response = await axios.get("/api/mongoDB/fetchTDTransactions");
+    const TDTrans = response.data.map((transaction: any) => ({
+      id: transaction.transactionId,
+      date: new Date(transaction.date).toLocaleDateString("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }),
+      name: transaction.name ? transaction.name : "UnKnown",
+      amount: transaction.amount,
+      category: transaction.category[0],
+      verified: transaction.pending ? "Pending" : "Verified",
+    }));
+    // setIsLoading(false);
+    setTdTransactions(TDTrans);
+  };
 
   // Fetch transactions from your API
   const fetchTransactions = async (latestYear = true) => {
@@ -417,7 +440,10 @@ export default function Dashboard() {
 
               {/* <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10"></div> */}
               <div className="flex justify-center">
-                <CheckingComponent account={balances[0]?.account} />
+                <CheckingComponent
+                  account={balances[0]?.account}
+                  transactions={tdTransactions}
+                />
                 {/* <SavingComponent /> */}
               </div>
             </TabsContent>
