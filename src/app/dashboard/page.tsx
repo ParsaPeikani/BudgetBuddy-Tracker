@@ -8,9 +8,12 @@ import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { TableLoading } from "@/components/loading/loading";
-import { ChartLoading } from "@/components/loading/loading";
-import { BalanceLoading } from "@/components/loading/loading";
+import {
+  TableLoading,
+  ChartLoading,
+  BalanceLoading,
+  MonthYearLoading,
+} from "@/components/loading/loading";
 import { toast } from "sonner";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import { CheckingComponent } from "@/components/balance/checking";
@@ -460,34 +463,6 @@ export default function Dashboard() {
                 />
               </div>
             )}
-            <TabsContent value="balance">
-              {isTdLoading ? (
-                <BalanceLoading />
-              ) : (
-                <>
-                  <div className="flex flex-col items-center justify-center text-white mt-10">
-                    <h1 className="text-6xl font-bold mb-4">
-                      {balances[0]?.account?.balances?.available +
-                        balances[1]?.account?.balances?.available || 0}
-                    </h1>
-                    <p className="text-gray-400 text-2xl mb-10">
-                      This is your current TD balance 🤫
-                    </p>
-                  </div>
-
-                  <div className="flex justify-center">
-                    <CheckingComponent
-                      account={balances[0]?.account}
-                      transactions={tdCheckingTransactions}
-                    />
-                    <SavingComponent
-                      account={balances[1]?.account}
-                      transactions={tdSavingTransactions}
-                    />
-                  </div>
-                </>
-              )}
-            </TabsContent>
             <TabsContent value="overview">
               <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
                 <div className="-mt-40">
@@ -498,18 +473,22 @@ export default function Dashboard() {
                     Here are your charts :)
                   </p>
                 </div>
-                <div className="flex justify-center -mt-40 w-2/6 pt-24">
-                  {month !== "" && (
-                    <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
-                      {month}
-                    </h1>
-                  )}
-                  {year !== "" && (
-                    <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
-                      {year}
-                    </p>
-                  )}
-                </div>
+                {isLoading ? (
+                  <MonthYearLoading />
+                ) : (
+                  <div className="flex justify-center -mt-40 w-2/6 pt-24">
+                    {month !== "" && (
+                      <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        {month}
+                      </h1>
+                    )}
+                    {year !== "" && (
+                      <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        {year}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="item-center">
                 <div className="flex justify-center">
@@ -540,7 +519,6 @@ export default function Dashboard() {
                 )}
               </div>
             </TabsContent>
-
             <TabsContent value="transactions">
               <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
                 <div className="-mt-40">
@@ -575,6 +553,34 @@ export default function Dashboard() {
                   />
                 )}
               </div>
+            </TabsContent>
+            <TabsContent value="balance">
+              {isTdLoading ? (
+                <BalanceLoading />
+              ) : (
+                <>
+                  <div className="flex flex-col items-center justify-center text-white mt-10">
+                    <h1 className="text-6xl font-bold mb-4">
+                      {balances[0]?.account?.balances?.available +
+                        balances[1]?.account?.balances?.available || 0}
+                    </h1>
+                    <p className="text-gray-400 text-2xl mb-10">
+                      This is your current TD balance 🤫
+                    </p>
+                  </div>
+
+                  <div className="flex justify-center">
+                    <CheckingComponent
+                      account={balances[0]?.account}
+                      transactions={tdCheckingTransactions}
+                    />
+                    <SavingComponent
+                      account={balances[1]?.account}
+                      transactions={tdSavingTransactions}
+                    />
+                  </div>
+                </>
+              )}
             </TabsContent>
             <br />
 

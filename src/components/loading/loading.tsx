@@ -1,5 +1,16 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
+// MonthYearLoading for the month and year component on the overview page
+export function MonthYearLoading() {
+  return (
+    <div className="flex justify-end items-start w-full -mt-16">
+      <div className="flex flex-col space-y-3 w-full max-w-[45%]">
+        <Skeleton className="h-[70px] w-full rounded-xl mb-8" />
+      </div>
+    </div>
+  );
+}
+
 // MonthlyChartLoading for the first big chart on the overview page
 export function MonthlyChartLoading() {
   return (
