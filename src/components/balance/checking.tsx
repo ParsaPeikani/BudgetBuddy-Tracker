@@ -19,7 +19,7 @@ export function CheckingComponent({
   account: any;
   transactions: Checking[];
 }) {
-  console.log("these are the transactions", transactions);
+  // console.log("these are the transactions", transactions[0]);
   return (
     <Card className="w-1/2">
       <CardHeader>
@@ -63,7 +63,7 @@ export function CheckingComponent({
           <h1 className="text-white text-2xl font-bold mb-4">
             Recent Transaction Table
           </h1>
-          <CheckingTable />
+          <CheckingTable data={transactions} />
         </div>
 
         <form>

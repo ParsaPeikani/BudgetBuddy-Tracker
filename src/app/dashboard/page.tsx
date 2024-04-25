@@ -57,7 +57,7 @@ export default function Dashboard() {
     setIsLoading(true); // Start loading
     try {
       fetchTransactions();
-      fetchTDTransactions();
+      fetchTDCheckingTransactions();
       fetchBalances();
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
@@ -69,9 +69,11 @@ export default function Dashboard() {
   }, []);
 
   // Fetch transactions from your API
-  const fetchTDTransactions = async () => {
+  const fetchTDCheckingTransactions = async () => {
     // setIsLoading(true);
-    const response = await axios.get("/api/mongoDB/fetchTDTransactions");
+    const response = await axios.get(
+      "/api/mongoDB/fetchTDCheckingTransactions"
+    );
     const TDTrans = response.data.map((transaction: any) => ({
       id: transaction.transactionId,
       date: new Date(transaction.date).toLocaleDateString("en-CA", {
@@ -82,7 +84,7 @@ export default function Dashboard() {
       name: transaction.name ? transaction.name : "UnKnown",
       amount: transaction.amount,
       category: transaction.category[0],
-      verified: transaction.pending ? "Pending" : "Verified",
+      status: transaction.pending ? "Pending" : "Verified",
     }));
     // setIsLoading(false);
     setTdTransactions(TDTrans);

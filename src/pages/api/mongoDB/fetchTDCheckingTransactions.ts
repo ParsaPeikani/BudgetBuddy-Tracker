@@ -14,7 +14,11 @@ export default async function handler(
     try {
       let transactions;
 
-      transactions = await TDTransaction.find({}).sort({ date: -1 });
+      const TdCheckingID = process.env.TD_CHECKING_ACCOUNT_ID;
+
+      transactions = await TDTransaction.find({ accountId: TdCheckingID }).sort(
+        { date: -1 }
+      );
 
       res.status(200).json(transactions);
     } catch (error) {
