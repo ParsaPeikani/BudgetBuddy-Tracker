@@ -169,7 +169,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter TD Checking transactions..."
+          placeholder="Filter TD transactions..."
           value={filtering}
           onChange={(event) => setFiltering(event.target.value)}
           className="max-w-sm text-white"

@@ -23,9 +23,9 @@ export function SavingComponent({
   return (
     <Card className="w-1/2">
       <CardHeader>
-        <CardTitle>TD STUDENT CHEQUING ACCOUNT</CardTitle>
+        <CardTitle>{account?.name}</CardTitle>
         <CardDescription>
-          These are details about your TD checking account
+          These are details about your TD saving account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -49,7 +49,7 @@ export function SavingComponent({
               <p className="font-medium">
                 Account ID:{" "}
                 <span className="font-normal text-gray-400">
-                  ${account?.accountId}
+                  {account?.accountId}
                 </span>
               </p>
               <div className="flex">
@@ -61,7 +61,7 @@ export function SavingComponent({
 
         <div className="flex flex-col justify-center items-center p-5">
           <h1 className="text-white text-2xl font-bold mb-4">
-            Recent Checking Transaction Table
+            Recent Saving Transaction Table
           </h1>
           <CheckingTable data={transactions} />
         </div>

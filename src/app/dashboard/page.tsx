@@ -42,7 +42,12 @@ export default function Dashboard() {
   }
 
   const [transactions, setTransactions] = useState<Payment[]>([]);
-  const [tdTransactions, setTdTransactions] = useState<Checking[]>([]);
+  const [tdCheckingTransactions, setTdCheckingTransactions] = useState<
+    Checking[]
+  >([]);
+  const [tdSavingTransactions, setTdSavingTransactions] = useState<Checking[]>(
+    []
+  );
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
@@ -58,6 +63,7 @@ export default function Dashboard() {
     try {
       fetchTransactions();
       fetchTDCheckingTransactions();
+      fetchTDSavingTransactions();
       fetchBalances();
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
@@ -87,7 +93,27 @@ export default function Dashboard() {
       status: transaction.pending ? "Pending" : "Verified",
     }));
     // setIsLoading(false);
-    setTdTransactions(TDTrans);
+    setTdCheckingTransactions(TDTrans);
+  };
+
+  // Fetch transactions from your API
+  const fetchTDSavingTransactions = async () => {
+    // setIsLoading(true);
+    const response = await axios.get("/api/mongoDB/fetchTDSavingTransactions");
+    const TDTrans = response.data.map((transaction: any) => ({
+      id: transaction.transactionId,
+      date: new Date(transaction.date).toLocaleDateString("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }),
+      name: transaction.name ? transaction.name : "UnKnown",
+      amount: transaction.amount,
+      category: transaction.category[0],
+      status: transaction.pending ? "Pending" : "Verified",
+    }));
+    // setIsLoading(false);
+    setTdSavingTransactions(TDTrans);
   };
 
   // Fetch transactions from your API
@@ -444,11 +470,11 @@ export default function Dashboard() {
               <div className="flex justify-center">
                 <CheckingComponent
                   account={balances[0]?.account}
-                  transactions={tdTransactions}
+                  transactions={tdCheckingTransactions}
                 />
                 <SavingComponent
                   account={balances[1]?.account}
-                  transactions={tdTransactions}
+                  transactions={tdSavingTransactions}
                 />
               </div>
             </TabsContent>
