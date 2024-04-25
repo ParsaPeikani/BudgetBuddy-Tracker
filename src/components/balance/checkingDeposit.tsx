@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function CheckingPopover() {
+export function CheckingDeposit() {
   return (
     <Popover>
       <PopoverTrigger asChild>

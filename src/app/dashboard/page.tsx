@@ -446,7 +446,10 @@ export default function Dashboard() {
                   account={balances[0]?.account}
                   transactions={tdTransactions}
                 />
-                {/* <SavingComponent /> */}
+                <SavingComponent
+                  account={balances[1]?.account}
+                  transactions={tdTransactions}
+                />
               </div>
             </TabsContent>
             <TabsContent value="overview">

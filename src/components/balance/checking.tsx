@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CheckingTable } from "./checkingTable";
-import { CheckingPopover } from "./checkingPopover";
+import { CheckingDeposit } from "./checkingDeposit";
 import { Checking } from "./checkingTable";
 
 import {
@@ -49,11 +49,11 @@ export function CheckingComponent({
               <p className="font-medium">
                 Account ID:{" "}
                 <span className="font-normal text-gray-400">
-                  dkYXK7qB99SQRnwd9QE7IdgjVwvyg1FKYMo11
+                  ${account?.accountId}
                 </span>
               </p>
               <div className="flex">
-                <CheckingPopover />
+                <CheckingDeposit />
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@ export function CheckingComponent({
 
         <div className="flex flex-col justify-center items-center p-5">
           <h1 className="text-white text-2xl font-bold mb-4">
-            Recent Transaction Table
+            Recent Saving Transaction Table
           </h1>
           <CheckingTable data={transactions} />
         </div>

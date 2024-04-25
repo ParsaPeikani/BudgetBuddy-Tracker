@@ -1,5 +1,7 @@
 import * as React from "react";
 import { CheckingTable } from "./checkingTable";
+import { SavingDeposit } from "./savingDeposit";
+import { Checking } from "./checkingTable";
 
 import {
   Card,
@@ -10,26 +12,58 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function SavingComponent() {
+export function SavingComponent({
+  account,
+  transactions,
+}: {
+  account: any;
+  transactions: Checking[];
+}) {
+  // console.log("these are the transactions", transactions[0]);
   return (
     <Card className="w-1/2">
       <CardHeader>
-        <CardTitle>TD EVERY DAY SAVINGS ACCOUNT</CardTitle>
+        <CardTitle>TD STUDENT CHEQUING ACCOUNT</CardTitle>
         <CardDescription>
-          These are details about your TD saving account
+          These are details about your TD checking account
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-gray-500 text-lg">
-          <p>Account Number: ******8611</p>
-          <p>Balance: $12,345.67</p>
-          <p>Account ID: mJYRxLXP44s3P1zgZ35eFynAxPV3nQSBbz84m</p>
+        <div className="text-gray-200 text-lg bg-black p-4 rounded-lg">
+          <div>
+            <div className="flex justify-between mb-4">
+              <p className="font-medium">
+                Account Number:{" "}
+                <span className="font-normal text-gray-400">
+                  ******{account?.mask}
+                </span>
+              </p>
+              <p className="font-medium">
+                Balance:{" "}
+                <span className="font-normal text-gray-400">
+                  ${account?.balances?.available}
+                </span>
+              </p>
+            </div>
+            <div className="flex justify-between items-center">
+              <p className="font-medium">
+                Account ID:{" "}
+                <span className="font-normal text-gray-400">
+                  ${account?.accountId}
+                </span>
+              </p>
+              <div className="flex">
+                <SavingDeposit />
+              </div>
+            </div>
+          </div>
         </div>
+
         <div className="flex flex-col justify-center items-center p-5">
-          <h1 className="text-white text-2xl font-bold">
-            Recent Transaction Table
+          <h1 className="text-white text-2xl font-bold mb-4">
+            Recent Checking Transaction Table
           </h1>
-          <CheckingTable />
+          <CheckingTable data={transactions} />
         </div>
 
         <form>
