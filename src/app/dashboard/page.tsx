@@ -418,7 +418,7 @@ export default function Dashboard() {
               {/* <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10"></div> */}
               <div className="flex justify-center">
                 <CheckingComponent account={balances[0]?.account} />
-                <SavingComponent />
+                {/* <SavingComponent /> */}
               </div>
             </TabsContent>
             <TabsContent value="overview">

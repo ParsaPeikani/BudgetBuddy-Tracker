@@ -52,7 +52,7 @@ export function CheckingComponent({ account }: { account: any }) {
         </div>
 
         <div className="flex flex-col justify-center items-center p-5">
-          <h1 className="text-white text-2xl font-bold">
+          <h1 className="text-white text-2xl font-bold mb-4">
             Recent Transaction Table
           </h1>
           <CheckingTable />
