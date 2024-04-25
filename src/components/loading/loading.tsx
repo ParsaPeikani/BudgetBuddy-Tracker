@@ -1,5 +1,34 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
+// MonthlyChartLoading for the first big chart on the overview page
+export function MonthlyChartLoading() {
+  return (
+    <div className="flex flex-col space-y-3 items-center justify-center w-full">
+      <Skeleton className="h-[400px] w-full md:w-[90%] lg:w-[85%] rounded-xl" />
+    </div>
+  );
+}
+
+// ChartLoading for the other charts on the overview page
+export function ChartLoading() {
+  return (
+    <div className="pt-20 flex w-full justify-center items-center">
+      <div className="w-5/12 flex justify-center items-center mx-20">
+        <div className="space-y-3 w-full">
+          <Skeleton className="h-[300px] w-full rounded-xl" />
+        </div>
+      </div>
+
+      <div className="w-5/12 flex justify-center items-center mx-20">
+        <div className="space-y-3 w-full">
+          <Skeleton className="h-[300px] w-full rounded-xl" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// TableLoading for the transactions page
 export function TableLoading() {
   return (
     <div className="flex flex-col space-y-3">
@@ -14,26 +43,19 @@ export function TableLoading() {
   );
 }
 
-export function MonthlyChartLoading() {
+// BalanceLoading for the balance page
+export function BalanceLoading() {
   return (
-    <div className="flex flex-col space-y-3 items-center justify-center w-full">
-      <Skeleton className="h-[400px] w-full md:w-[90%] lg:w-[85%] rounded-xl" />
-    </div>
-  );
-}
-
-export function ChartLoading() {
-  return (
-    <div className="pt-20 flex w-full justify-center items-center">
-      <div className="w-5/12 flex justify-center items-center mx-20">
-        <div className="space-y-3 w-full">
-          <Skeleton className="h-[300px] w-full rounded-xl" />
-        </div>
+    <div>
+      <div className="flex justify-center mt-8 mb-8">
+        <Skeleton className="h-[120px] md:w-[90%] lg:w-[20%] rounded-xl" />
       </div>
-
-      <div className="w-5/12 flex justify-center items-center mx-20">
-        <div className="space-y-3 w-full">
-          <Skeleton className="h-[300px] w-full rounded-xl" />
+      <div className="flex justify-center">
+        <div className="lg:w-[50%] pl-4 pr-4">
+          <Skeleton className="h-[1000px] rounded-xl" />
+        </div>
+        <div className="lg:w-[50%] pl-4 pr-4">
+          <Skeleton className="h-[1000px]  rounded-xl" />
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { TableLoading } from "@/components/loading/loading";
 import { ChartLoading } from "@/components/loading/loading";
+import { BalanceLoading } from "@/components/loading/loading";
 import { toast } from "sonner";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import { CheckingComponent } from "@/components/balance/checking";
@@ -18,6 +19,7 @@ import { SavingComponent } from "@/components/balance/saving";
 import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import { SelectDate } from "@/components/SelectDate/selectDate";
+import { set } from "mongoose";
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -51,6 +53,7 @@ export default function Dashboard() {
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isTdLoading, setIsTdLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("balance"); // Default to 'balance'
   const [balances, setBalances] = useState<any>([]);
 
@@ -60,6 +63,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     setIsLoading(true); // Start loading
+    setIsTdLoading(true);
     try {
       fetchTransactions();
       fetchTDCheckingTransactions();
@@ -70,6 +74,7 @@ export default function Dashboard() {
     } finally {
       setTimeout(() => {
         setIsLoading(false);
+        setIsTdLoading(false);
       });
     }
   }, []);
@@ -456,27 +461,32 @@ export default function Dashboard() {
               </div>
             )}
             <TabsContent value="balance">
-              <div className="flex flex-col items-center justify-center text-white mt-10">
-                <h1 className="text-6xl font-bold mb-4">
-                  {balances[0]?.account?.balances?.available +
-                    balances[1]?.account?.balances?.available}
-                </h1>
-                <p className="text-gray-400 text-2xl mb-10">
-                  This is your current TD balance 🤫
-                </p>
-              </div>
+              {isTdLoading ? (
+                <BalanceLoading />
+              ) : (
+                <>
+                  <div className="flex flex-col items-center justify-center text-white mt-10">
+                    <h1 className="text-6xl font-bold mb-4">
+                      {balances[0]?.account?.balances?.available +
+                        balances[1]?.account?.balances?.available || 0}
+                    </h1>
+                    <p className="text-gray-400 text-2xl mb-10">
+                      This is your current TD balance 🤫
+                    </p>
+                  </div>
 
-              {/* <div className="flex justify-between bg-black p-8 lg:pl-20 -mt-40 md:pl-10"></div> */}
-              <div className="flex justify-center">
-                <CheckingComponent
-                  account={balances[0]?.account}
-                  transactions={tdCheckingTransactions}
-                />
-                <SavingComponent
-                  account={balances[1]?.account}
-                  transactions={tdSavingTransactions}
-                />
-              </div>
+                  <div className="flex justify-center">
+                    <CheckingComponent
+                      account={balances[0]?.account}
+                      transactions={tdCheckingTransactions}
+                    />
+                    <SavingComponent
+                      account={balances[1]?.account}
+                      transactions={tdSavingTransactions}
+                    />
+                  </div>
+                </>
+              )}
             </TabsContent>
             <TabsContent value="overview">
               <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
