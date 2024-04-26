@@ -62,7 +62,7 @@ export default function MyResponsivePie({ data }: { data: any[] }) {
         Each Transaction Category In Percentile
       </h2>
       {/* style={{ height: `${parentHeight}px` }} */}
-      <div className="flex mt-[-20px] lg:h-[500px] md:h-[400px]">
+      <div className="flex mt-[-20px] lg:h-[490px] md:h-[400px]">
         <ResponsivePie
           data={percentData}
           margin={{ top: 40, right: 80, bottom: 80, left: 90 }}

@@ -492,7 +492,7 @@ export default function Dashboard() {
               </div>
               <div className="item-center">
                 <div className="shadow-xl rounded-lg overflow-hidden mx-10">
-                  <div className="p-10 border-2 border-white glow rounded-lg bg-gray-950">
+                  <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
                     <MonthlyBarChart
                       transactions={transactions}
                       month={month || ""}
@@ -507,16 +507,24 @@ export default function Dashboard() {
                     <ChartLoading />
                   </div>
                 ) : (
-                  <div className="flex justify-center mt-20">
-                    <div className=" w-1/2">
-                      <HorizontalBarChart
-                        transactions={transactions}
-                        month={month || ""}
-                        year={year || ""}
-                      />
+                  <div className="flex justify-center mt-20 mr-5 ml-5">
+                    <div className="w-1/2 mx-5">
+                      <div className="shadow-xl rounded-lg overflow-hidden">
+                        <div className="pt-5 pb-5 border-2 border-white glow rounded-lg bg-gray-950">
+                          <HorizontalBarChart
+                            transactions={transactions}
+                            month={month || ""}
+                            year={year || ""}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-1/2">
-                      <MyResponsivePie data={transactions} />
+                    <div className="w-1/2 mx-5">
+                      <div className="shadow-xl rounded-lg overflow-hidden">
+                        <div className="p-10 border-2 border-white glow rounded-lg bg-gray-950">
+                          <MyResponsivePie data={transactions} />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}

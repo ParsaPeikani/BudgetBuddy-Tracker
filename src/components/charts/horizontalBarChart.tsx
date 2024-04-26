@@ -93,7 +93,7 @@ export default function HorizontalBarChart({
         Budgeted vs Actual Expenses
       </h2>
       {/* style={{ height: "400px", width: "600px" }} */}
-      <div className="md:h-[400px] md:w-[600px] lg:h-[550px] lg:w-[900px] -mt-10">
+      <div className="md:h-[400px] md:w-[600px] lg:h-[550px] lg:w-[820px] -mt-10">
         <ResponsiveBar
           data={data}
           keys={["Actual", "Budget"]} // Representing actual and budgeted expenses
