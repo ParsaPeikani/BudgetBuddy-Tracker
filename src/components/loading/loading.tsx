@@ -25,7 +25,7 @@ export function MonthlyChartLoading() {
 export function ChartLoading() {
   return (
     <div className="pt-20 flex w-full justify-center items-center">
-      <div className="w-5/12 flex justify-center items-center mx-20">
+      <div className="w-5/12 flex justify-center items-center mx-20 p-12 border-2 border-white glow rounded-lg bg-gray-950">
         <div className="space-y-3 w-full">
           <div className="flex justify-center">
             <Skeleton className="h-[30px] w-[50%] rounded-xl" />
@@ -34,7 +34,7 @@ export function ChartLoading() {
         </div>
       </div>
 
-      <div className="w-5/12 flex justify-center items-center mx-20">
+      <div className="w-5/12 flex justify-center items-center mx-20 p-12 border-2 border-white glow rounded-lg bg-gray-950">
         <div className="space-y-3 w-full">
           <div className="flex justify-center">
             <Skeleton className="h-[30px] w-[50%] rounded-xl" />

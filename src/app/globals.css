@@ -137,6 +137,10 @@
   background-color: #121212; /* Adjust based on your theme */
 }
 
+.bg-gray-900 {
+  background-color: #1e1e1e;
+}
+
 .shadow-xl {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }

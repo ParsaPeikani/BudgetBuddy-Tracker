@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-import { RowDropBox } from "../row-size/row-size";
+import { TDRowDropBox } from "../row-size/row-size";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -166,17 +166,20 @@ export function CheckingTable({ data }: { data: Checking[] }) {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-ful">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter TD transactions..."
           value={filtering}
           onChange={(event) => setFiltering(event.target.value)}
-          className="max-w-sm text-white"
+          className="max-w-sm text-white bg-gray-950"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto text-white">
+            <Button
+              variant="outline"
+              className="ml-auto text-white bg-gray-950"
+            >
               Columns <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -202,7 +205,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
         </DropdownMenu>
       </div>
       <div className="rounded-md border">
-        <Table>
+        <Table className="bg-gray-900">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -254,8 +257,8 @@ export function CheckingTable({ data }: { data: Checking[] }) {
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex items-center space-x-2 pr-12">
           <h3 className="text-sm text-gray-600">Rows per page</h3>
-          <div className="text-white">
-            <RowDropBox onRowChange={handleRowChange} />
+          <div className="text-white ">
+            <TDRowDropBox onRowChange={handleRowChange} />
           </div>
         </div>
         <h3 className="pr-10 text-white">
@@ -264,6 +267,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
         <div className="space-x-2 text-white">
           <Button
             variant="outline"
+            className="bg-gray-950"
             size="sm"
             onClick={() => {
               setCurrentPage(1);
@@ -275,6 +279,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
           </Button>
           <Button
             variant="outline"
+            className="bg-gray-950"
             size="sm"
             onClick={() => {
               table.previousPage();
@@ -286,6 +291,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
           </Button>
           <Button
             variant="outline"
+            className="bg-gray-950"
             size="sm"
             onClick={() => {
               table.nextPage();
@@ -297,6 +303,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
           </Button>
           <Button
             variant="outline"
+            className="bg-gray-950"
             size="sm"
             onClick={() => {
               setCurrentPage(table.getPageCount());

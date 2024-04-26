@@ -10,12 +10,12 @@ export function SavingDeposit() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="text-white">
+        <Button variant="outline" className="text-white bg-gray-950">
           Deposit Info
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-90">
-        <div className="grid gap-4 bg-black p-2">
+      <PopoverContent className="w-90 bg-gray-950">
+        <div className="grid gap-4 p-2">
           <div className="space-y-2 align-middle text-center">
             <h4 className="font-medium leading-none text-white text-xl">
               Direct Deposit

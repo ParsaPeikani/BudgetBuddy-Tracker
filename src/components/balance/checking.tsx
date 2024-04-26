@@ -21,7 +21,7 @@ export function CheckingComponent({
 }) {
   // console.log("these are the transactions", transactions[0]);
   return (
-    <Card className="w-1/2">
+    <Card className="w-1/2 bg-gray-950">
       <CardHeader>
         <CardTitle>{account?.name}</CardTitle>
         <CardDescription>
@@ -29,7 +29,7 @@ export function CheckingComponent({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-gray-200 text-lg bg-black p-4 rounded-lg">
+        <div className="text-gray-200 bg-gray-900 text-lg p-4 rounded-lg">
           <div>
             <div className="flex justify-between mb-4">
               <p className="font-medium">

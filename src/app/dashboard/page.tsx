@@ -8,6 +8,7 @@ import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 import {
   TableLoading,
   ChartLoading,
@@ -57,7 +58,7 @@ export default function Dashboard() {
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
   const [isTdLoading, setIsTdLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview"); // Default to 'balance'
+  const [activeTab, setActiveTab] = useState("balance"); // Default to 'balance'
   const [balances, setBalances] = useState<any>([]);
 
   const handleTabChange = (value: string) => {
@@ -470,7 +471,7 @@ export default function Dashboard() {
                     Welcome back Parsa!
                   </h1>
                   <p className="text-gray-400 lg:text-2xl md:text-md">
-                    Here are your charts :)
+                    Here are your CIBC transaction Charts :)
                   </p>
                 </div>
                 {isLoading ? (
@@ -570,17 +571,29 @@ export default function Dashboard() {
                 <BalanceLoading />
               ) : (
                 <>
-                  <div className="flex flex-col items-center justify-center text-white mt-10">
-                    <h1 className="text-6xl font-bold mb-4">
-                      {balances[0]?.account?.balances?.available +
-                        balances[1]?.account?.balances?.available || 0}
-                    </h1>
-                    <p className="text-gray-400 text-2xl mb-10">
-                      This is your current TD balance 🤫
-                    </p>
+                  <div className="flex flex-col items-center justify-center mb-8">
+                    <div className="flex flex-col items-center justify-center text-white mt-10 border border-white bg-gray-950 rounded-lg w-[30%]">
+                      <h1 className="text-6xl font-bold mt-8">
+                        {balances[0]?.account?.balances?.available +
+                          balances[1]?.account?.balances?.available || 0}
+                      </h1>
+                      <p className="text-gray-400 text-2xl mb-10">
+                        This is your current TD balance 🤫
+                      </p>
+                    </div>
+                  </div>
+                  <div className="shadow-xl rounded-lg overflow-hidden mx-10">
+                    <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
+                      <TdIncomeVsExpenseChart
+                        transactions={transactions}
+                        month={month || ""}
+                        year={year || ""}
+                        isLoading={isLoading}
+                      />
+                    </div>
                   </div>
 
-                  <div className="flex justify-center">
+                  {/* <div className="flex justify-center">
                     <CheckingComponent
                       account={balances[0]?.account}
                       transactions={tdCheckingTransactions}
@@ -589,7 +602,7 @@ export default function Dashboard() {
                       account={balances[1]?.account}
                       transactions={tdSavingTransactions}
                     />
-                  </div>
+                  </div> */}
                 </>
               )}
             </TabsContent>
