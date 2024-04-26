@@ -28,9 +28,11 @@ const FormSchema = z.object({
 export function SelectDate({
   getNewTransactions,
   fetchTransactions,
+  showAllTransactions = true,
 }: {
   getNewTransactions: (data: any) => void;
   fetchTransactions: (latestYear: boolean) => void;
+  showAllTransactions: boolean;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -163,9 +165,11 @@ export function SelectDate({
         </Form>
       </div>
       <div className="pt-4">
-        <Button variant="outline" onClick={() => fetchTransactions(false)}>
-          Get All Transactions
-        </Button>
+        {showAllTransactions && (
+          <Button variant="outline" onClick={() => fetchTransactions(false)}>
+            Get All Transactions
+          </Button>
+        )}
       </div>
     </div>
   );

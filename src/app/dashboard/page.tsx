@@ -461,6 +461,7 @@ export default function Dashboard() {
                 <SelectDate
                   getNewTransactions={getNewTransactions}
                   fetchTransactions={fetchTransactions}
+                  showAllTransactions
                 />
               </div>
             )}
@@ -582,14 +583,23 @@ export default function Dashboard() {
                       </p>
                     </div>
                   </div>
-                  <div className="shadow-xl rounded-lg overflow-hidden mx-10">
-                    <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
-                      <TdIncomeVsExpenseChart
-                        transactions={transactions}
-                        month={month || ""}
-                        year={year || ""}
-                        isLoading={isLoading}
+                  <div>
+                    <div className="flex justify-center pt-5">
+                      <SelectDate
+                        getNewTransactions={getNewTransactions}
+                        fetchTransactions={fetchTransactions}
+                        showAllTransactions={false}
                       />
+                    </div>
+                    <div className="shadow-xl rounded-lg overflow-hidden mx-10">
+                      <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
+                        <TdIncomeVsExpenseChart
+                          transactions={transactions}
+                          month={month || ""}
+                          year={year || ""}
+                          isLoading={isLoading}
+                        />
+                      </div>
                     </div>
                   </div>
 
