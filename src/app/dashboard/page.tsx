@@ -491,14 +491,17 @@ export default function Dashboard() {
                 )}
               </div>
               <div className="item-center">
-                <div className="flex justify-center">
-                  <MonthlyBarChart
-                    transactions={transactions}
-                    month={month || ""}
-                    year={year || ""}
-                    isLoading={isLoading}
-                  />
+                <div className="shadow-xl rounded-lg overflow-hidden mx-10">
+                  <div className="p-10 border-2 border-white glow rounded-lg bg-gray-950">
+                    <MonthlyBarChart
+                      transactions={transactions}
+                      month={month || ""}
+                      year={year || ""}
+                      isLoading={isLoading}
+                    />
+                  </div>
                 </div>
+
                 {isLoading ? (
                   <div className="w-full flex justify-center items-center">
                     <ChartLoading />
