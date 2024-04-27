@@ -10,6 +10,11 @@ import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 import {
+  fetchTDCheckingTransactions,
+  fetchAllTDTransactions,
+  fetchTDSavingTransactions,
+} from "@/components/serverFunctions/apiCalls";
+import {
   TableLoading,
   ChartLoading,
   BalanceLoading,
@@ -23,7 +28,6 @@ import { SavingComponent } from "@/components/balance/saving";
 import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import { SelectDate } from "@/components/SelectDate/selectDate";
-import { set } from "mongoose";
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -71,9 +75,9 @@ export default function Dashboard() {
     setIsTdLoading(true);
     try {
       fetchTransactions();
-      fetchAllTDTransactions();
-      fetchTDCheckingTransactions();
-      fetchTDSavingTransactions();
+      fetchAllTDTransactions(setAllTDTransactions);
+      fetchTDCheckingTransactions(setTdCheckingTransactions);
+      fetchTDSavingTransactions(setTdSavingTransactions);
       fetchBalances();
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
@@ -84,66 +88,6 @@ export default function Dashboard() {
       });
     }
   }, []);
-
-  // Fetch transactions from your API
-  const fetchTDCheckingTransactions = async () => {
-    // setIsLoading(true);
-    const response = await axios.get(
-      "/api/mongoDB/fetchTDCheckingTransactions"
-    );
-    const TDTrans = response.data.map((transaction: any) => ({
-      id: transaction.transactionId,
-      date: new Date(transaction.date).toLocaleDateString("en-CA", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }),
-      name: transaction.name ? transaction.name : "UnKnown",
-      amount: transaction.amount,
-      category: transaction.category[0],
-      status: transaction.pending ? "Pending" : "Verified",
-    }));
-    // setIsLoading(false);
-    setTdCheckingTransactions(TDTrans);
-  };
-
-  // Fetch All TD Transcations
-  const fetchAllTDTransactions = async () => {
-    const response = await axios.get("/api/mongoDB/fetchAllTDTransactions");
-    const TDTrans = response.data.map((transaction: any) => ({
-      id: transaction.transactionId,
-      date: new Date(transaction.date).toLocaleDateString("en-CA", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }),
-      name: transaction.name ? transaction.name : "UnKnown",
-      amount: transaction.amount,
-      category: transaction.category[0],
-      status: transaction.pending ? "Pending" : "Verified",
-    }));
-    setAllTDTransactions(TDTrans);
-  };
-
-  // Fetch transactions from your API
-  const fetchTDSavingTransactions = async () => {
-    // setIsLoading(true);
-    const response = await axios.get("/api/mongoDB/fetchTDSavingTransactions");
-    const TDTrans = response.data.map((transaction: any) => ({
-      id: transaction.transactionId,
-      date: new Date(transaction.date).toLocaleDateString("en-CA", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }),
-      name: transaction.name ? transaction.name : "UnKnown",
-      amount: transaction.amount,
-      category: transaction.category[0],
-      status: transaction.pending ? "Pending" : "Verified",
-    }));
-    // setIsLoading(false);
-    setTdSavingTransactions(TDTrans);
-  };
 
   // Fetch transactions from your API
   const fetchTransactions = async (latestYear = true) => {
