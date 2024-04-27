@@ -54,6 +54,7 @@ export default function Dashboard() {
   const [tdSavingTransactions, setTdSavingTransactions] = useState<Checking[]>(
     []
   );
+  const [allTDTransactions, setAllTDTransactions] = useState<Checking[]>([]);
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +71,7 @@ export default function Dashboard() {
     setIsTdLoading(true);
     try {
       fetchTransactions();
+      fetchAllTDTransactions();
       fetchTDCheckingTransactions();
       fetchTDSavingTransactions();
       fetchBalances();
@@ -103,6 +105,24 @@ export default function Dashboard() {
     }));
     // setIsLoading(false);
     setTdCheckingTransactions(TDTrans);
+  };
+
+  // Fetch All TD Transcations
+  const fetchAllTDTransactions = async () => {
+    const response = await axios.get("/api/mongoDB/fetchAllTDTransactions");
+    const TDTrans = response.data.map((transaction: any) => ({
+      id: transaction.transactionId,
+      date: new Date(transaction.date).toLocaleDateString("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }),
+      name: transaction.name ? transaction.name : "UnKnown",
+      amount: transaction.amount,
+      category: transaction.category[0],
+      status: transaction.pending ? "Pending" : "Verified",
+    }));
+    setAllTDTransactions(TDTrans);
   };
 
   // Fetch transactions from your API
@@ -594,7 +614,7 @@ export default function Dashboard() {
                     <div className="shadow-xl rounded-lg overflow-hidden mx-10">
                       <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
                         <TdIncomeVsExpenseChart
-                          transactions={transactions}
+                          transactions={allTDTransactions}
                           month={month || ""}
                           year={year || ""}
                           isLoading={isLoading}
