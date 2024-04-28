@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction } from "react";
 import { Checking } from "../balance/checkingTable";
 import { Payment } from "@/components/custom-table/columns";
 import React, { createContext, useState, useContext, useCallback } from "react";
+import { toast } from "sonner";
+import { Delete } from "lucide-react";
 
 ///////////////////////////////////TD Transactions/////////////////////////////////////
 
@@ -101,6 +103,17 @@ const CIBCTransactionsContext = createContext({
   setIsLoading: (value: boolean) => {},
   setMonth: (month: string) => {},
   setYear: (year: string) => {},
+  DeleteCIBCTransaction: (transactionId: string) => {},
+  DeleteCIBCTransactionFromBackend: (
+    id: string,
+    deletedTransaction: CIBCTransaction | undefined,
+    newTransactions: CIBCTransaction[]
+  ) => {},
+  RestoreCIBCTransaction: (
+    deletedTransaction: any,
+    newTransactions: any,
+    originalTransaction: any
+  ) => {},
 });
 
 export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
@@ -144,6 +157,113 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  const DeleteCIBCTransaction = (transactionId: string) => {
+    // finding the index of the transaction with the transactionId
+    const deletedTransaction = CIBCTransactions.find(
+      (transaction: any) => transaction.id === transactionId
+    );
+
+    // Delete transaction with the transactionId from the CIBCTransactions array
+    const newTransactions = CIBCTransactions.filter(
+      (transaction: any) => transaction.id !== transactionId
+    );
+
+    setCIBCTransactions([...newTransactions]);
+    DeleteCIBCTransactionFromBackend(
+      transactionId,
+      deletedTransaction,
+      newTransactions
+    );
+  };
+
+  const DeleteCIBCTransactionFromBackend = async (
+    id: string,
+    deletedTransaction: CIBCTransaction | undefined,
+    newTransactions: CIBCTransaction[]
+  ) => {
+    const response = await axios.delete(
+      `/api/mongoDB/deleteTransaction?transactionId=${id}`
+    );
+    const data = response.data;
+
+    toast(
+      `Your ${
+        data.transaction.merchantName ? data.transaction.merchantName : ""
+      } transaction has been deleted`,
+      {
+        description: new Date().toLocaleString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "2-digit",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        }),
+        action: {
+          label: "Undo",
+          onClick: () =>
+            RestoreCIBCTransaction(
+              deletedTransaction,
+              newTransactions,
+              data.transaction
+            ),
+        },
+      }
+    );
+  };
+
+  const RestoreCIBCTransaction = async (
+    deletedTransaction: any,
+    newTransactions: any,
+    originalTransaction: any
+  ) => {
+    try {
+      const currentTransactions = [...CIBCTransactions];
+      console.log("hello I am gettin ghere");
+
+      if (!currentTransactions.some((t) => t.id === deletedTransaction.id)) {
+        newTransactions = [...newTransactions, deletedTransaction];
+
+        // Sort the CIBCTransactions array by the date property, from the most recent to the oldest
+        newTransactions.sort(
+          (a: any, b: any) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        setCIBCTransactions(newTransactions);
+      } else {
+        setCIBCTransactions(currentTransactions);
+      }
+      // Putting the deleted transaction back into the database
+      const response = await axios
+        .post("/api/mongoDB/postTransactions", originalTransaction)
+        .then(() => {
+          {
+            toast(
+              `Your ${
+                deletedTransaction.transaction
+                  ? deletedTransaction.transaction
+                  : ""
+              } transaction has been restored :)`,
+              {
+                position: "top-center",
+                style: {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }, // Centering the text
+              }
+            );
+          }
+        });
+    } catch (error) {
+      console.error(
+        "There was an error storing the transaction from Undo!",
+        error
+      );
+    }
+  };
+
   return (
     <CIBCTransactionsContext.Provider
       value={{
@@ -156,6 +276,9 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         setIsLoading,
         setMonth,
         setYear,
+        DeleteCIBCTransaction,
+        DeleteCIBCTransactionFromBackend,
+        RestoreCIBCTransaction,
       }}
     >
       {children}
@@ -164,51 +287,3 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
 };
 
 export const useCIBCTransactions = () => useContext(CIBCTransactionsContext);
-
-// export async function fetchCIBCTransactions(
-//   latestYear: boolean = true,
-//   setIsLoading: Dispatch<SetStateAction<boolean>>,
-//   setMonth: Dispatch<SetStateAction<string | undefined>>,
-//   setYear: Dispatch<SetStateAction<string | undefined>>,
-//   setCIBCTransactions: Dispatch<SetStateAction<Payment[]>>
-// ) {
-//   if (setIsLoading) {
-//     setIsLoading(true);
-//   }
-
-//   const response = await axios.get("/api/mongoDB/fetchCIBCTransactions", {
-//     params: {
-//       latestYear: latestYear,
-//     },
-//   });
-//   const Columns = response.data.map((transaction: any) => ({
-//     id: transaction.transactionId,
-//     date: new Date(transaction.date).toLocaleDateString("en-CA", {
-//       year: "numeric",
-//       month: "2-digit",
-//       day: "2-digit",
-//     }),
-//     transaction: transaction.merchantName
-//       ? transaction.merchantName
-//       : "UnKnown",
-//     amount: transaction.amount,
-//     category: transaction.category[0],
-//     verified: transaction.pending ? "Pending" : "Verified",
-//   }));
-
-//   if (!latestYear && setMonth && setYear) {
-//     setMonth("All");
-//     setYear("Transactions");
-//   } else if (setMonth && setYear) {
-//     setMonth("");
-//     setYear(new Date().getFullYear().toString());
-//   }
-
-//   if (setIsLoading) {
-//     setIsLoading(false);
-//   }
-
-//   if (setCIBCTransactions) {
-//     setCIBCTransactions(Columns);
-//   }
-// }

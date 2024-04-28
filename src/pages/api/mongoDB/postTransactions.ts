@@ -8,30 +8,20 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await connectDB();
+  console.log("we are getting here????");
 
   if (req.method === "POST") {
-    console.log("POST request received");
     // Assuming the transaction object is sent in the request body
-    // const transactionData = req.body;
-    const transactionData = [
-      
-    ];
-    try {
-      for (let i = 0; i < transactionData.length; i++) {
-        console.log("hello");
-        const newTransaction = new Transaction(transactionData[i]);
-        await newTransaction.save();
-      }
-      // Use the Transaction model to create a new document in the MongoDB database
-      // const newTransaction = new Transaction(transactionData[0]);
-      // await newTransaction.save(); // Save the new transaction
+    const transactionData = req.body;
 
-      res.status(201).json(transactionData); // Respond with the newly created transaction
-    } catch (error: any) {
-      res.status(500).json({
-        message: "Error saving transaction",
-        error: error?.message.toString(),
-      });
+    try {
+      // Use the Transaction model to create a new document in the MongoDB database
+      const newTransaction = new Transaction(transactionData);
+      await newTransaction.save(); // Save the new transaction
+
+      res.status(201).json(newTransaction); // Respond with the newly created transaction
+    } catch (error) {
+      res.status(500).json({ message: "Error saving transaction", error });
     }
   } else {
     res.setHeader("Allow", ["POST"]);

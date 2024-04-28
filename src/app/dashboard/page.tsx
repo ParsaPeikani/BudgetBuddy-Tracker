@@ -1,36 +1,45 @@
 "use client";
+
+// General Imports
 import axios from "axios";
-import { Button } from "@/components/ui/button";
-import Navbar from "@/components/navbar/navbar";
-import { Payment, getColumns } from "@/components/custom-table/columns";
-import { Checking } from "@/components/balance/checkingTable";
-import { DataTable } from "@/components/custom-table/data-table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { CIBCTransactionsProvider } from "@/components/serverFunctions/apiCalls";
-import { useCIBCTransactions } from "@/components/serverFunctions/apiCalls";
-import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// Other Custom Components
+import Navbar from "@/components/navbar/navbar";
+import { DataTable } from "@/components/custom-table/data-table";
+import { SelectDate } from "@/components/SelectDate/selectDate";
+import { Payment, GetColumns } from "@/components/custom-table/columns";
+
+// TD Components
+import { Checking } from "@/components/balance/checkingTable";
+import { SavingComponent } from "@/components/balance/saving";
+import { CheckingComponent } from "@/components/balance/checking";
+
+// API Calls
 import {
-  fetchTDCheckingTransactions,
+  fetchBalances,
+  useCIBCTransactions,
   fetchAllTDTransactions,
   fetchTDSavingTransactions,
-  fetchBalances,
+  fetchTDCheckingTransactions,
 } from "@/components/serverFunctions/apiCalls";
+
+// Loading Components
 import {
   TableLoading,
   ChartLoading,
   BalanceLoading,
   MonthYearLoading,
 } from "@/components/loading/loading";
-import { toast } from "sonner";
-import HorizontalBarChart from "@/components/charts/horizontalBarChart";
-import { CheckingComponent } from "@/components/balance/checking";
-import { SavingComponent } from "@/components/balance/saving";
 
+// Charts
 import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
-import { SelectDate } from "@/components/SelectDate/selectDate";
+import HorizontalBarChart from "@/components/charts/horizontalBarChart";
+import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 
 export default function Dashboard() {
   const { session } = useSession();
@@ -66,16 +75,6 @@ export default function Dashboard() {
     []
   );
   const [balances, setBalances] = useState<any>([]);
-
-  // CIBC Transaction Variables
-  // const [CIBCTransactions, setCIBCTransactions] = useState<Payment[]>([]);
-
-  // State for the month and year
-  // const [month, setMonth] = useState<string>();
-  // const [year, setYear] = useState<string>();
-
-  // State for the loading for both CIBC and TD CIBCTransactions
-  // const [isLoading, setIsLoading] = useState(true);
   const [isTdLoading, setIsTdLoading] = useState(true);
 
   // State for the active tab
@@ -86,138 +85,22 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    console.log("hello");
-    setIsLoading(true); // Start loading
-    // setIsTdLoading(true);
+    setIsLoading(true);
     try {
       fetchCIBCTransactions(true);
-      // fetchCIBCTransactions(
-      //   setIsLoading,
-      //   setMonth,
-      //   setYear,
-      //   setCIBCTransactions
-      // );
       fetchAllTDTransactions(setAllTDTransactions);
       fetchTDCheckingTransactions(setTdCheckingTransactions);
       fetchTDSavingTransactions(setTdSavingTransactions);
       fetchBalances(setBalances);
     } catch (error) {
-      console.error("Failed to fetch CIBCTransactions:", error);
+      console.error("Failed to fetch Transactions:", error);
     } finally {
-      console.log("hello 2");
       setTimeout(() => {
         setIsLoading(false);
         setIsTdLoading(false);
       });
     }
   }, []);
-
-  const deleteTransaction = (transactionId: string) => {
-    // finding the index of the transaction with the transactionId
-    const deletedTransaction = CIBCTransactions.find(
-      (transaction: any) => transaction.id === transactionId
-    );
-
-    // Delete transaction with the transactionId from the CIBCTransactions array
-    const newTransactions = CIBCTransactions.filter(
-      (transaction: any) => transaction.id !== transactionId
-    );
-
-    setCIBCTransactions([...newTransactions]);
-    deleteTransactionFromBackend(
-      transactionId,
-      deletedTransaction,
-      newTransactions
-    );
-  };
-
-  // This function is used to delete a transaction from the backend
-  const deleteTransactionFromBackend = async (
-    id: string,
-    deletedTransaction: any = null,
-    newTransactions: any = null
-  ) => {
-    const response = await axios.delete(
-      `/api/mongoDB/deleteTransaction?transactionId=${id}`
-    );
-    const data = response.data;
-
-    toast(
-      `Your ${
-        data.transaction.merchantName ? data.transaction.merchantName : ""
-      } transaction has been deleted`,
-      {
-        description: new Date().toLocaleString("en-US", {
-          weekday: "long", // "Sunday"
-          year: "numeric", // "2023"
-          month: "long", // "December"
-          day: "2-digit", // "03"
-          hour: "numeric", // "9"
-          minute: "2-digit", // "00"
-          hour12: true, // AM/PM
-        }),
-        action: {
-          label: "Undo",
-          onClick: () =>
-            restoreTransactionToBackend(
-              deletedTransaction,
-              newTransactions,
-              data.transaction
-            ),
-        },
-      }
-    );
-  };
-
-  const restoreTransactionToBackend = async (
-    deletedTransaction: any,
-    newTransactions: any,
-    originalTransaction: any
-  ) => {
-    try {
-      const currentTransactions = [...CIBCTransactions];
-
-      if (!currentTransactions.some((t) => t.id === deletedTransaction.id)) {
-        newTransactions = [...newTransactions, deletedTransaction];
-
-        // Sort the CIBCTransactions array by the date property, from the most recent to the oldest
-        newTransactions.sort(
-          (a: any, b: any) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-        setCIBCTransactions(newTransactions);
-      } else {
-        setCIBCTransactions(currentTransactions);
-      }
-      // Putting the deleted transaction back into the database
-      const response = await axios
-        .post("/api/mongoDB/postTransaction", originalTransaction)
-        .then(() => {
-          {
-            toast(
-              `Your ${
-                deletedTransaction.transaction
-                  ? deletedTransaction.transaction
-                  : ""
-              } transaction has been restored :)`,
-              {
-                position: "top-center",
-                style: {
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }, // Centering the text
-              }
-            );
-          }
-        });
-    } catch (error) {
-      console.error(
-        "There was an error storing the transaction from Undo!",
-        error
-      );
-    }
-  };
 
   const deleteAllSelectedRows = async (table: any) => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
@@ -385,7 +268,7 @@ export default function Dashboard() {
   // };
 
   // Getting the column data from the getColumns function
-  const columns = getColumns(deleteTransaction, updateTransaction);
+  const columns = GetColumns(updateTransaction);
 
   return (
     <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="">

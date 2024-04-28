@@ -34,7 +34,7 @@ export default function MonthlyBarChart({
   year: string;
   isLoading: boolean;
 }) {
-  console.log("these are the transactions: ", transactions);
+  // console.log("these are the transactions: ", transactions);
   const MonthlyChartdata = [
     {
       month: "Jan",
