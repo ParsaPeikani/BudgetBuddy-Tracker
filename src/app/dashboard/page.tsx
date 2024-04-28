@@ -8,11 +8,14 @@ import { DataTable } from "@/components/custom-table/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { CIBCTransactionsProvider } from "@/components/serverFunctions/apiCalls";
+import { useCIBCTransactions } from "@/components/serverFunctions/apiCalls";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 import {
   fetchTDCheckingTransactions,
   fetchAllTDTransactions,
   fetchTDSavingTransactions,
+  fetchBalances,
 } from "@/components/serverFunctions/apiCalls";
 import {
   TableLoading,
@@ -32,6 +35,17 @@ import { SelectDate } from "@/components/SelectDate/selectDate";
 export default function Dashboard() {
   const { session } = useSession();
   const user_id = session?.user.id;
+  const {
+    fetchCIBCTransactions,
+    isLoading,
+    month,
+    year,
+    setCIBCTransactions,
+    setIsLoading,
+    CIBCTransactions,
+    setMonth,
+    setYear,
+  }: any = useCIBCTransactions();
   // Uncomment this function to store the transactions in the database for the development environment
   // const getTrans = async () => {
   //   try {
@@ -41,47 +55,56 @@ export default function Dashboard() {
   //   } catch (error) {
   //     console.error("There was an error!", error);
   //   }
-  // };
-  interface Transaction {
-    id: string; // Assuming id is a string, adjust types accordingly
-    date: Date; // Adjust according to the actual data type, e.g., string or Date
-    transaction: string;
-    amount: number;
-    category: string;
-    verified: boolean;
-  }
+  // }
 
-  const [transactions, setTransactions] = useState<Payment[]>([]);
+  // TD Transaction Varaiables
+  const [allTDTransactions, setAllTDTransactions] = useState<Checking[]>([]);
   const [tdCheckingTransactions, setTdCheckingTransactions] = useState<
     Checking[]
   >([]);
   const [tdSavingTransactions, setTdSavingTransactions] = useState<Checking[]>(
     []
   );
-  const [allTDTransactions, setAllTDTransactions] = useState<Checking[]>([]);
-  const [month, setMonth] = useState<string>();
-  const [year, setYear] = useState<string>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isTdLoading, setIsTdLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("balance"); // Default to 'balance'
   const [balances, setBalances] = useState<any>([]);
+
+  // CIBC Transaction Variables
+  // const [CIBCTransactions, setCIBCTransactions] = useState<Payment[]>([]);
+
+  // State for the month and year
+  // const [month, setMonth] = useState<string>();
+  // const [year, setYear] = useState<string>();
+
+  // State for the loading for both CIBC and TD CIBCTransactions
+  // const [isLoading, setIsLoading] = useState(true);
+  const [isTdLoading, setIsTdLoading] = useState(true);
+
+  // State for the active tab
+  const [activeTab, setActiveTab] = useState("overview");
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
 
   useEffect(() => {
+    console.log("hello");
     setIsLoading(true); // Start loading
-    setIsTdLoading(true);
+    // setIsTdLoading(true);
     try {
-      fetchTransactions();
+      fetchCIBCTransactions(true);
+      // fetchCIBCTransactions(
+      //   setIsLoading,
+      //   setMonth,
+      //   setYear,
+      //   setCIBCTransactions
+      // );
       fetchAllTDTransactions(setAllTDTransactions);
       fetchTDCheckingTransactions(setTdCheckingTransactions);
       fetchTDSavingTransactions(setTdSavingTransactions);
-      fetchBalances();
+      fetchBalances(setBalances);
     } catch (error) {
-      console.error("Failed to fetch transactions:", error);
+      console.error("Failed to fetch CIBCTransactions:", error);
     } finally {
+      console.log("hello 2");
       setTimeout(() => {
         setIsLoading(false);
         setIsTdLoading(false);
@@ -89,61 +112,18 @@ export default function Dashboard() {
     }
   }, []);
 
-  // Fetch transactions from your API
-  const fetchTransactions = async (latestYear = true) => {
-    setIsLoading(true);
-    const response = await axios.get("/api/mongoDB/fetchTransactions", {
-      params: {
-        latestYear: latestYear,
-      },
-    });
-    const Columns = response.data.map((transaction: any) => ({
-      id: transaction.transactionId,
-      date: new Date(transaction.date).toLocaleDateString("en-CA", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }),
-      transaction: transaction.merchantName
-        ? transaction.merchantName
-        : "UnKnown",
-      amount: transaction.amount,
-      category: transaction.category[0],
-      verified: transaction.pending ? "Pending" : "Verified",
-    }));
-    if (!latestYear) {
-      setMonth("All");
-      setYear("Transactions");
-    } else {
-      setMonth("");
-      setYear(new Date().getFullYear().toString());
-    }
-    setIsLoading(false);
-    setTransactions(Columns);
-  };
-
-  // Fetch balances from your API
-  const fetchBalances = async () => {
-    try {
-      const response = await axios.get("/api/mongoDB/fetchBalances");
-      setBalances(response.data);
-    } catch (error) {
-      console.error("Failed to fetch balances:", error);
-    }
-  };
-
   const deleteTransaction = (transactionId: string) => {
     // finding the index of the transaction with the transactionId
-    const deletedTransaction = transactions.find(
+    const deletedTransaction = CIBCTransactions.find(
       (transaction: any) => transaction.id === transactionId
     );
 
-    // Delete transaction with the transactionId from the transactions array
-    const newTransactions = transactions.filter(
+    // Delete transaction with the transactionId from the CIBCTransactions array
+    const newTransactions = CIBCTransactions.filter(
       (transaction: any) => transaction.id !== transactionId
     );
 
-    setTransactions([...newTransactions]);
+    setCIBCTransactions([...newTransactions]);
     deleteTransactionFromBackend(
       transactionId,
       deletedTransaction,
@@ -195,19 +175,19 @@ export default function Dashboard() {
     originalTransaction: any
   ) => {
     try {
-      const currentTransactions = [...transactions];
+      const currentTransactions = [...CIBCTransactions];
 
       if (!currentTransactions.some((t) => t.id === deletedTransaction.id)) {
         newTransactions = [...newTransactions, deletedTransaction];
 
-        // Sort the transactions array by the date property, from the most recent to the oldest
+        // Sort the CIBCTransactions array by the date property, from the most recent to the oldest
         newTransactions.sort(
           (a: any, b: any) =>
             new Date(b.date).getTime() - new Date(a.date).getTime()
         );
-        setTransactions(newTransactions);
+        setCIBCTransactions(newTransactions);
       } else {
-        setTransactions(currentTransactions);
+        setCIBCTransactions(currentTransactions);
       }
       // Putting the deleted transaction back into the database
       const response = await axios
@@ -246,13 +226,13 @@ export default function Dashboard() {
       return row.original;
     });
 
-    // Now you can use deletedTransactions to filter out transactions or for other operations
-    const newTransactions = transactions.filter(
+    // Now you can use deletedTransactions to filter out CIBCTransactions or for other operations
+    const newTransactions = CIBCTransactions.filter(
       (transaction: any) =>
         !deletedTransactions.some((item: any) => item.id === transaction.id)
     );
 
-    setTransactions(newTransactions);
+    setCIBCTransactions(newTransactions);
 
     await deleteMultipleTransactionsFromBackend(
       deletedTransactions,
@@ -311,7 +291,7 @@ export default function Dashboard() {
         (a: any, b: any) =>
           new Date(b.date).getTime() - new Date(a.date).getTime()
       );
-      setTransactions([...newTransactions]);
+      setCIBCTransactions([...newTransactions]);
 
       for (const deletedTransaction of fullDeletedTransactionData) {
         await axios.post("/api/mongoDB/postTransaction", deletedTransaction);
@@ -330,7 +310,7 @@ export default function Dashboard() {
   };
 
   const updateTransaction = async (data: any) => {
-    transactions.map((transaction: any) => {
+    CIBCTransactions.map((transaction: any) => {
       if (transaction.id === data.id) {
         transaction.transaction = data.name;
         transaction.amount = data.amount;
@@ -339,7 +319,7 @@ export default function Dashboard() {
         transaction.verified = data.verified ? "Verified" : "Pending";
       }
     });
-    setTransactions([...transactions]);
+    setCIBCTransactions([...CIBCTransactions]);
     try {
       await axios.post("/api/mongoDB/updateTransaction", data);
       toast(`${data.name ? data.name : ""} Transaction has been updated :)`, {
@@ -377,7 +357,7 @@ export default function Dashboard() {
             category: transaction.category[0],
             verified: transaction.pending ? "Pending" : "Verified",
           }));
-          setTransactions(newColumns);
+          setCIBCTransactions(newColumns);
           setMonth(data.month);
           setYear(data.year);
           setIsLoading(false);
@@ -424,7 +404,7 @@ export default function Dashboard() {
               <div className="flex justify-center pt-5">
                 <SelectDate
                   getNewTransactions={getNewTransactions}
-                  fetchTransactions={fetchTransactions}
+                  fetchTransactions={fetchCIBCTransactions}
                   showAllTransactions
                 />
               </div>
@@ -460,7 +440,7 @@ export default function Dashboard() {
                 <div className="shadow-xl rounded-lg overflow-hidden mx-10">
                   <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
                     <MonthlyBarChart
-                      transactions={transactions}
+                      transactions={CIBCTransactions}
                       month={month || ""}
                       year={year || ""}
                       isLoading={isLoading}
@@ -478,7 +458,7 @@ export default function Dashboard() {
                       <div className="shadow-xl rounded-lg overflow-hidden">
                         <div className="pt-5 pb-5 border-2 border-white glow rounded-lg bg-gray-950">
                           <HorizontalBarChart
-                            transactions={transactions}
+                            transactions={CIBCTransactions}
                             month={month || ""}
                             year={year || ""}
                           />
@@ -488,7 +468,7 @@ export default function Dashboard() {
                     <div className="w-1/2 mx-5">
                       <div className="shadow-xl rounded-lg overflow-hidden">
                         <div className="p-10 border-2 border-white glow rounded-lg bg-gray-950">
-                          <MyResponsivePie data={transactions} />
+                          {/* <MyResponsivePie data={CIBCTransactions} /> */}
                         </div>
                       </div>
                     </div>
@@ -520,12 +500,12 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="lg:pl-20 lg:pr-20 md:pl-10 md:pr-10">
-                {isLoading || !transactions ? (
+                {isLoading || !CIBCTransactions ? (
                   <TableLoading />
                 ) : (
                   <DataTable
                     columns={columns}
-                    data={transactions}
+                    data={CIBCTransactions}
                     deleteAllSelectedRows={deleteAllSelectedRows}
                   />
                 )}
@@ -551,7 +531,7 @@ export default function Dashboard() {
                     <div className="flex justify-center pt-5">
                       <SelectDate
                         getNewTransactions={getNewTransactions}
-                        fetchTransactions={fetchTransactions}
+                        fetchTransactions={fetchCIBCTransactions}
                         showAllTransactions={false}
                       />
                     </div>

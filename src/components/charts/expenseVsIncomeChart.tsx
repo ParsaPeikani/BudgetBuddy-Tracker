@@ -34,7 +34,7 @@ export default function TdIncomeVsExpenseChart({
   year: string;
   isLoading: boolean;
 }) {
-  console.log("these are the transactions: ", transactions);
+  //   console.log("these are the transactions: ", transactions);
   const TdExpenseVsIncomeChartdata = [
     { month: "Jan", Expense: 20, Income: 20 },
     { month: "Feb", Expense: 20, Income: 20 },

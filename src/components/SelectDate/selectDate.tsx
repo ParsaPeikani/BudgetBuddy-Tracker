@@ -4,6 +4,8 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Payment } from "@/components/custom-table/columns";
+import { useCIBCTransactions } from "../serverFunctions/apiCalls";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -15,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { Dispatch, SetStateAction } from "react";
+import { set } from "mongoose";
 
 const FormSchema = z.object({
   year: z.string({
@@ -31,9 +35,17 @@ export function SelectDate({
   showAllTransactions = true,
 }: {
   getNewTransactions: (data: any) => void;
-  fetchTransactions: (latestYear: boolean) => void;
+  fetchTransactions: (
+    latestYear: boolean,
+    setIsLoading: Dispatch<SetStateAction<boolean>>,
+    setMonth?: Dispatch<SetStateAction<string | undefined>>,
+    setYear?: Dispatch<SetStateAction<string | undefined>>,
+    setCIBCTransactions?: Dispatch<SetStateAction<Payment[]>>
+  ) => void;
   showAllTransactions: boolean;
 }) {
+  const { fetchCIBCTransactions }: any = useCIBCTransactions();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -86,7 +98,8 @@ export function SelectDate({
       year: "",
       month: "",
     });
-    fetchTransactions(true);
+    fetchCIBCTransactions(true);
+    // fetchTransactions(true, setIsLoading);
   }
 
   return (
@@ -166,7 +179,10 @@ export function SelectDate({
       </div>
       <div className="pt-4">
         {showAllTransactions && (
-          <Button variant="outline" onClick={() => fetchTransactions(false)}>
+          <Button
+            variant="outline"
+            onClick={() => fetchCIBCTransactions(false)}
+          >
             Get All Transactions
           </Button>
         )}

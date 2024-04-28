@@ -22,7 +22,7 @@ export default function MyResponsivePie({ data }: { data: any[] }) {
   ];
 
   // Update values from data
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data?.length; i++) {
     if (data[i].category === "Food and Drink") {
       testingdata[0].value += 1;
     } else if (data[i].category === "Payment") {

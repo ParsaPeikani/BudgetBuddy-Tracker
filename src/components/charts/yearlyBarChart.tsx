@@ -34,6 +34,7 @@ export default function MonthlyBarChart({
   year: string;
   isLoading: boolean;
 }) {
+  console.log("these are the transactions: ", transactions);
   const MonthlyChartdata = [
     {
       month: "Jan",
@@ -207,22 +208,24 @@ export default function MonthlyBarChart({
       }
     }
   } else {
-    for (let i = 0; i < transactions.length; i++) {
-      if (transactions[i].category === "Food and Drink") {
-        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Food +=
-          transactions[i].amount;
-      } else if (transactions[i].category === "Shopping") {
-        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Shopping +=
-          transactions[i].amount;
-      } else if (transactions[i].category === "Travel") {
-        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Travel +=
-          transactions[i].amount;
-      } else if (transactions[i].category === "Transfer") {
-        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Transfer +=
-          transactions[i].amount;
-      } else {
-        MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Other +=
-          transactions[i].amount;
+    if (transactions?.length > 0) {
+      for (let i = 0; i < transactions.length; i++) {
+        if (transactions[i].category === "Food and Drink") {
+          MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Food +=
+            transactions[i].amount;
+        } else if (transactions[i].category === "Shopping") {
+          MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Shopping +=
+            transactions[i].amount;
+        } else if (transactions[i].category === "Travel") {
+          MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Travel +=
+            transactions[i].amount;
+        } else if (transactions[i].category === "Transfer") {
+          MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Transfer +=
+            transactions[i].amount;
+        } else {
+          MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Other +=
+            transactions[i].amount;
+        }
       }
     }
   }

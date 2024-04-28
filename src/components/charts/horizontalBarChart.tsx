@@ -56,7 +56,7 @@ export default function HorizontalBarChart({
   }
 
   // Calculating the Actual amounts for each category
-  for (let i = 0; i < transactions.length; i++) {
+  for (let i = 0; i < transactions?.length; i++) {
     if (transactions[i].category === "Food and Drink") {
       data[0].Actual += transactions[i].amount;
     } else if (transactions[i].category === "Payment") {
