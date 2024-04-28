@@ -8,7 +8,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await connectDB();
-  console.log("we are getting here????");
 
   if (req.method === "POST") {
     // Assuming the transaction object is sent in the request body

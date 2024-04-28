@@ -54,6 +54,7 @@ export default function Dashboard() {
     CIBCTransactions,
     setMonth,
     setYear,
+    DeleteAllSelectedRows,
   }: any = useCIBCTransactions();
   // Uncomment this function to store the transactions in the database for the development environment
   // const getTrans = async () => {
@@ -101,96 +102,6 @@ export default function Dashboard() {
       });
     }
   }, []);
-
-  const deleteAllSelectedRows = async (table: any) => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-
-    const deletedTransactions = selectedRows.map((row: any) => {
-      return row.original;
-    });
-
-    // Now you can use deletedTransactions to filter out CIBCTransactions or for other operations
-    const newTransactions = CIBCTransactions.filter(
-      (transaction: any) =>
-        !deletedTransactions.some((item: any) => item.id === transaction.id)
-    );
-
-    setCIBCTransactions(newTransactions);
-
-    await deleteMultipleTransactionsFromBackend(
-      deletedTransactions,
-      newTransactions
-    );
-
-    table.resetRowSelection();
-  };
-
-  const deleteMultipleTransactionsFromBackend = async (
-    deletedTransactions: any,
-    updatedTransactions: any
-  ) => {
-    try {
-      const response = await axios.delete(
-        "/api/mongoDB/deleteMultipleTransactions",
-        {
-          data: deletedTransactions,
-        }
-      );
-      const fullDeletedTransactionData =
-        response.data.fullDeletedTransactionData;
-      toast(`Multiple transactions have been deleted!`, {
-        description: new Date().toLocaleString("en-US", {
-          weekday: "long", // "Sunday"
-          year: "numeric", // "2023"
-          month: "long", // "December"
-          day: "2-digit", // "03"
-          hour: "numeric", // "9"
-          minute: "2-digit", // "00"
-          hour12: true, // AM/PM
-        }),
-        action: {
-          label: "Undo",
-          onClick: () =>
-            restoreMultipleTransactionsToBackend(
-              deletedTransactions,
-              updatedTransactions,
-              fullDeletedTransactionData
-            ),
-        },
-      });
-    } catch (error) {
-      console.error("There was an error deleting the transaction!", error);
-    }
-  };
-
-  const restoreMultipleTransactionsToBackend = async (
-    deletedTransactions: any,
-    updatedTransactions: any,
-    fullDeletedTransactionData: any
-  ) => {
-    try {
-      let newTransactions = [...updatedTransactions, ...deletedTransactions];
-      newTransactions.sort(
-        (a: any, b: any) =>
-          new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      setCIBCTransactions([...newTransactions]);
-
-      for (const deletedTransaction of fullDeletedTransactionData) {
-        await axios.post("/api/mongoDB/postTransaction", deletedTransaction);
-      }
-      toast(`Multiple transactions have been restored :)`, {
-        position: "top-center",
-        style: {
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }, // Centering the text
-      });
-    } catch (e) {
-      console.error("There was an error storing the transaction from Undo!", e);
-    }
-  };
 
   const updateTransaction = async (data: any) => {
     CIBCTransactions.map((transaction: any) => {
@@ -389,7 +300,7 @@ export default function Dashboard() {
                   <DataTable
                     columns={columns}
                     data={CIBCTransactions}
-                    deleteAllSelectedRows={deleteAllSelectedRows}
+                    deleteAllSelectedRows={DeleteAllSelectedRows}
                   />
                 )}
               </div>
