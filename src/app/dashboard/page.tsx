@@ -55,17 +55,8 @@ export default function Dashboard() {
     setMonth,
     setYear,
     DeleteAllSelectedRows,
+    UpdateCIBCTransaction,
   }: any = useCIBCTransactions();
-  // Uncomment this function to store the transactions in the database for the development environment
-  // const getTrans = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `/api/plaid/transactions?userId=${user_id}`
-  //     );
-  //   } catch (error) {
-  //     console.error("There was an error!", error);
-  //   }
-  // }
 
   // TD Transaction Varaiables
   const [allTDTransactions, setAllTDTransactions] = useState<Checking[]>([]);
@@ -103,32 +94,6 @@ export default function Dashboard() {
     }
   }, []);
 
-  const updateTransaction = async (data: any) => {
-    CIBCTransactions.map((transaction: any) => {
-      if (transaction.id === data.id) {
-        transaction.transaction = data.name;
-        transaction.amount = data.amount;
-        transaction.date = new Date(data.date).toLocaleDateString();
-        transaction.category = data.category;
-        transaction.verified = data.verified ? "Verified" : "Pending";
-      }
-    });
-    setCIBCTransactions([...CIBCTransactions]);
-    try {
-      await axios.post("/api/mongoDB/updateTransaction", data);
-      toast(`${data.name ? data.name : ""} Transaction has been updated :)`, {
-        position: "top-center",
-        style: {
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }, // Centering the text
-      });
-    } catch (error) {
-      console.error("There was an error updating the transaction!", error);
-    }
-  };
-
   const getNewTransactions = async (data: any) => {
     setIsLoading(true);
     try {
@@ -161,25 +126,8 @@ export default function Dashboard() {
     }
   };
 
-  // const postTrans = async () => {
-  //   try {
-  //     const response = await axios.get("/api/plaid/balance");
-  //     console.log("Transactions have been posted successfully!", response.data);
-  //     // toast("Transactions have been posted successfully!", {
-  //     //   position: "top-center",
-  //     //   style: {
-  //     //     display: "flex",
-  //     //     justifyContent: "center",
-  //     //     alignItems: "center",
-  //     //   }, // Centering the text
-  //     // });
-  //   } catch (error) {
-  //     console.error("There was an error getting the transactions!", error);
-  //   }
-  // };
-
   // Getting the column data from the getColumns function
-  const columns = GetColumns(updateTransaction);
+  const columns = GetColumns(UpdateCIBCTransaction);
 
   return (
     <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="">

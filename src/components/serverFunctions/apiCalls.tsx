@@ -84,11 +84,11 @@ export async function fetchBalances(
 
 interface CIBCTransaction {
   id: string;
-  date: Date;
+  date: string;
   transaction: string;
   amount: number;
   category: string;
-  verified: boolean;
+  verified: string;
 }
 
 // Fetch CIBCTransactions from the database
@@ -124,6 +124,7 @@ const CIBCTransactionsContext = createContext({
     updatedTransactions: CIBCTransaction[],
     fullDeletedTransactionData: CIBCTransaction[]
   ) => {},
+  UpdateCIBCTransaction: (data: any) => {},
 });
 
 export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
@@ -152,6 +153,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         category: transaction.category[0],
         verified: transaction.pending ? "Pending" : "Verified",
       }));
+      console.log("these are the data: ", transformedData);
       setCIBCTransactions(transformedData);
       if (!latestYear) {
         setMonth("All");
@@ -368,6 +370,32 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  const UpdateCIBCTransaction = async (data: any) => {
+    CIBCTransactions.map((transaction: CIBCTransaction) => {
+      if (transaction.id === data.id) {
+        transaction.transaction = data.name;
+        transaction.amount = data.amount;
+        transaction.date = new Date(data.date).toLocaleDateString();
+        transaction.category = data.category;
+        transaction.verified = data.verified ? "Verified" : "Pending";
+      }
+    });
+    setCIBCTransactions([...CIBCTransactions]);
+    try {
+      await axios.post("/api/mongoDB/updateCIBCTransaction", data);
+      toast(`${data.name ? data.name : ""} Transaction has been updated :)`, {
+        position: "top-center",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }, // Centering the text
+      });
+    } catch (error) {
+      console.error("There was an error updating the transaction!", error);
+    }
+  };
+
   return (
     <CIBCTransactionsContext.Provider
       value={{
@@ -386,6 +414,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         RestoreCIBCTransaction,
         DeleteMultipleCIBCTransactionsFromBackend,
         RestoreMultipleCIBCTransactions,
+        UpdateCIBCTransaction,
       }}
     >
       {children}
@@ -394,3 +423,33 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
 };
 
 export const useCIBCTransactions = () => useContext(CIBCTransactionsContext);
+
+///////////////////////////////////PLAID Transactions/////////////////////////////////////
+// Uncomment this function to store the transactions in the database for the development environment
+
+// const postTrans = async () => {
+//   try {
+//     const response = await axios.get("/api/plaid/balance");
+//     console.log("Transactions have been posted successfully!", response.data);
+//     // toast("Transactions have been posted successfully!", {
+//     //   position: "top-center",
+//     //   style: {
+//     //     display: "flex",
+//     //     justifyContent: "center",
+//     //     alignItems: "center",
+//     //   }, // Centering the text
+//     // });
+//   } catch (error) {
+//     console.error("There was an error getting the transactions!", error);
+//   }
+// };
+
+// const getTrans = async () => {
+//   try {
+//     const response = await axios.get(
+//       `/api/plaid/transactions?userId=${user_id}`
+//     );
+//   } catch (error) {
+//     console.error("There was an error!", error);
+//   }
+// }
