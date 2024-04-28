@@ -98,7 +98,7 @@ const CIBCTransactionsContext = createContext({
   isLoading: false,
   month: "",
   year: "",
-  fetchCIBCTransactions: () => {},
+  FetchCIBCTransactions: () => {},
   setCIBCTransactions: (transactions: CIBCTransaction[]) => {},
   setIsLoading: (value: boolean) => {},
   setMonth: (month: string) => {},
@@ -125,6 +125,7 @@ const CIBCTransactionsContext = createContext({
     fullDeletedTransactionData: CIBCTransaction[]
   ) => {},
   UpdateCIBCTransaction: (data: any) => {},
+  GetNewCIBCTransactions: (data: any) => {},
 });
 
 export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
@@ -135,7 +136,8 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
-  const fetchCIBCTransactions = async (latestYear = true) => {
+  // Fetching CIBC Transactions from the database
+  const FetchCIBCTransactions = async (latestYear = true) => {
     setIsLoading(true);
     try {
       const response = await axios.get("/api/mongoDB/fetchCIBCTransactions", {
@@ -153,7 +155,6 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         category: transaction.category[0],
         verified: transaction.pending ? "Pending" : "Verified",
       }));
-      console.log("these are the data: ", transformedData);
       setCIBCTransactions(transformedData);
       if (!latestYear) {
         setMonth("All");
@@ -169,6 +170,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  // Delete a CIBC Transaction form Frontend
   const DeleteCIBCTransaction = (transactionId: string) => {
     // finding the index of the transaction with the transactionId
     const deletedTransaction = CIBCTransactions.find(
@@ -188,6 +190,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     );
   };
 
+  // Delete a CIBC Transaction from the backend
   const DeleteCIBCTransactionFromBackend = async (
     id: string,
     deletedTransaction: CIBCTransaction | undefined,
@@ -225,6 +228,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     );
   };
 
+  // Restore a CIBC Transaction both from the frontend and backend
   const RestoreCIBCTransaction = async (
     deletedTransaction: CIBCTransaction | undefined,
     newTransactions: CIBCTransaction[],
@@ -265,7 +269,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                }, // Centering the text
+                },
               }
             );
           }
@@ -278,6 +282,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  // Delete Mutliple CIBC Transactions from the frontend
   const DeleteAllSelectedRows = async (table: any) => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
 
@@ -303,6 +308,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     table.resetRowSelection();
   };
 
+  // Delete Mutliple CIBC Transactions from the backend
   const DeleteMultipleCIBCTransactionsFromBackend = async (
     deletedTransactions: CIBCTransaction[],
     updatedTransactions: CIBCTransaction[]
@@ -341,6 +347,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  // Restore Mutliple CIBC Transactions from both the frontend and backend
   const RestoreMultipleCIBCTransactions = async (
     deletedTransactions: CIBCTransaction[],
     updatedTransactions: CIBCTransaction[],
@@ -370,6 +377,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  // Update a CIBC Transaction on the frontend and backend
   const UpdateCIBCTransaction = async (data: any) => {
     CIBCTransactions.map((transaction: CIBCTransaction) => {
       if (transaction.id === data.id) {
@@ -396,6 +404,39 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  // Fetch new CIBC Transactions based on the year and month from the database
+  const GetNewCIBCTransactions = async (data: any) => {
+    setIsLoading(true);
+    try {
+      await axios
+        .get(
+          `/api/mongoDB/newTransactions?year=${data.year}&month=${data.month}`
+        )
+        .then((newdata) => {
+          const newColumns = newdata.data.map((transaction: any) => ({
+            id: transaction.transactionId,
+            date: new Date(transaction.date).toLocaleDateString("en-CA", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }),
+            transaction: transaction.merchantName
+              ? transaction.merchantName
+              : "UnKnown",
+            amount: transaction.amount,
+            category: transaction.category[0],
+            verified: transaction.pending ? "Pending" : "Verified",
+          }));
+          setCIBCTransactions(newColumns);
+          setMonth(data.month);
+          setYear(data.year);
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.error("There was an error fetching the transactions!", error);
+    }
+  };
+
   return (
     <CIBCTransactionsContext.Provider
       value={{
@@ -403,7 +444,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         isLoading,
         month,
         year,
-        fetchCIBCTransactions,
+        FetchCIBCTransactions,
         setCIBCTransactions,
         setIsLoading,
         setMonth,
@@ -415,6 +456,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         DeleteMultipleCIBCTransactionsFromBackend,
         RestoreMultipleCIBCTransactions,
         UpdateCIBCTransaction,
+        GetNewCIBCTransactions,
       }}
     >
       {children}

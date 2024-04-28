@@ -42,20 +42,21 @@ import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 
 export default function Dashboard() {
+  // Clerk Session
   const { session } = useSession();
   const user_id = session?.user.id;
+
+  // CIBC Transaction Variables
   const {
-    fetchCIBCTransactions,
+    FetchCIBCTransactions,
     isLoading,
     month,
     year,
-    setCIBCTransactions,
     setIsLoading,
     CIBCTransactions,
-    setMonth,
-    setYear,
     DeleteAllSelectedRows,
     UpdateCIBCTransaction,
+    GetNewCIBCTransactions,
   }: any = useCIBCTransactions();
 
   // TD Transaction Varaiables
@@ -79,7 +80,7 @@ export default function Dashboard() {
   useEffect(() => {
     setIsLoading(true);
     try {
-      fetchCIBCTransactions(true);
+      FetchCIBCTransactions(true);
       fetchAllTDTransactions(setAllTDTransactions);
       fetchTDCheckingTransactions(setTdCheckingTransactions);
       fetchTDSavingTransactions(setTdSavingTransactions);
@@ -93,38 +94,6 @@ export default function Dashboard() {
       });
     }
   }, []);
-
-  const getNewTransactions = async (data: any) => {
-    setIsLoading(true);
-    try {
-      await axios
-        .get(
-          `/api/mongoDB/newTransactions?year=${data.year}&month=${data.month}`
-        )
-        .then((newdata) => {
-          const newColumns = newdata.data.map((transaction: any) => ({
-            id: transaction.transactionId,
-            date: new Date(transaction.date).toLocaleDateString("en-CA", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            }),
-            transaction: transaction.merchantName
-              ? transaction.merchantName
-              : "UnKnown",
-            amount: transaction.amount,
-            category: transaction.category[0],
-            verified: transaction.pending ? "Pending" : "Verified",
-          }));
-          setCIBCTransactions(newColumns);
-          setMonth(data.month);
-          setYear(data.year);
-          setIsLoading(false);
-        });
-    } catch (error) {
-      console.error("There was an error fetching the transactions!", error);
-    }
-  };
 
   // Getting the column data from the getColumns function
   const columns = GetColumns(UpdateCIBCTransaction);
@@ -144,11 +113,7 @@ export default function Dashboard() {
           <div>
             {activeTab !== "balance" && (
               <div className="flex justify-center pt-5">
-                <SelectDate
-                  getNewTransactions={getNewTransactions}
-                  fetchTransactions={fetchCIBCTransactions}
-                  showAllTransactions
-                />
+                <SelectDate showAllTransactions={true} />
               </div>
             )}
             <TabsContent value="overview">
@@ -271,11 +236,7 @@ export default function Dashboard() {
                   </div>
                   <div>
                     <div className="flex justify-center pt-5">
-                      <SelectDate
-                        getNewTransactions={getNewTransactions}
-                        fetchTransactions={fetchCIBCTransactions}
-                        showAllTransactions={false}
-                      />
+                      <SelectDate showAllTransactions={false} />
                     </div>
                     <div className="shadow-xl rounded-lg overflow-hidden mx-10">
                       <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">

@@ -1,14 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+// Other imports
 import { z } from "zod";
-import { Payment } from "@/components/custom-table/columns";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Custom hooks
 import { useCIBCTransactions } from "../serverFunctions/apiCalls";
 
+// ShadcUI components
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -16,9 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
-import { Dispatch, SetStateAction } from "react";
-import { set } from "mongoose";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 
 const FormSchema = z.object({
   year: z.string({
@@ -30,21 +30,12 @@ const FormSchema = z.object({
 });
 
 export function SelectDate({
-  getNewTransactions,
-  fetchTransactions,
   showAllTransactions = true,
 }: {
-  getNewTransactions: (data: any) => void;
-  fetchTransactions: (
-    latestYear: boolean,
-    setIsLoading: Dispatch<SetStateAction<boolean>>,
-    setMonth?: Dispatch<SetStateAction<string | undefined>>,
-    setYear?: Dispatch<SetStateAction<string | undefined>>,
-    setCIBCTransactions?: Dispatch<SetStateAction<Payment[]>>
-  ) => void;
   showAllTransactions: boolean;
 }) {
-  const { fetchCIBCTransactions }: any = useCIBCTransactions();
+  const { FetchCIBCTransactions, GetNewCIBCTransactions }: any =
+    useCIBCTransactions();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -62,7 +53,7 @@ export function SelectDate({
       });
       return;
     }
-    getNewTransactions(data);
+    GetNewCIBCTransactions(data);
   }
 
   function onInvalid(errors: any) {
@@ -90,7 +81,7 @@ export function SelectDate({
     }
 
     if (!formData.month) formData.month = "";
-    getNewTransactions(formData);
+    GetNewCIBCTransactions(formData);
   }
 
   function Reset() {
@@ -98,8 +89,7 @@ export function SelectDate({
       year: "",
       month: "",
     });
-    fetchCIBCTransactions(true);
-    // fetchTransactions(true, setIsLoading);
+    FetchCIBCTransactions(true);
   }
 
   return (
@@ -181,7 +171,7 @@ export function SelectDate({
         {showAllTransactions && (
           <Button
             variant="outline"
-            onClick={() => fetchCIBCTransactions(false)}
+            onClick={() => FetchCIBCTransactions(false)}
           >
             Get All Transactions
           </Button>
