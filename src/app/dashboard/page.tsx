@@ -93,7 +93,7 @@ export default function Dashboard() {
         setIsTdLoading(false);
       });
     }
-  }, []);
+  }, [FetchCIBCTransactions, setIsLoading]);
 
   // Getting the column data from the getColumns function
   const columns = GetColumns(UpdateCIBCTransaction);
@@ -175,7 +175,7 @@ export default function Dashboard() {
                     <div className="w-1/2 mx-5">
                       <div className="shadow-xl rounded-lg overflow-hidden">
                         <div className="p-10 border-2 border-white glow rounded-lg bg-gray-950">
-                          {/* <MyResponsivePie data={CIBCTransactions} /> */}
+                          <MyResponsivePie data={CIBCTransactions} />
                         </div>
                       </div>
                     </div>

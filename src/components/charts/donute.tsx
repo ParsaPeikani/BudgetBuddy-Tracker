@@ -2,16 +2,16 @@ import { ResponsivePie } from "@nivo/pie";
 import { useState, useEffect } from "react";
 
 export default function MyResponsivePie({ data }: { data: any[] }) {
-  const [parentHeight, setParentHeight] = useState(window.innerHeight / 1.75);
+  // const [parentHeight, setParentHeight] = useState(window.innerHeight / 1.75);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setParentHeight(window.innerHeight / 1.75);
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setParentHeight(window.innerHeight / 1.75);
+  //   };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const testingdata = [
     { id: "Food", label: "Food", value: 0 },
