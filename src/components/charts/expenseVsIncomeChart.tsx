@@ -1,6 +1,7 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { MonthlyChartLoading } from "../loading/loading";
 import { useState, useEffect } from "react";
+import { Checking } from "@/components/balance/checkingTable";
 
 const monthIndex: Record<string, number> = {
   January: 0,
@@ -24,31 +25,61 @@ function getMonthNumber(dateString: string) {
 }
 
 export default function TdIncomeVsExpenseChart({
-  transactions,
+  TDtransactions,
+  CIBCTransactions,
   month,
   year,
   isLoading,
 }: {
-  transactions: any;
+  TDtransactions: Checking[];
+  CIBCTransactions: any;
   month: string;
   year: string;
   isLoading: boolean;
 }) {
-  //   console.log("these are the transactions: ", transactions);
   const TdExpenseVsIncomeChartdata = [
-    { month: "Jan", Expense: 20, Income: 20 },
-    { month: "Feb", Expense: 20, Income: 20 },
-    { month: "Mar", Expense: 20, Income: 20 },
-    { month: "Apr", Expense: 20, Income: 20 },
-    { month: "May", Expense: 20, Income: 20 },
-    { month: "Jun", Expense: 20, Income: 20 },
-    { month: "Jul", Expense: 20, Income: 20 },
-    { month: "Aug", Expense: 20, Income: 20 },
-    { month: "Sep", Expense: 20, Income: 20 },
-    { month: "Oct", Expense: 20, Income: 20 },
-    { month: "Nov", Expense: 20, Income: 20 },
-    { month: "Dec", Expense: 20, Income: 20 },
+    { month: "Jan", Expense: 0, Income: 0 },
+    { month: "Feb", Expense: 0, Income: 0 },
+    { month: "Mar", Expense: 0, Income: 0 },
+    { month: "Apr", Expense: 0, Income: 0 },
+    { month: "May", Expense: 0, Income: 0 },
+    { month: "Jun", Expense: 0, Income: 0 },
+    { month: "Jul", Expense: 0, Income: 0 },
+    { month: "Aug", Expense: 0, Income: 0 },
+    { month: "Sep", Expense: 0, Income: 0 },
+    { month: "Oct", Expense: 0, Income: 0 },
+    { month: "Nov", Expense: 0, Income: 0 },
+    { month: "Dec", Expense: 0, Income: 0 },
   ];
+  // Update Values from data for each month
+  for (let i = 0; i < TDtransactions.length; i++) {
+    const transaction = TDtransactions[i];
+    const transactionMonth = getMonthNumber(transaction.date);
+    TdExpenseVsIncomeChartdata[transactionMonth - 1].Income +=
+      transaction.amount;
+  }
+
+  for (let i = 0; i < CIBCTransactions.length; i++) {
+    const transaction = CIBCTransactions[i];
+    const transactionMonth = getMonthNumber(transaction.date);
+    TdExpenseVsIncomeChartdata[transactionMonth - 1].Expense +=
+      transaction.amount;
+  }
+
+  // Round up the Expense and Income Values
+  for (let i = 0; i < TdExpenseVsIncomeChartdata.length; i++) {
+    TdExpenseVsIncomeChartdata[i].Expense = Math.round(
+      TdExpenseVsIncomeChartdata[i].Expense
+    );
+    TdExpenseVsIncomeChartdata[i].Income = Math.round(
+      TdExpenseVsIncomeChartdata[i].Income
+    );
+  }
+
+  // Reversing The Income Data from Positive to Negative
+  for (let i = 0; i < TdExpenseVsIncomeChartdata.length; i++) {
+    TdExpenseVsIncomeChartdata[i].Income *= -1;
+  }
 
   if (isLoading) {
     return <MonthlyChartLoading />;

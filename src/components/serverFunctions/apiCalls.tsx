@@ -9,10 +9,13 @@ import { Delete } from "lucide-react";
 ///////////////////////////////////TD Transactions/////////////////////////////////////
 
 // Fetch All TD Transcations
-export async function fetchAllTDTransactions(
+export async function FetchAllTDTransactions(
+  lastYear: boolean,
   setAllTDTransactions: Dispatch<SetStateAction<any[]>>
 ) {
-  const response = await axios.get("/api/mongoDB/fetchAllTDTransactions");
+  const response = await axios.get("/api/mongoDB/fetchAllTDTransactions", {
+    params: { lastYear },
+  });
   const TDTrans = response.data.map((transaction: any) => ({
     id: transaction.transactionId,
     date: new Date(transaction.date).toLocaleDateString("en-CA", {

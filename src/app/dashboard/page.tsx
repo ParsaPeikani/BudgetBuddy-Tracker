@@ -22,7 +22,7 @@ import { CheckingComponent } from "@/components/balance/checking";
 import {
   fetchBalances,
   useCIBCTransactions,
-  fetchAllTDTransactions,
+  FetchAllTDTransactions,
   fetchTDSavingTransactions,
   fetchTDCheckingTransactions,
 } from "@/components/serverFunctions/apiCalls";
@@ -71,7 +71,7 @@ export default function Dashboard() {
   const [isTdLoading, setIsTdLoading] = useState(true);
 
   // State for the active tab
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("balance");
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -81,7 +81,7 @@ export default function Dashboard() {
     setIsLoading(true);
     try {
       FetchCIBCTransactions(true);
-      fetchAllTDTransactions(setAllTDTransactions);
+      FetchAllTDTransactions(true, setAllTDTransactions);
       fetchTDCheckingTransactions(setTdCheckingTransactions);
       fetchTDSavingTransactions(setTdSavingTransactions);
       fetchBalances(setBalances);
@@ -241,7 +241,8 @@ export default function Dashboard() {
                     <div className="shadow-xl rounded-lg overflow-hidden mx-10">
                       <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
                         <TdIncomeVsExpenseChart
-                          transactions={allTDTransactions}
+                          TDtransactions={allTDTransactions}
+                          CIBCTransactions={CIBCTransactions}
                           month={month || ""}
                           year={year || ""}
                           isLoading={isLoading}
