@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/navbar/navbar";
 import { DataTable } from "@/components/custom-table/data-table";
 import { SelectDate } from "@/components/SelectDate/selectDate";
+import { TDSelectDate } from "@/components/SelectDate/TdSelectDate";
 import { Payment, GetColumns } from "@/components/custom-table/columns";
 
 // TD Components
@@ -20,11 +21,8 @@ import { CheckingComponent } from "@/components/balance/checking";
 
 // API Calls
 import {
-  fetchBalances,
   useCIBCTransactions,
-  FetchAllTDTransactions,
-  fetchTDSavingTransactions,
-  fetchTDCheckingTransactions,
+  useTDTransactions,
 } from "@/components/serverFunctions/apiCalls";
 
 // Loading Components
@@ -59,16 +57,30 @@ export default function Dashboard() {
     GetNewCIBCTransactions,
   }: any = useCIBCTransactions();
 
+  // TD Transaction Variables
+  const {
+    FetchAllTDTransactions,
+    FetchTDCheckingTransactions,
+    FetchTDSavingTransactions,
+    FetchBalances,
+    AllTDTransactions,
+    TdCheckingTransactions,
+    TdSavingTransactions,
+    Balances,
+    isTdLoading,
+    setIsTdLoading,
+  }: any = useTDTransactions();
+
   // TD Transaction Varaiables
-  const [allTDTransactions, setAllTDTransactions] = useState<Checking[]>([]);
-  const [tdCheckingTransactions, setTdCheckingTransactions] = useState<
-    Checking[]
-  >([]);
-  const [tdSavingTransactions, setTdSavingTransactions] = useState<Checking[]>(
-    []
-  );
-  const [balances, setBalances] = useState<any>([]);
-  const [isTdLoading, setIsTdLoading] = useState(true);
+  // const [allTDTransactions, setAllTDTransactions] = useState<Checking[]>([]);
+  // const [tdCheckingTransactions, setTdCheckingTransactions] = useState<
+  //   Checking[]
+  // >([]);
+  // const [tdSavingTransactions, setTdSavingTransactions] = useState<Checking[]>(
+  //   []
+  // );
+  // const [balances, setBalances] = useState<any>([]);
+  // const [isTdLoading, setIsTdLoading] = useState(true);
 
   // State for the active tab
   const [activeTab, setActiveTab] = useState("balance");
@@ -81,10 +93,10 @@ export default function Dashboard() {
     setIsLoading(true);
     try {
       FetchCIBCTransactions(true);
-      FetchAllTDTransactions(true, setAllTDTransactions);
-      fetchTDCheckingTransactions(setTdCheckingTransactions);
-      fetchTDSavingTransactions(setTdSavingTransactions);
-      fetchBalances(setBalances);
+      FetchAllTDTransactions(true);
+      FetchTDCheckingTransactions();
+      FetchTDSavingTransactions();
+      FetchBalances();
     } catch (error) {
       console.error("Failed to fetch Transactions:", error);
     } finally {
@@ -93,7 +105,15 @@ export default function Dashboard() {
         setIsTdLoading(false);
       });
     }
-  }, [FetchCIBCTransactions, setIsLoading]);
+  }, [
+    FetchCIBCTransactions,
+    setIsLoading,
+    FetchAllTDTransactions,
+    FetchTDCheckingTransactions,
+    FetchTDSavingTransactions,
+    FetchBalances,
+    setIsTdLoading,
+  ]);
 
   // Getting the column data from the getColumns function
   const columns = GetColumns(UpdateCIBCTransaction);
@@ -226,8 +246,8 @@ export default function Dashboard() {
                   <div className="flex flex-col items-center justify-center mb-8">
                     <div className="flex flex-col items-center justify-center text-white mt-10 border border-white bg-gray-950 rounded-lg w-[30%]">
                       <h1 className="text-6xl font-bold mt-8">
-                        {balances[0]?.account?.balances?.available +
-                          balances[1]?.account?.balances?.available || 0}
+                        {Balances[0]?.account?.balances?.available +
+                          Balances[1]?.account?.balances?.available || 0}
                       </h1>
                       <p className="text-gray-400 text-2xl mb-10">
                         This is your current TD balance 🤫
@@ -236,12 +256,12 @@ export default function Dashboard() {
                   </div>
                   <div>
                     <div className="flex justify-center pt-5">
-                      <SelectDate showAllTransactions={false} />
+                      <TDSelectDate showAllTransactions={false} />
                     </div>
                     <div className="shadow-xl rounded-lg overflow-hidden mx-10">
                       <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
                         <TdIncomeVsExpenseChart
-                          TDtransactions={allTDTransactions}
+                          TDtransactions={AllTDTransactions}
                           CIBCTransactions={CIBCTransactions}
                           month={month || ""}
                           year={year || ""}
@@ -251,16 +271,16 @@ export default function Dashboard() {
                     </div>
                   </div>
 
-                  {/* <div className="flex justify-center">
+                  <div className="flex justify-center">
                     <CheckingComponent
-                      account={balances[0]?.account}
-                      transactions={tdCheckingTransactions}
+                      account={Balances[0]?.account}
+                      transactions={TdCheckingTransactions}
                     />
                     <SavingComponent
-                      account={balances[1]?.account}
-                      transactions={tdSavingTransactions}
+                      account={Balances[1]?.account}
+                      transactions={TdSavingTransactions}
                     />
-                  </div> */}
+                  </div>
                 </>
               )}
             </TabsContent>
