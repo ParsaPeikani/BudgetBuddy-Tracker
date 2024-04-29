@@ -37,6 +37,7 @@ export function TDSelectDate({
 }) {
   const { FetchCIBCTransactions, GetNewCIBCTransactions }: any =
     useCIBCTransactions();
+  const { FetchAllTDTransactions } = useTDTransactions();
 
   const { GetNewTDTransactions }: any = useTDTransactions();
 
@@ -96,6 +97,7 @@ export function TDSelectDate({
       month: "",
     });
     FetchCIBCTransactions(true);
+    FetchAllTDTransactions(true);
   }
 
   return (

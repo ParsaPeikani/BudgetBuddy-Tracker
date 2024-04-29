@@ -69,7 +69,7 @@ export default function Dashboard() {
   }: any = useTDTransactions();
 
   // State for the active tab
-  const [activeTab, setActiveTab] = useState("balance");
+  const [activeTab, setActiveTab] = useState("overview");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
@@ -189,7 +189,7 @@ export default function Dashboard() {
               </div>
             </TabsContent>
             <TabsContent value="transactions">
-              <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
+              <div className="flex justify-between bg-black p-8 lg:pl-10 md:pl-10">
                 <div className="-mt-40">
                   <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
                     Welcome back Parsa!
@@ -211,7 +211,7 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
-              <div className="lg:pl-20 lg:pr-20 md:pl-10 md:pr-10">
+              <div className="md:pl-10 md:pr-10 flex flex-col justify-center">
                 {isLoading || !CIBCTransactions ? (
                   <TableLoading />
                 ) : (
@@ -239,9 +239,32 @@ export default function Dashboard() {
                       </p>
                     </div>
                   </div>
+
+                  <div className="flex justify-center">
+                    <CheckingComponent
+                      account={Balances[0]?.account}
+                      transactions={TdCheckingTransactions}
+                    />
+                    <SavingComponent
+                      account={Balances[1]?.account}
+                      transactions={TdSavingTransactions}
+                    />
+                  </div>
                   <div>
-                    <div className="flex justify-center pt-5">
+                    <div className="flex flex-col items-center justify-center pt-20">
                       <TDSelectDate showAllTransactions={false} />
+                      <div className="flex justify-center w-2/6">
+                        {month !== "" && (
+                          <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                            {month}
+                          </h1>
+                        )}
+                        {year !== "" && (
+                          <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                            {year}
+                          </p>
+                        )}
+                      </div>
                     </div>
                     <div className="shadow-xl rounded-lg overflow-hidden mx-10">
                       <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
@@ -254,17 +277,6 @@ export default function Dashboard() {
                         />
                       </div>
                     </div>
-                  </div>
-
-                  <div className="flex justify-center">
-                    <CheckingComponent
-                      account={Balances[0]?.account}
-                      transactions={TdCheckingTransactions}
-                    />
-                    <SavingComponent
-                      account={Balances[1]?.account}
-                      transactions={TdSavingTransactions}
-                    />
                   </div>
                 </>
               )}

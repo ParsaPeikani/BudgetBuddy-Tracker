@@ -3,9 +3,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 // MonthYearLoading for the month and year component on the overview page
 export function MonthYearLoading() {
   return (
-    <div className="flex justify-end items-start w-full -mt-16">
-      <div className="flex flex-col space-y-3 w-full max-w-[45%]">
-        <Skeleton className="h-[70px] w-full rounded-xl mb-8" />
+    <div className="flex justify-end w-2/6 -mt-20">
+      <div className="flex flex-col w-full">
+        <Skeleton className="h-[70px] rounded-xl mt-4" />
       </div>
     </div>
   );
@@ -14,9 +14,9 @@ export function MonthYearLoading() {
 // MonthlyChartLoading for the first big chart on the overview page
 export function MonthlyChartLoading() {
   return (
-    <div className="flex flex-col space-y-3 items-center justify-center w-full">
-      <Skeleton className="h-[40px] w-full md:w-[90%] lg:w-[25%] rounded-xl mb-8" />
-      <Skeleton className="h-[450px] w-full md:w-[90%] lg:w-[85%] rounded-xl" />
+    <div className="flex flex-col space-y-3 items-center justify-center w-full pt-2">
+      <Skeleton className="h-[40px] w-full md:w-[90%] lg:w-[30%] rounded-xl mb-8 ml-8" />
+      <Skeleton className="h-[450px] w-full md:w-[90%] lg:w-[90%] rounded-xl" />
     </div>
   );
 }
@@ -51,7 +51,14 @@ export function TableLoading() {
   return (
     <div className="flex flex-col space-y-3">
       {/* Use percentages or other relative units for responsiveness */}
-      <Skeleton className="h-[400px] w-full md:w-[90%] lg:w-[95%] rounded-xl" />
+      <div className="flex justify-end">
+        <Skeleton className="h-[90px] w-full md:w-[90%] lg:w-[32%] rounded-xl -mt-36" />
+      </div>
+      <div className="flex justify-between">
+        <Skeleton className="h-[40px] w-full md:w-[90%] lg:w-[19%] rounded-xl" />
+        <Skeleton className="h-[40px] w-full md:w-[90%] lg:w-[9%] rounded-xl" />
+      </div>
+      <Skeleton className="h-[600px] w-full md:w-[90%] lg:w-[100%] rounded-xl" />
       <div className="space-y-2">
         {/* Adjust width with percentages or vw (viewport width) for responsiveness */}
         <Skeleton className="h-4 w-3/4 md:w-[250px]" />
@@ -64,9 +71,9 @@ export function TableLoading() {
 // BalanceLoading for the balance page
 export function BalanceLoading() {
   return (
-    <div>
+    <div className="mt-12">
       <div className="flex justify-center mt-8 mb-8">
-        <Skeleton className="h-[120px] md:w-[90%] lg:w-[20%] rounded-xl" />
+        <Skeleton className="h-[170px] md:w-[90%] lg:w-[30%] rounded-xl" />
       </div>
       <div className="flex justify-center">
         <div className="lg:w-[50%] pl-4 pr-4">
