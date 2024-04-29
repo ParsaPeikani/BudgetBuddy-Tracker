@@ -1,10 +1,7 @@
 import axios from "axios";
-import { Dispatch, SetStateAction } from "react";
 import { Checking } from "../balance/checkingTable";
-import { Payment } from "@/components/custom-table/columns";
 import React, { createContext, useState, useContext, useCallback } from "react";
 import { toast } from "sonner";
-import { Delete } from "lucide-react";
 
 ///////////////////////////////////TD Transactions/////////////////////////////////////
 
@@ -19,6 +16,7 @@ const TDTransactionsContext = createContext({
   FetchTDCheckingTransactions: () => {},
   FetchTDSavingTransactions: () => {},
   FetchBalances: () => {},
+  GetNewTDTransactions: (data: any) => {},
 });
 
 export const TDTransactionsProvider = ({ children }: { children: any }) => {
@@ -100,6 +98,40 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
     }
   }, []);
 
+  // Fetch new TD Transactions based on the year and month from the database
+  const GetNewTDTransactions = async (data: any) => {
+    // setIsLoading(true);
+    try {
+      await axios
+        .get(
+          `/api/mongoDB/newTDTransactions?year=${data.year}&month=${data.month}`
+        )
+        .then((newdata) => {
+          const newColumns = newdata.data.map((transaction: any) => ({
+            id: transaction.transactionId,
+            date: new Date(transaction.date).toLocaleDateString("en-CA", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }),
+            name: transaction.name ? transaction.name : "UnKnown",
+            amount: transaction.amount,
+            category: transaction.category[0],
+            status: transaction.pending ? "Pending" : "Verified",
+          }));
+          setAllTDTransactions(newColumns);
+          // setMonth(data.month);
+          // setYear(data.year);
+          // setIsLoading(false);
+        });
+    } catch (error) {
+      console.error(
+        "There was an error fetching the new TD transactions!",
+        error
+      );
+    }
+  };
+
   return (
     <TDTransactionsContext.Provider
       value={{
@@ -113,6 +145,7 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
         FetchTDCheckingTransactions,
         FetchTDSavingTransactions,
         FetchBalances,
+        GetNewTDTransactions,
       }}
     >
       {children}
@@ -121,81 +154,6 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
 };
 
 export const useTDTransactions = () => useContext(TDTransactionsContext);
-
-// Fetch All TD Transcations
-// export async function FetchAllTDTransactions(
-//   lastYear: boolean,
-//   setAllTDTransactions: Dispatch<SetStateAction<any[]>>
-// ) {
-//   const response = await axios.get("/api/mongoDB/fetchAllTDTransactions", {
-//     params: { lastYear },
-//   });
-//   const TDTrans = response.data.map((transaction: any) => ({
-//     id: transaction.transactionId,
-//     date: new Date(transaction.date).toLocaleDateString("en-CA", {
-//       year: "numeric",
-//       month: "2-digit",
-//       day: "2-digit",
-//     }),
-//     name: transaction.name ? transaction.name : "UnKnown",
-//     amount: transaction.amount,
-//     category: transaction.category[0],
-//     status: transaction.pending ? "Pending" : "Verified",
-//   }));
-//   setAllTDTransactions(TDTrans);
-// }
-
-// // Fetch TD Checking Transactions from Database
-// export async function fetchTDCheckingTransactions(
-//   setTdCheckingTransactions: Dispatch<SetStateAction<Checking[]>>
-// ) {
-//   const response = await axios.get("/api/mongoDB/fetchTDCheckingTransactions");
-//   const TDTrans = response.data.map((transaction: any) => ({
-//     id: transaction.transactionId,
-//     date: new Date(transaction.date).toLocaleDateString("en-CA", {
-//       year: "numeric",
-//       month: "2-digit",
-//       day: "2-digit",
-//     }),
-//     name: transaction.name ? transaction.name : "UnKnown",
-//     amount: transaction.amount,
-//     category: transaction.category[0],
-//     status: transaction.pending ? "Pending" : "Verified",
-//   }));
-//   setTdCheckingTransactions(TDTrans);
-// }
-
-// // Fetch TD Saving Transactions from Database
-// export async function fetchTDSavingTransactions(
-//   setTdSavingTransactions: Dispatch<SetStateAction<any[]>>
-// ) {
-//   const response = await axios.get("/api/mongoDB/fetchTDSavingTransactions");
-//   const TDTrans = response.data.map((transaction: any) => ({
-//     id: transaction.transactionId,
-//     date: new Date(transaction.date).toLocaleDateString("en-CA", {
-//       year: "numeric",
-//       month: "2-digit",
-//       day: "2-digit",
-//     }),
-//     name: transaction.name ? transaction.name : "UnKnown",
-//     amount: transaction.amount,
-//     category: transaction.category[0],
-//     status: transaction.pending ? "Pending" : "Verified",
-//   }));
-//   setTdSavingTransactions(TDTrans);
-// }
-
-// // Fetch TD Checking and Saving TD balances
-// export async function fetchBalances(
-//   setBalances: Dispatch<SetStateAction<any>>
-// ) {
-//   try {
-//     const response = await axios.get("/api/mongoDB/fetchBalances");
-//     setBalances(response.data);
-//   } catch (error) {
-//     console.error("Failed to fetch balances:", error);
-//   }
-// }
 
 ///////////////////////////////////CIBC Transactions/////////////////////////////////////
 

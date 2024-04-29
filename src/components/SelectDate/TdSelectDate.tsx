@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // Custom hooks
 import { useCIBCTransactions } from "../serverFunctions/apiCalls";
+import { useTDTransactions } from "../serverFunctions/apiCalls";
 
 // ShadcUI components
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,8 @@ export function TDSelectDate({
   const { FetchCIBCTransactions, GetNewCIBCTransactions }: any =
     useCIBCTransactions();
 
+  const { GetNewTDTransactions }: any = useTDTransactions();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -53,7 +56,9 @@ export function TDSelectDate({
       });
       return;
     }
+    console.log("these are the data", data);
     GetNewCIBCTransactions(data);
+    GetNewTDTransactions(data);
   }
 
   function onInvalid(errors: any) {
@@ -82,6 +87,7 @@ export function TDSelectDate({
 
     if (!formData.month) formData.month = "";
     GetNewCIBCTransactions(formData);
+    GetNewTDTransactions(formData);
   }
 
   function Reset() {

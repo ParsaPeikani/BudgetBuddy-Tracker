@@ -1,8 +1,6 @@
 "use client";
 
 // General Imports
-import axios from "axios";
-import { toast } from "sonner";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,7 +13,6 @@ import { TDSelectDate } from "@/components/SelectDate/TdSelectDate";
 import { Payment, GetColumns } from "@/components/custom-table/columns";
 
 // TD Components
-import { Checking } from "@/components/balance/checkingTable";
 import { SavingComponent } from "@/components/balance/saving";
 import { CheckingComponent } from "@/components/balance/checking";
 
@@ -71,20 +68,8 @@ export default function Dashboard() {
     setIsTdLoading,
   }: any = useTDTransactions();
 
-  // TD Transaction Varaiables
-  // const [allTDTransactions, setAllTDTransactions] = useState<Checking[]>([]);
-  // const [tdCheckingTransactions, setTdCheckingTransactions] = useState<
-  //   Checking[]
-  // >([]);
-  // const [tdSavingTransactions, setTdSavingTransactions] = useState<Checking[]>(
-  //   []
-  // );
-  // const [balances, setBalances] = useState<any>([]);
-  // const [isTdLoading, setIsTdLoading] = useState(true);
-
   // State for the active tab
   const [activeTab, setActiveTab] = useState("balance");
-
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
