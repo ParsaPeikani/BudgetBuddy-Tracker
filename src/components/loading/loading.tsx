@@ -21,6 +21,16 @@ export function MonthlyChartLoading() {
   );
 }
 
+// MonthlyChartLoading for the first big chart on the overview page
+export function BalanceMonthlyChartLoading() {
+  return (
+    <div className="flex flex-col space-y-3 items-center justify-center w-full pt-2">
+      <Skeleton className="h-[40px] w-full md:w-[90%] lg:w-[22%] rounded-xl mb-8 mt-2 ml-8" />
+      <Skeleton className="h-[450px] w-full md:w-[90%] lg:w-[90%] rounded-xl" />
+    </div>
+  );
+}
+
 // ChartLoading for the other charts on the overview page
 export function ChartLoading() {
   return (
@@ -52,7 +62,7 @@ export function TableLoading() {
     <div className="flex flex-col space-y-3">
       {/* Use percentages or other relative units for responsiveness */}
       <div className="flex justify-end">
-        <Skeleton className="h-[90px] w-full md:w-[90%] lg:w-[32%] rounded-xl -mt-36" />
+        <Skeleton className="h-[90px] w-full md:w-[90%] lg:w-[32%] rounded-xl -mt-28" />
       </div>
       <div className="flex justify-between">
         <Skeleton className="h-[40px] w-full md:w-[90%] lg:w-[19%] rounded-xl" />
@@ -83,6 +93,15 @@ export function BalanceLoading() {
           <Skeleton className="h-[1000px]  rounded-xl" />
         </div>
       </div>
+    </div>
+  );
+}
+
+// BalanceLoading for the balance page
+export function BalanceMonthYearLoading() {
+  return (
+    <div className="flex justify-center w-2/6 mt-4 mb-5">
+      <Skeleton className="h-[70px] w-full md:w-[90%] lg:w-[90%] rounded-xl" />
     </div>
   );
 }

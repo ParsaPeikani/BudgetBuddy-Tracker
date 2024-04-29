@@ -1,5 +1,5 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { MonthlyChartLoading } from "../loading/loading";
+import { BalanceMonthlyChartLoading } from "../loading/loading";
 import { useState, useEffect } from "react";
 import { Checking } from "@/components/balance/checkingTable";
 
@@ -82,7 +82,7 @@ export default function TdIncomeVsExpenseChart({
   }
 
   if (isLoading) {
-    return <MonthlyChartLoading />;
+    return <BalanceMonthlyChartLoading />;
   }
   return (
     <div

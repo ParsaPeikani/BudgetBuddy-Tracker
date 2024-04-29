@@ -28,6 +28,7 @@ import {
   ChartLoading,
   BalanceLoading,
   MonthYearLoading,
+  BalanceMonthYearLoading,
 } from "@/components/loading/loading";
 
 // Charts
@@ -69,7 +70,7 @@ export default function Dashboard() {
   }: any = useTDTransactions();
 
   // State for the active tab
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("transactions");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
@@ -122,13 +123,13 @@ export default function Dashboard() {
               </div>
             )}
             <TabsContent value="overview">
-              <div className="flex justify-between bg-black p-8 lg:pl-20 md:pl-10">
+              <div className="flex justify-between bg-black p-8 lg:pl-10 md:pl-10">
                 <div className="-mt-40">
                   <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
                     Welcome back Parsa!
                   </h1>
                   <p className="text-gray-400 lg:text-2xl md:text-md">
-                    Here are your CIBC transaction Charts :)
+                    CIBC transactions Charts :)
                   </p>
                 </div>
                 {isLoading ? (
@@ -190,13 +191,13 @@ export default function Dashboard() {
             </TabsContent>
             <TabsContent value="transactions">
               <div className="flex justify-between bg-black p-8 lg:pl-10 md:pl-10">
-                <div className="-mt-40">
-                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
-                    Welcome back Parsa!
+                <div className="-mt-36">
+                  <h1 className="text-white lg:text-5xl md:text-3xl font-bold pt-24">
+                    CIBC transactions :)
                   </h1>
-                  <p className="text-gray-400 lg:text-2xl md:text-md">
+                  {/* <p className="text-gray-400 lg:text-2xl md:text-md">
                     Here is a list of your CIBC Credit Card transactions :)
-                  </p>
+                  </p> */}
                 </div>
                 <div className="flex justify-center -mt-40 w-2/6 pt-24">
                   {month !== "" && (
@@ -211,7 +212,7 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
-              <div className="md:pl-10 md:pr-10 flex flex-col justify-center">
+              <div className="md:pl-10 md:pr-10 flex flex-col justify-center -mt-2">
                 {isLoading || !CIBCTransactions ? (
                   <TableLoading />
                 ) : (
@@ -253,18 +254,22 @@ export default function Dashboard() {
                   <div>
                     <div className="flex flex-col items-center justify-center pt-20">
                       <TDSelectDate showAllTransactions={false} />
-                      <div className="flex justify-center w-2/6">
-                        {month !== "" && (
-                          <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
-                            {month}
-                          </h1>
-                        )}
-                        {year !== "" && (
-                          <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
-                            {year}
-                          </p>
-                        )}
-                      </div>
+                      {isLoading ? (
+                        <BalanceMonthYearLoading />
+                      ) : (
+                        <div className="flex justify-center w-2/6 mt-4 mb-5">
+                          {month !== "" && (
+                            <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                              {month}
+                            </h1>
+                          )}
+                          {year !== "" && (
+                            <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                              {year}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div className="shadow-xl rounded-lg overflow-hidden mx-10">
                       <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
