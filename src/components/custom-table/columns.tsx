@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { DrawerDemo } from "@/components/DrawerDemo/drawerDemo";
+import { TransactionDrawer } from "@/components/TransactionDrawer/transactionDrawer";
 import { Edit } from "@/components/edit/edit";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -90,7 +90,7 @@ export const GetColumns = (
         const transaction = row.original;
         return (
           <div className="pl-4">
-            <DrawerDemo
+            <TransactionDrawer
               transaction={transaction}
               deleteTransaction={DeleteCIBCTransaction}
               title={row.getValue("transaction")}
@@ -193,7 +193,7 @@ export const GetColumns = (
                     transaction={transaction}
                     updateTransaction={updateTransaction}
                   />
-                  <DrawerDemo
+                  <TransactionDrawer
                     transaction={transaction}
                     deleteTransaction={DeleteCIBCTransaction}
                     title="Details"

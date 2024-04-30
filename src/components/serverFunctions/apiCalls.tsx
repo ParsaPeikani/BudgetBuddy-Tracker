@@ -244,7 +244,6 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         category: transaction.category[0],
         verified: transaction.pending ? "Pending" : "Verified",
       }));
-      console.log("what the fuck is this");
       setCIBCTransactions(transformedData);
       setBalanceCIBCTransactions(transformedData);
       if (!latestYear) {
