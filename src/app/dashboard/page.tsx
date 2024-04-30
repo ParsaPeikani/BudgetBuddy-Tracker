@@ -38,6 +38,7 @@ import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
+import Image from "next/image";
 
 export default function Dashboard() {
   // Clerk Session
@@ -78,7 +79,7 @@ export default function Dashboard() {
   }: any = useTDTransactions();
 
   // State for the active tab
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("ai");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
@@ -119,11 +120,12 @@ export default function Dashboard() {
             <TabsTrigger value="overview">OverView</TabsTrigger>
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="balance">Balance</TabsTrigger>
+            <TabsTrigger value="ai">Ask AI</TabsTrigger>
           </TabsList>
         </div>
         <div>
           <div>
-            {activeTab !== "balance" && (
+            {activeTab !== "balance" && activeTab !== "ai" && (
               <div className="flex justify-center pt-5">
                 <SelectDate showAllTransactions={true} />
               </div>
@@ -295,6 +297,22 @@ export default function Dashboard() {
                   </div>
                 </>
               )}
+            </TabsContent>
+            <TabsContent value="ai">
+              <div className="flex justify-center items-center">
+                <h1 className="gradient-text-shadow font-bold mt-6 lg:text-6xl md:text-3xl pb-4">
+                  Ask BudgetPro AI
+                </h1>
+
+                <div className="pl-4 pt-2">
+                  <Image
+                    src="/ai1.png"
+                    alt="Description of GIF"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+              </div>
             </TabsContent>
             <br />
 
