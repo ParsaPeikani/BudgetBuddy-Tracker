@@ -57,7 +57,7 @@ export default function Dashboard() {
     CIBCTransactions,
     DeleteAllSelectedRows,
     UpdateCIBCTransaction,
-    GetNewCIBCTransactions,
+    BalanceCIBCTransactions,
     totalSpent,
   }: any = useCIBCTransactions();
 
@@ -68,6 +68,8 @@ export default function Dashboard() {
     FetchTDSavingTransactions,
     FetchBalances,
     AllTDTransactions,
+    TDmonth,
+    TDyear,
     TdCheckingTransactions,
     TdSavingTransactions,
     Balances,
@@ -268,12 +270,12 @@ export default function Dashboard() {
                         <div className="flex justify-center w-2/6 mt-4 mb-5">
                           {month !== "" && (
                             <h1 className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 pr-10 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
-                              {month}
+                              {TDmonth}
                             </h1>
                           )}
                           {year !== "" && (
                             <p className="text-stroke lg:text-6xl md:text-4xl font-extrabold mb-4 tracking-tight transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
-                              {year}
+                              {TDyear || "2024"}
                             </p>
                           )}
                         </div>
@@ -283,9 +285,9 @@ export default function Dashboard() {
                       <div className="p-12 border-2 border-white glow rounded-lg bg-gray-950">
                         <TdIncomeVsExpenseChart
                           TDtransactions={AllTDTransactions}
-                          CIBCTransactions={CIBCTransactions}
-                          month={month || ""}
-                          year={year || ""}
+                          CIBCTransactions={BalanceCIBCTransactions}
+                          month={TDmonth || ""}
+                          year={TDyear || ""}
                           isLoading={isLoading}
                         />
                       </div>

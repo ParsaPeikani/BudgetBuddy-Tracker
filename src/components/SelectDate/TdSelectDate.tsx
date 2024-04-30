@@ -58,7 +58,7 @@ export function TDSelectDate({
       return;
     }
     console.log("these are the data", data);
-    GetNewCIBCTransactions(data);
+    GetNewCIBCTransactions(data, true);
     GetNewTDTransactions(data);
   }
 
@@ -87,7 +87,7 @@ export function TDSelectDate({
     }
 
     if (!formData.month) formData.month = "";
-    GetNewCIBCTransactions(formData);
+    GetNewCIBCTransactions(formData, true);
     GetNewTDTransactions(formData);
   }
 

@@ -12,6 +12,8 @@ const TDTransactionsContext = createContext({
   TdCheckingTransactions: [] as Checking[],
   TdSavingTransactions: [] as Checking[],
   Balances: [] as any,
+  TDmonth: "",
+  TDyear: "2024",
   isTdLoading: false,
   setIsTdLoading: (value: boolean) => {},
   FetchAllTDTransactions: (lastYear: boolean) => {},
@@ -29,6 +31,8 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
   const [TdSavingTransactions, setTdSavingTransactions] = useState<Checking[]>(
     []
   );
+  const [TDmonth, setTDmonth] = useState("");
+  const [TDyear, setTDyear] = useState("");
   const [Balances, setBalances] = useState<any>([]);
   const [isTdLoading, setIsTdLoading] = useState(true);
 
@@ -121,6 +125,8 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
             status: transaction.pending ? "Pending" : "Verified",
           }));
           setAllTDTransactions(newColumns);
+          setTDmonth(data.month);
+          setTDyear(data.year);
         });
     } catch (error) {
       console.error(
@@ -137,6 +143,8 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
         TdCheckingTransactions,
         TdSavingTransactions,
         Balances,
+        TDmonth,
+        TDyear,
         isTdLoading,
         setIsTdLoading,
         FetchAllTDTransactions,
@@ -168,6 +176,7 @@ interface CIBCTransaction {
 
 const CIBCTransactionsContext = createContext({
   CIBCTransactions: [] as CIBCTransaction[],
+  BalanceCIBCTransactions: [] as CIBCTransaction[],
   isLoading: false,
   month: "",
   year: "",
@@ -175,6 +184,7 @@ const CIBCTransactionsContext = createContext({
   setTotalSpent: (value: number) => {},
   FetchCIBCTransactions: () => {},
   setCIBCTransactions: (transactions: CIBCTransaction[]) => {},
+  setBalanceCIBCTransactions: (transactions: CIBCTransaction[]) => {},
   setIsLoading: (value: boolean) => {},
   setMonth: (month: string) => {},
   setYear: (year: string) => {},
@@ -200,13 +210,16 @@ const CIBCTransactionsContext = createContext({
     fullDeletedTransactionData: CIBCTransaction[]
   ) => {},
   UpdateCIBCTransaction: (data: any) => {},
-  GetNewCIBCTransactions: (data: any) => {},
+  GetNewCIBCTransactions: (data: any, balancePage: boolean) => {},
 });
 
 export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   const [CIBCTransactions, setCIBCTransactions] = useState<CIBCTransaction[]>(
     []
   );
+  const [BalanceCIBCTransactions, setBalanceCIBCTransactions] = useState<
+    CIBCTransaction[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -231,7 +244,9 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         category: transaction.category[0],
         verified: transaction.pending ? "Pending" : "Verified",
       }));
+      console.log("what the fuck is this");
       setCIBCTransactions(transformedData);
+      setBalanceCIBCTransactions(transformedData);
       if (!latestYear) {
         setMonth("All");
         setYear("Transactions");
@@ -481,7 +496,11 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   };
 
   // Fetch new CIBC Transactions based on the year and month from the database
-  const GetNewCIBCTransactions = async (data: any) => {
+  const GetNewCIBCTransactions = async (
+    data: any,
+    balancePage: boolean = false
+  ) => {
+    console.log("this is the balance page", balancePage);
     setIsLoading(true);
     try {
       await axios
@@ -503,9 +522,16 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
             category: transaction.category[0],
             verified: transaction.pending ? "Pending" : "Verified",
           }));
-          setCIBCTransactions(newColumns);
-          setMonth(data.month);
-          setYear(data.year);
+          if (balancePage) {
+            setBalanceCIBCTransactions([...newColumns]);
+          } else {
+            console.log("hello");
+            setCIBCTransactions([...newColumns]);
+            setMonth(data.month);
+            setYear(data.year);
+          }
+          // setCIBCTransactions(newColumns);
+
           setIsLoading(false);
         });
     } catch (error) {
@@ -517,12 +543,14 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     <CIBCTransactionsContext.Provider
       value={{
         CIBCTransactions,
+        BalanceCIBCTransactions,
         isLoading,
         month,
         year,
         totalSpent,
         FetchCIBCTransactions,
         setCIBCTransactions,
+        setBalanceCIBCTransactions,
         setTotalSpent,
         setIsLoading,
         setMonth,
