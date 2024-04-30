@@ -64,7 +64,7 @@ export default function HorizontalBarChart({
     } else if (transactions[i].category === "Travel") {
       data[2].Actual += transactions[i].amount;
     } else if (transactions[i].category === "Transfer") {
-      data[3].Actual += transactions[i].amount;
+      data[3].Actual -= transactions[i].amount;
     } else {
       data[4].Actual += transactions[i].amount;
     }

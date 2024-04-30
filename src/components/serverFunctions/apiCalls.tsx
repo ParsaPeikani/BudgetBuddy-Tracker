@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { useSession } from "@clerk/nextjs";
 import { Checking } from "../balance/checkingTable";
 import React, { createContext, useState, useContext, useCallback } from "react";
+import { set } from "mongoose";
 
 ///////////////////////////////////TD Transactions/////////////////////////////////////
 
@@ -174,6 +175,8 @@ const CIBCTransactionsContext = createContext({
   isLoading: false,
   month: "",
   year: "",
+  totalSpent: 0,
+  setTotalSpent: (value: number) => {},
   FetchCIBCTransactions: () => {},
   setCIBCTransactions: (transactions: CIBCTransaction[]) => {},
   setIsLoading: (value: boolean) => {},
@@ -211,6 +214,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [totalSpent, setTotalSpent] = useState(0);
 
   // Fetching CIBC Transactions from the database
   const FetchCIBCTransactions = useCallback(
@@ -523,8 +527,10 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         isLoading,
         month,
         year,
+        totalSpent,
         FetchCIBCTransactions,
         setCIBCTransactions,
+        setTotalSpent,
         setIsLoading,
         setMonth,
         setYear,

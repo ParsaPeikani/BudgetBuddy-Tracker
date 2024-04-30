@@ -1,6 +1,6 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { MonthlyChartLoading } from "../loading/loading";
-import { useState, useEffect } from "react";
+import { useCIBCTransactions } from "@/components/serverFunctions/apiCalls";
 
 const monthIndex: Record<string, number> = {
   January: 0,
@@ -34,7 +34,7 @@ export default function MonthlyBarChart({
   year: string;
   isLoading: boolean;
 }) {
-  // console.log("these are the transactions: ", transactions);
+  const { setTotalSpent } = useCIBCTransactions();
   const MonthlyChartdata = [
     {
       month: "Jan",
@@ -220,7 +220,7 @@ export default function MonthlyBarChart({
           MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Travel +=
             transactions[i].amount;
         } else if (transactions[i].category === "Transfer") {
-          MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Transfer +=
+          MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Transfer -=
             transactions[i].amount;
         } else {
           MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Other +=
@@ -229,6 +229,17 @@ export default function MonthlyBarChart({
       }
     }
   }
+
+  // Calculate the total amount Spent
+  let totalSpent = 0;
+  for (let i = 0; i < MonthlyChartdata.length; i++) {
+    totalSpent +=
+      MonthlyChartdata[i].Food +
+      MonthlyChartdata[i].Shopping +
+      MonthlyChartdata[i].Travel +
+      MonthlyChartdata[i].Other;
+  }
+  setTotalSpent(Math.round(totalSpent));
 
   // Round up all the values of the categories to 2 decimal places
   for (let i = 0; i < MonthlyChartdata.length; i++) {

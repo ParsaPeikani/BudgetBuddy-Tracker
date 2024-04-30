@@ -42,7 +42,7 @@ export default function Dashboard() {
   // Clerk Session
   const { session } = useSession();
   const user_id = session?.user.id;
-  
+
   // Post Transaction Function from custom Hook
   const postTrans = usePostTrans();
 
@@ -57,6 +57,7 @@ export default function Dashboard() {
     DeleteAllSelectedRows,
     UpdateCIBCTransaction,
     GetNewCIBCTransactions,
+    totalSpent,
   }: any = useCIBCTransactions();
 
   // TD Transaction Variables
@@ -74,7 +75,7 @@ export default function Dashboard() {
   }: any = useTDTransactions();
 
   // State for the active tab
-  const [activeTab, setActiveTab] = useState("transactions");
+  const [activeTab, setActiveTab] = useState("overview");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
@@ -130,10 +131,10 @@ export default function Dashboard() {
               <div className="flex justify-between bg-black p-8 lg:pl-10 md:pl-10">
                 <div className="-mt-40">
                   <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
-                    Welcome back Parsa!
+                    CIBC transactions Charts :)
                   </h1>
                   <p className="text-gray-400 lg:text-2xl md:text-md">
-                    CIBC transactions Charts :)
+                    Total Spent: {totalSpent}
                   </p>
                 </div>
                 {isLoading ? (
@@ -292,14 +293,14 @@ export default function Dashboard() {
             </TabsContent>
             <br />
 
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
               <button
                 onClick={postTrans}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Post Transactions
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
