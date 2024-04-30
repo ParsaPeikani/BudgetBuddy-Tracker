@@ -1,6 +1,7 @@
 // /pages/api/transactions.js
 import connectDB from "@/pages/lib/connectDB";
-import Transaction from "@/Models/transaction";
+// import Transaction from "@/Models/transaction";
+import CIBCTransaction from "@/Models/cibcTransactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 import moment from "moment";
 
@@ -49,7 +50,7 @@ export default async function handler(
           },
         };
         // Execute the query
-        const results = await Transaction.find(query).sort({ date: -1 });
+        const results = await CIBCTransaction.find(query).sort({ date: -1 });
         res.status(200).json(results);
       } else {
         // MongoDB query to filter transactions by year
@@ -58,7 +59,7 @@ export default async function handler(
             $eq: [{ $year: "$date" }, year],
           },
         };
-        const results = await Transaction.find(query).sort({ date: -1 });
+        const results = await CIBCTransaction.find(query).sort({ date: -1 });
         res.status(200).json(results);
       }
     } catch (error) {

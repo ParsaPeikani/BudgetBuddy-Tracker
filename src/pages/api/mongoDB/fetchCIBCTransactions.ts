@@ -1,6 +1,6 @@
 // /pages/api/transactions.js
 import connectDB from "@/pages/lib/connectDB";
-import Transaction from "@/Models/transaction";
+import CIBCTransaction from "@/Models/cibcTransactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -21,7 +21,7 @@ export default async function handler(
         const currentYear = new Date().getFullYear();
 
         // Find transactions where the year matches the current year
-        transactions = await Transaction.find({
+        transactions = await CIBCTransaction.find({
           date: {
             $gte: new Date(`${currentYear}-01-01T00:00:00Z`),
             $lte: new Date(`${currentYear}-12-31T23:59:59Z`),
@@ -29,7 +29,7 @@ export default async function handler(
         }).sort({ date: -1 });
       } else {
         // Fetch all transactions if setToLastYear is not true
-        transactions = await Transaction.find({}).sort({ date: -1 });
+        transactions = await CIBCTransaction.find({}).sort({ date: -1 });
       }
 
       res.status(200).json(transactions);

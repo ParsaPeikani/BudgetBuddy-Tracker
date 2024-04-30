@@ -1,6 +1,7 @@
 // /pages/api/transactions.js
 import connectDB from "@/pages/lib/connectDB";
-import Transaction from "@/Models/transaction";
+// import Transaction from "@/Models/transaction";
+import CIBCTransaction from "@/Models/cibcTransactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,7 +13,7 @@ export default async function handler(
   if (req.method === "GET") {
     const { transactionId } = req.query;
     try {
-      const transactions = await Transaction.findOne({
+      const transactions = await CIBCTransaction.findOne({
         transactionId: transactionId,
       });
       res.status(200).json(transactions);

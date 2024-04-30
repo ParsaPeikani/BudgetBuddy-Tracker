@@ -1,6 +1,6 @@
 // /pages/api/transactions.js
 import connectDB from "@/pages/lib/connectDB";
-import Transaction from "@/Models/transaction";
+import CIBCTransaction from "@/Models/cibcTransactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -16,7 +16,7 @@ export default async function handler(
       // First store all the transaction in an array to send to the client for undo
       for (let i = 0; i < deletedTransactions.length; i++) {
         const transactionId = deletedTransactions[i].id;
-        const transaction = await Transaction.findOne({
+        const transaction = await CIBCTransaction.findOne({
           transactionId: transactionId,
         });
         fullDeletedTransactionData.push(transaction);
@@ -24,7 +24,7 @@ export default async function handler(
       // Respond with the deleted transaction data
       for (let i = 0; i < deletedTransactions.length; i++) {
         const transactionId = deletedTransactions[i].id;
-        await Transaction.deleteOne({ transactionId: transactionId });
+        await CIBCTransaction.deleteOne({ transactionId: transactionId });
       }
       res.status(200).json({
         message: `Transactions Deleted Successfully`,

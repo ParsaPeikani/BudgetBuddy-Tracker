@@ -1,7 +1,8 @@
 import axios from "axios";
+import { toast } from "sonner";
+import { useSession } from "@clerk/nextjs";
 import { Checking } from "../balance/checkingTable";
 import React, { createContext, useState, useContext, useCallback } from "react";
-import { toast } from "sonner";
 
 ///////////////////////////////////TD Transactions/////////////////////////////////////
 
@@ -547,22 +548,43 @@ export const useCIBCTransactions = () => useContext(CIBCTransactionsContext);
 ///////////////////////////////////PLAID Transactions/////////////////////////////////////
 // Uncomment this function to store the transactions in the database for the development environment
 
-// const postTrans = async () => {
-//   try {
-//     const response = await axios.get("/api/plaid/balance");
-//     console.log("Transactions have been posted successfully!", response.data);
-//     // toast("Transactions have been posted successfully!", {
-//     //   position: "top-center",
-//     //   style: {
-//     //     display: "flex",
-//     //     justifyContent: "center",
-//     //     alignItems: "center",
-//     //   }, // Centering the text
-//     // });
-//   } catch (error) {
-//     console.error("There was an error getting the transactions!", error);
-//   }
-// };
+export function usePostTrans() {
+  const { session } = useSession();
+
+  const postTrans = async () => {
+    if (!session) {
+      console.error("Session not found, user must be logged in.");
+      return;
+    }
+
+    const user_id = session.user.id;
+
+    try {
+      const response = await axios.get("/api/plaid/cibcTransactions", {
+        params: {
+          user_id: user_id,
+        },
+      });
+      console.log(
+        "Transactions have been posted successfully!",
+        response.data.latest_transactions
+      );
+      // Uncomment for toast message
+      // toast("Transactions have been posted successfully!", {
+      //   position: "top-center",
+      //   style: {
+      //     display: "flex",
+      //     justifyContent: "center",
+      //     alignItems: "center",
+      //   },
+      // });
+    } catch (error) {
+      console.error("There was an error getting the transactions!", error);
+    }
+  };
+
+  return postTrans;
+}
 
 // const getTrans = async () => {
 //   try {

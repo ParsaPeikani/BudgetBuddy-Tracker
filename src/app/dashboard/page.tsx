@@ -18,6 +18,7 @@ import { CheckingComponent } from "@/components/balance/checking";
 
 // API Calls
 import {
+  usePostTrans,
   useCIBCTransactions,
   useTDTransactions,
 } from "@/components/serverFunctions/apiCalls";
@@ -41,6 +42,9 @@ export default function Dashboard() {
   // Clerk Session
   const { session } = useSession();
   const user_id = session?.user.id;
+  
+  // Post Transaction Function from custom Hook
+  const postTrans = usePostTrans();
 
   // CIBC Transaction Variables
   const {
@@ -288,14 +292,14 @@ export default function Dashboard() {
             </TabsContent>
             <br />
 
-            {/* <div className="flex justify-center">
+            <div className="flex justify-center">
               <button
                 onClick={postTrans}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Post Transactions
               </button>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

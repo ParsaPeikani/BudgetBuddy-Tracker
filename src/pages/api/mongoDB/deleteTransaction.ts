@@ -1,6 +1,6 @@
 // /pages/api/transactions.js
 import connectDB from "@/pages/lib/connectDB";
-import Transaction from "@/Models/transaction";
+import CIBCTransaction from "@/Models/cibcTransactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -13,7 +13,7 @@ export default async function handler(
     const { transactionId } = req.query;
     try {
       // First, find the transaction to ensure it exists and to fetch its data
-      const transaction = await Transaction.findOne({
+      const transaction = await CIBCTransaction.findOne({
         transactionId: transactionId,
       });
 
@@ -23,7 +23,7 @@ export default async function handler(
 
       // Optionally, here you could perform a soft delete instead of a hard delete
       // For now, we'll proceed with deleting it from the database
-      await Transaction.deleteOne({ transactionId: transactionId });
+      await CIBCTransaction.deleteOne({ transactionId: transactionId });
 
       // Respond with the deleted transaction data
       res.status(200).json({

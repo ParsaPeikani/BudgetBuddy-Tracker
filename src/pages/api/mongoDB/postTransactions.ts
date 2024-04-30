@@ -1,6 +1,7 @@
 // /pages/api/transactions.js
 import connectDB from "@/pages/lib/connectDB";
-import Transaction from "@/Models/transaction";
+// import Transaction from "@/Models/transaction";
+import CIBCTransaction from "@/Models/cibcTransactions";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -15,7 +16,7 @@ export default async function handler(
 
     try {
       // Use the Transaction model to create a new document in the MongoDB database
-      const newTransaction = new Transaction(transactionData);
+      const newTransaction = new CIBCTransaction(transactionData);
       await newTransaction.save(); // Save the new transaction
 
       res.status(201).json(newTransaction); // Respond with the newly created transaction
