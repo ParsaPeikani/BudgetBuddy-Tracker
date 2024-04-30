@@ -29,6 +29,7 @@ import {
   ChartLoading,
   BalanceLoading,
   MonthYearLoading,
+  TotalSpentLoading,
   BalanceMonthYearLoading,
 } from "@/components/loading/loading";
 
@@ -81,7 +82,6 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    setIsLoading(true);
     try {
       FetchCIBCTransactions(true);
       FetchAllTDTransactions(true);
@@ -92,7 +92,6 @@ export default function Dashboard() {
       console.error("Failed to fetch Transactions:", error);
     } finally {
       setTimeout(() => {
-        setIsLoading(false);
         setIsTdLoading(false);
       });
     }
@@ -133,9 +132,13 @@ export default function Dashboard() {
                   <h1 className="text-white lg:text-5xl md:text-3xl font-bold mb-4 pt-24">
                     CIBC transactions Charts :)
                   </h1>
-                  <p className="text-gray-400 lg:text-2xl md:text-md">
-                    Total Spent: {totalSpent}
-                  </p>
+                  {isLoading ? (
+                    <TotalSpentLoading />
+                  ) : (
+                    <p className="text-gray-400 lg:text-2xl md:text-md">
+                      🤑 Total Spent: {totalSpent} $ 🤑
+                    </p>
+                  )}
                 </div>
                 {isLoading ? (
                   <MonthYearLoading />

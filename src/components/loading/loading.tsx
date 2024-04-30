@@ -4,8 +4,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function MonthYearLoading() {
   return (
     <div className="flex justify-end w-2/6 -mt-20">
+      <Skeleton className="h-[20px] rounded-xl mt-4" />
       <div className="flex flex-col w-full">
         <Skeleton className="h-[70px] rounded-xl mt-4" />
+      </div>
+    </div>
+  );
+}
+
+// MonthYearLoading for the month and year component on the overview page
+export function TotalSpentLoading() {
+  return (
+    <div className="flex justify-end w-3/6 -mt-2">
+      <div className="flex flex-col w-full">
+        <Skeleton className="h-[40px] rounded-xl" />
       </div>
     </div>
   );

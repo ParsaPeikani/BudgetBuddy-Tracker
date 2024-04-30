@@ -1,6 +1,8 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { MonthlyChartLoading } from "../loading/loading";
 import { useCIBCTransactions } from "@/components/serverFunctions/apiCalls";
+import { useEffect } from "react";
+import { useMemo } from "react";
 
 const monthIndex: Record<string, number> = {
   January: 0,
@@ -35,7 +37,7 @@ export default function MonthlyBarChart({
   isLoading: boolean;
 }) {
   const { setTotalSpent } = useCIBCTransactions();
-  const MonthlyChartdata = [
+  const MonthlyChartdata = useMemo(() => [
     {
       month: "Jan",
       Food: 0,
@@ -192,7 +194,7 @@ export default function MonthlyBarChart({
       Other: 0,
       OtherColor: "hsl(64, 70%, 50%)",
     },
-  ];
+  ]);
   if (month?.length > 0 && year?.length > 0 && month !== "All") {
     for (let i = 0; i < transactions.length; i++) {
       if (transactions[i].category === "Food and Drink") {
@@ -230,16 +232,18 @@ export default function MonthlyBarChart({
     }
   }
 
-  // Calculate the total amount Spent
-  let totalSpent = 0;
-  for (let i = 0; i < MonthlyChartdata.length; i++) {
-    totalSpent +=
-      MonthlyChartdata[i].Food +
-      MonthlyChartdata[i].Shopping +
-      MonthlyChartdata[i].Travel +
-      MonthlyChartdata[i].Other;
-  }
-  setTotalSpent(Math.round(totalSpent));
+  useEffect(() => {
+    // Calculate the total amount Spent
+    let totalSpent = 0;
+    for (let i = 0; i < MonthlyChartdata.length; i++) {
+      totalSpent +=
+        MonthlyChartdata[i].Food +
+        MonthlyChartdata[i].Shopping +
+        MonthlyChartdata[i].Travel +
+        MonthlyChartdata[i].Other;
+    }
+    setTotalSpent(Math.round(totalSpent));
+  }, [MonthlyChartdata, setTotalSpent]);
 
   // Round up all the values of the categories to 2 decimal places
   for (let i = 0; i < MonthlyChartdata.length; i++) {
@@ -281,6 +285,7 @@ export default function MonthlyBarChart({
         indexBy="month"
         margin={{ top: 20, right: 130, bottom: 50, left: 70 }}
         padding={0.3}
+        tooltip={CustomTooltip}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
         colors={{ scheme: "nivo" }}
@@ -386,3 +391,43 @@ export default function MonthlyBarChart({
     </div>
   );
 }
+
+const CustomTooltip = ({
+  id,
+  value,
+  color,
+  indexValue,
+  data,
+}: {
+  id: string;
+  value: number;
+  color: string;
+  indexValue: string;
+  data: any;
+}) => {
+  // Assuming 'data' contains all the category values for the month
+  const total = Object.keys(data)
+    .filter(
+      (key) =>
+        key !== "month" && key !== "Transfer" && key.endsWith("Color") === false
+    ) // Filter out non-value keys
+    .reduce((acc, key) => acc + data[key], 0); // Sum up all values
+
+  return (
+    <div
+      style={{
+        padding: "12px 16px",
+        background: "#222222",
+        borderRadius: "4px",
+        color: `${color}`,
+        boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+      }}
+    >
+      <strong>Month: {indexValue}</strong>
+      <div>
+        {id}: {value}
+      </div>
+      <div>Total: {Math.round(total)}</div>
+    </div>
+  );
+};

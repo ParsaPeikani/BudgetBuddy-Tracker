@@ -33,7 +33,6 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
   const [isTdLoading, setIsTdLoading] = useState(true);
 
   const FetchAllTDTransactions = useCallback(async (lastYear: boolean) => {
-    console.log("Fetching all TD Transactions");
     const response = await axios.get("/api/mongoDB/fetchAllTDTransactions", {
       params: { lastYear },
     });
@@ -122,9 +121,6 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
             status: transaction.pending ? "Pending" : "Verified",
           }));
           setAllTDTransactions(newColumns);
-          // setMonth(data.month);
-          // setYear(data.year);
-          // setIsLoading(false);
         });
     } catch (error) {
       console.error(
@@ -217,41 +213,38 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   const [totalSpent, setTotalSpent] = useState(0);
 
   // Fetching CIBC Transactions from the database
-  const FetchCIBCTransactions = useCallback(
-    async (latestYear = true) => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get("/api/mongoDB/fetchCIBCTransactions", {
-          params: { latestYear },
-        });
-        const transformedData = response.data.map((transaction: any) => ({
-          id: transaction.transactionId,
-          date: new Date(transaction.date).toLocaleDateString("en-CA", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          }),
-          transaction: transaction.merchantName || "Unknown",
-          amount: transaction.amount,
-          category: transaction.category[0],
-          verified: transaction.pending ? "Pending" : "Verified",
-        }));
-        setCIBCTransactions(transformedData);
-        if (!latestYear) {
-          setMonth("All");
-          setYear("Transactions");
-        } else {
-          setMonth("");
-          setYear(new Date().getFullYear().toString());
-        }
-      } catch (error) {
-        console.error("Failed to fetch transactions:", error);
-      } finally {
-        setIsLoading(false);
+  const FetchCIBCTransactions = useCallback(async (latestYear = true) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get("/api/mongoDB/fetchCIBCTransactions", {
+        params: { latestYear },
+      });
+      const transformedData = response.data.map((transaction: any) => ({
+        id: transaction.transactionId,
+        date: new Date(transaction.date).toLocaleDateString("en-CA", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }),
+        transaction: transaction.merchantName || "Unknown",
+        amount: transaction.amount,
+        category: transaction.category[0],
+        verified: transaction.pending ? "Pending" : "Verified",
+      }));
+      setCIBCTransactions(transformedData);
+      if (!latestYear) {
+        setMonth("All");
+        setYear("Transactions");
+      } else {
+        setMonth("");
+        setYear(new Date().getFullYear().toString());
       }
-    },
-    [setCIBCTransactions, setIsLoading, setMonth, setYear]
-  ); // include all setters and other dependencies
+    } catch (error) {
+      console.error("Failed to fetch transactions:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []); // include all setters and other dependencies
 
   // Delete a CIBC Transaction form Frontend
   const DeleteCIBCTransaction = (transactionId: string) => {
