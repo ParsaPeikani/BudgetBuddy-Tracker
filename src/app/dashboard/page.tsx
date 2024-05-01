@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Other Custom Components
 import Navbar from "@/components/navbar/navbar";
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/custom-table/data-table";
 import { SelectDate } from "@/components/SelectDate/selectDate";
 import { TDSelectDate } from "@/components/SelectDate/TdSelectDate";
@@ -21,6 +22,7 @@ import {
   usePostTrans,
   useCIBCTransactions,
   useTDTransactions,
+  callOpenAI,
 } from "@/components/serverFunctions/apiCalls";
 
 // Loading Components
@@ -299,19 +301,24 @@ export default function Dashboard() {
               )}
             </TabsContent>
             <TabsContent value="ai">
-              <div className="flex justify-center items-center">
-                <h1 className="gradient-text-shadow font-bold mt-6 lg:text-6xl md:text-3xl pb-4">
-                  Ask BudgetPro AI
-                </h1>
+              <div className="flex flex-col justify-center items-center">
+                <div className="flex">
+                  <h1 className="gradient-text-shadow font-bold mt-6 lg:text-6xl md:text-3xl pb-4">
+                    Ask BudgetPro AI
+                  </h1>
 
-                <div className="pl-4 pt-2">
-                  <Image
-                    src="/ai1.png"
-                    alt="Description of GIF"
-                    width={100}
-                    height={100}
-                  />
+                  <div className="pl-4 pt-2">
+                    <Image
+                      src="/ai1.png"
+                      alt="Description of GIF"
+                      width={100}
+                      height={100}
+                    />
+                  </div>
                 </div>
+                <Button className="mt-6" variant="outline" onClick={callOpenAI}>
+                  Make Request
+                </Button>
               </div>
             </TabsContent>
             <br />
