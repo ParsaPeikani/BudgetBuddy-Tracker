@@ -1,11 +1,13 @@
 "use client";
 
 // General Imports
+import { useChat } from "ai/react";
 import { useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Other Custom Components
+import ChatBubble from "@/components/ChatBubble";
 import Navbar from "@/components/navbar/navbar";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/custom-table/data-table";
@@ -22,7 +24,7 @@ import {
   usePostTrans,
   useCIBCTransactions,
   useTDTransactions,
-  callOpenAI,
+  useOpenAI,
 } from "@/components/serverFunctions/apiCalls";
 
 // Loading Components
@@ -41,6 +43,38 @@ import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 import Image from "next/image";
+
+export function Chat() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  return (
+    <div className="chat-container">
+      <div className="messages-container">
+        {messages.map((m) => (
+          <div
+            key={m.id}
+            className={`message ${
+              m.role === "user" ? "user-message" : "ai-message"
+            }`}
+          >
+            <span className="message-role">
+              {m.role === "user" ? "You: " : "AI: "}
+            </span>
+            <span className="message-content">{m.content}</span>
+          </div>
+        ))}
+      </div>
+
+      <form onSubmit={handleSubmit} className="chat-form">
+        <input
+          className="chat-input"
+          value={input}
+          placeholder="Ask anything about your finances..."
+          onChange={handleInputChange}
+        />
+      </form>
+    </div>
+  );
+}
 
 export default function Dashboard() {
   // Clerk Session
@@ -79,6 +113,8 @@ export default function Dashboard() {
     isTdLoading,
     setIsTdLoading,
   }: any = useTDTransactions();
+
+  const { openAIResponse, callOpenAI }: any = useOpenAI();
 
   // State for the active tab
   const [activeTab, setActiveTab] = useState("ai");
@@ -316,9 +352,13 @@ export default function Dashboard() {
                     />
                   </div>
                 </div>
-                <Button className="mt-6" variant="outline" onClick={callOpenAI}>
+                {/* <Button className="mt-6" variant="outline" onClick={callOpenAI}>
                   Make Request
-                </Button>
+                </Button> */}
+                {/* <p className="mt-10">{openAIResponse}</p> */}
+                <div className="pt-10">
+                  <Chat />
+                </div>
               </div>
             </TabsContent>
             <br />

@@ -572,18 +572,35 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
 export const useCIBCTransactions = () => useContext(CIBCTransactionsContext);
 
 ///////////////////////////////////OpenAI Calls/////////////////////////////////////
-export async function callOpenAI() {
-  try {
-    const response = await axios.post("/api/openAI/testing");
-    console.log(
-      "We are getting here",
-      response.data.choices[0].message.content
-    );
-    // return response.data;
-  } catch (error) {
-    console.error("There was an error calling OpenAI!", error);
-  }
-}
+const OpenAIContext = createContext({
+  openAIResponse: "",
+  callOpenAI: () => {},
+});
+export const OpenAIProvider = ({ children }: { children: any }) => {
+  const [openAIResponse, setOpenAIResponse] = useState("");
+  const callOpenAI = async () => {
+    try {
+      const response = await axios.post("/api/openAI/testing");
+      const message = response.data.choices[0].message.content;
+      console.log(
+        "We are getting here",
+        response.data.choices[0].message.content
+      );
+      setOpenAIResponse(message);
+      // return response.data;
+    } catch (error) {
+      console.error("There was an error calling OpenAI!", error);
+    }
+  };
+
+  return (
+    <OpenAIContext.Provider value={{ openAIResponse, callOpenAI }}>
+      {children}
+    </OpenAIContext.Provider>
+  );
+};
+
+export const useOpenAI = () => useContext(OpenAIContext);
 ///////////////////////////////////PLAID Transactions/////////////////////////////////////
 // Uncomment this function to store the transactions in the database for the development environment
 

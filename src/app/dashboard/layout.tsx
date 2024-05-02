@@ -3,8 +3,11 @@
 
 // import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
-import { CIBCTransactionsProvider } from "@/components/serverFunctions/apiCalls";
-import { TDTransactionsProvider } from "@/components/serverFunctions/apiCalls";
+import {
+  CIBCTransactionsProvider,
+  TDTransactionsProvider,
+  OpenAIProvider,
+} from "@/components/serverFunctions/apiCalls";
 
 // export const metadata: Metadata = {
 //   title: "BudgetPro | Dashboard",
@@ -19,10 +22,12 @@ export default function RootLayout({
   return (
     <CIBCTransactionsProvider>
       <TDTransactionsProvider>
-        <div>
-          <section>{children}</section>
-          <Toaster />
-        </div>
+        <OpenAIProvider>
+          <div>
+            <section>{children}</section>
+            <Toaster />
+          </div>
+        </OpenAIProvider>
       </TDTransactionsProvider>
     </CIBCTransactionsProvider>
   );
