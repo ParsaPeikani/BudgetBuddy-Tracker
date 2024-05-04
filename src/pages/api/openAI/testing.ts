@@ -17,7 +17,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-        const newMessage = req.body.message;
+      // const newMessage = req.body.message;
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
@@ -27,19 +27,19 @@ export default async function handler(
               "You are a finance advisor and can give tips based on the transactions from the current year.",
           },
         ],
-        stream: true,
+        // stream: true,
         temperature: 0.79,
         max_tokens: 256,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
       });
-      //   for await (const chunk of stream) {
-      //     process.stdout.write(chunk.choices[0]?.delta?.content || "");
-      //   }
-      const stream = OpenAIStream(response);
-      return new StreamingTextResponse(stream);
-      res.status(200).json(stream);
+      // for await (const chunk of response) {
+      //   process.stdout.write(chunk.choices[0]?.delta?.content || "");
+      // }
+      // const stream = OpenAIStream(response);
+      // return new StreamingTextResponse(stream);
+      res.status(200).json(response);
       res.status(200).json({
         message: `Getting the OPen AI end point to work`,
       });

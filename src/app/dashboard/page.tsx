@@ -44,37 +44,37 @@ import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 import Image from "next/image";
 
-export function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
-  return (
-    <div className="chat-container">
-      <div className="messages-container">
-        {messages.map((m) => (
-          <div
-            key={m.id}
-            className={`message ${
-              m.role === "user" ? "user-message" : "ai-message"
-            }`}
-          >
-            <span className="message-role">
-              {m.role === "user" ? "You: " : "AI: "}
-            </span>
-            <span className="message-content">{m.content}</span>
-          </div>
-        ))}
-      </div>
+// export function Chat() {
+//   const { messages, input, handleInputChange, handleSubmit } = useChat();
+//   return (
+//     <div className="chat-container">
+//       <div className="messages-container">
+//         {messages.map((m) => (
+//           <div
+//             key={m.id}
+//             className={`message ${
+//               m.role === "user" ? "user-message" : "ai-message"
+//             }`}
+//           >
+//             <span className="message-role">
+//               {m.role === "user" ? "You: " : "AI: "}
+//             </span>
+//             <span className="message-content">{m.content}</span>
+//           </div>
+//         ))}
+//       </div>
 
-      <form onSubmit={handleSubmit} className="chat-form">
-        <input
-          className="chat-input"
-          value={input}
-          placeholder="Ask anything about your finances..."
-          onChange={handleInputChange}
-        />
-      </form>
-    </div>
-  );
-}
+//       <form onSubmit={handleSubmit} className="chat-form">
+//         <input
+//           className="chat-input"
+//           value={input}
+//           placeholder="Ask me anything :)"
+//           onChange={handleInputChange}
+//         />
+//       </form>
+//     </div>
+//   );
+// }
 
 export default function Dashboard() {
   // Clerk Session
@@ -114,7 +114,7 @@ export default function Dashboard() {
     setIsTdLoading,
   }: any = useTDTransactions();
 
-  const { openAIResponse, callOpenAI }: any = useOpenAI();
+  const { BudgetProChat, BudgetProSummary, openAIResponse }: any = useOpenAI();
 
   // State for the active tab
   const [activeTab, setActiveTab] = useState("ai");
@@ -340,7 +340,7 @@ export default function Dashboard() {
               <div className="flex flex-col justify-center items-center">
                 <div className="flex">
                   <h1 className="gradient-text-shadow font-bold mt-6 lg:text-6xl md:text-3xl pb-4">
-                    Ask BudgetPro AI
+                    Ask BudgetPro
                   </h1>
 
                   <div className="pl-4 pt-2">
@@ -356,8 +356,14 @@ export default function Dashboard() {
                   Make Request
                 </Button> */}
                 {/* <p className="mt-10">{openAIResponse}</p> */}
-                <div className="pt-10">
-                  <Chat />
+                <div className="pt-10 flex ">
+                  {/* <div className="pr-10">
+                    <div>
+                      <p>{openAIResponse}</p>
+                      <Button onClick={BudgetProSummary}>Generate Summary</Button>
+                    </div>
+                  </div> */}
+                  <BudgetProChat />
                 </div>
               </div>
             </TabsContent>

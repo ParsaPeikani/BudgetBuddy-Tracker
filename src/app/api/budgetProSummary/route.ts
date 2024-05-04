@@ -2,6 +2,7 @@ import { openai } from "@ai-sdk/openai";
 import { StreamingTextResponse, streamText } from "ai";
 
 export async function POST(req: Request) {
+  console.log("hello from the openAI end point2");
   // Extract the `messages` from the body of the request
   const { messages } = await req.json();
 

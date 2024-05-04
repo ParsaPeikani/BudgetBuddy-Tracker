@@ -1,5 +1,8 @@
 import axios from "axios";
 import { toast } from "sonner";
+import { useEffect, useRef } from "react";
+import { useChat } from "ai/react";
+import { Button } from "../ui/button";
 import { useSession } from "@clerk/nextjs";
 import { Checking } from "../balance/checkingTable";
 import React, { createContext, useState, useContext, useCallback } from "react";
@@ -574,13 +577,67 @@ export const useCIBCTransactions = () => useContext(CIBCTransactionsContext);
 ///////////////////////////////////OpenAI Calls/////////////////////////////////////
 const OpenAIContext = createContext({
   openAIResponse: "",
-  callOpenAI: () => {},
+  BudgetProChat: () => {},
+  BudgetProSummary: () => {},
 });
 export const OpenAIProvider = ({ children }: { children: any }) => {
   const [openAIResponse, setOpenAIResponse] = useState("");
-  const callOpenAI = async () => {
+  function BudgetProChat() {
+    const options = {
+      api: "/api/budgetProChat",
+    };
+    const { messages, input, setInput, handleInputChange, handleSubmit } =
+      useChat(options);
+
+    // Create a ref for the messages container
+    const messagesEndRef = useRef(null);
+
+    // Scroll to the bottom every time messages change
+    useEffect(() => {
+      if (messagesEndRef.current) {
+        (messagesEndRef.current as HTMLElement).scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+    }, [messages]); // Dependency array includes 'messages', so the effect runs every time messages change
+
+    return (
+      <div className="chat-container">
+        <div className="messages-container">
+          {messages.map((m) => (
+            <div
+              key={m.id}
+              className={`message ${
+                m.role === "user" ? "user-message" : "ai-message"
+              }`}
+            >
+              <span className="message-role">
+                {m.role === "user" ? "You: " : "AI: "}
+              </span>
+              <span className="message-content">{m.content}</span>
+            </div>
+          ))}
+          {/* Invisible div at the bottom of the messages container */}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <form onSubmit={handleSubmit} className="chat-form">
+          <input
+            className="chat-input"
+            value={input}
+            placeholder="Ask me anything :)"
+            onChange={handleInputChange}
+          />
+        </form>
+      </div>
+    );
+  }
+
+  async function BudgetProSummary() {
     try {
+      console.log("hello");
       const response = await axios.post("/api/openAI/testing");
+      console.log("this is the response", response);
       const message = response.data.choices[0].message.content;
       console.log(
         "We are getting here",
@@ -591,10 +648,12 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
     } catch (error) {
       console.error("There was an error calling OpenAI!", error);
     }
-  };
+  }
 
   return (
-    <OpenAIContext.Provider value={{ openAIResponse, callOpenAI }}>
+    <OpenAIContext.Provider
+      value={{ BudgetProChat, BudgetProSummary, openAIResponse }}
+    >
       {children}
     </OpenAIContext.Provider>
   );

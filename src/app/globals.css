@@ -165,16 +165,21 @@
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 400px;
-  height: 500px;
+  width: 600px;
+  height: 550px;
 }
 
 /* Message container styles */
 .messages-container {
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Enables scrolling */
   margin-bottom: 12px;
   padding: 8px;
-  height: calc(100% - 50px);
+  height: calc(
+    100% - 50px
+  ); /* Adjust the height to account for the input field */
+  width: 100%;
 }
 
 /* Message styling */
@@ -184,20 +189,24 @@
   padding: 10px;
   border-radius: 6px;
   color: #fff;
+  min-width: 100px; /* Ensure a minimum width for better visual */
+  max-width: 80%; /* Ensure messages don't take full width, adjust as needed */
 }
 
 .user-message {
   text-align: left;
+  align-self: flex-start; /* Ensures alignment to the left */
 }
 
 .ai-message {
   text-align: left;
+  align-self: flex-end; /* Ensures alignment to the right */
   background: #2b2b2b;
 }
 
 .message-role {
   font-weight: bold;
-  color: #4caf50; /* Green for users, can change if needed */
+  color: #4caf50; /* Green for user messages */
 }
 
 .message-content {
