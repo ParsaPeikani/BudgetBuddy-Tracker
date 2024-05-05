@@ -586,7 +586,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
     const options = {
       api: "/api/budgetProChat",
     };
-    const { messages, input, setInput, handleInputChange, handleSubmit } =
+    const { messages, input, handleInputChange, handleSubmit } =
       useChat(options);
 
     // Create a ref for the messages container
