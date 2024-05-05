@@ -583,30 +583,72 @@ const OpenAIContext = createContext({
 export const OpenAIProvider = ({ children }: { children: any }) => {
   const [openAIResponse, setOpenAIResponse] = useState("");
   function BudgetProChat() {
+    const [messages, setMessages] = useState([] as any);
+    const [currentMessage, setCurrentMessage] = useState("");
+
     const options = {
-      api: "/api/budgetProChat",
+      api: "/api/openAI/budgetProChat",
     };
-    const { messages, input, handleInputChange, handleSubmit } =
-      useChat(options);
 
-    // Create a ref for the messages container
-    const messagesEndRef = useRef(null);
+    const handleInputChange = (e: any) => {
+      setCurrentMessage(e.target.value);
+    };
 
-    // Scroll to the bottom every time messages change
-    useEffect(() => {
-      if (messagesEndRef.current) {
-        (messagesEndRef.current as HTMLElement).scrollIntoView({
-          behavior: "smooth",
-        });
+    const handleSubmit = async (e: any) => {
+      e.preventDefault();
+      if (messages.length === 0) {
+        const newMessages = [
+          {
+            role: "system",
+            content:
+              "You are a finance advisor and can give tips based on the transactions from the current year.",
+          },
+          { role: "user", content: currentMessage },
+        ];
+        setMessages(newMessages);
+        setCurrentMessage("");
+        try {
+          const response = await axios.post(options.api, {
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You are a finance advisor and can give tips based on the transactions from the current year.",
+              },
+              { role: "user", content: currentMessage },
+            ],
+          });
+          const newMessage = response.data;
+          setMessages([...newMessages, newMessage]);
+        } catch (error) {
+          console.error("There was an error calling OpenAI!", error);
+        }
+      } else {
+        const newMessages = [
+          ...messages,
+          { role: "user", content: currentMessage },
+        ];
+        setMessages(newMessages);
+        setCurrentMessage("");
+        try {
+          const response = await axios.post(options.api, {
+            messages: [...messages, { role: "user", content: currentMessage }],
+          });
+          console.log("these are the new messasges: ", response.data);
+          const newMessage = response.data;
+          setMessages([...newMessages, newMessage]);
+        } catch (error) {
+          console.error("There was an error calling OpenAI!", error);
+        }
       }
-    }, [messages]); // Dependency array includes 'messages', so the effect runs every time messages change
+    };
 
     return (
       <div className="chat-container">
         <div className="messages-container">
-          {messages.map((m) => (
+          {messages.slice(1).map((m: any, index: number) => (
             <div
-              key={m.id}
+              key={index}
               className={`message ${
                 m.role === "user" ? "user-message" : "ai-message"
               }`}
@@ -617,14 +659,12 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
               <span className="message-content">{m.content}</span>
             </div>
           ))}
-          {/* Invisible div at the bottom of the messages container */}
-          <div ref={messagesEndRef} />
         </div>
 
         <form onSubmit={handleSubmit} className="chat-form">
           <input
-            className="chat-input"
-            value={input}
+            className="chat-input outline-none"
+            value={currentMessage}
             placeholder="Ask me anything :)"
             onChange={handleInputChange}
           />

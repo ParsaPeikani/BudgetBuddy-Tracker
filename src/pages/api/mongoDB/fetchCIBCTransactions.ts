@@ -10,6 +10,7 @@ export default async function handler(
   await connectDB();
 
   if (req.method === "GET") {
+    console.log("\n\n\n\n\n\n\n\n\n");
     try {
       // Convert the query string parameter to a boolean
       const setToLastYear = req.query.latestYear === "true";
