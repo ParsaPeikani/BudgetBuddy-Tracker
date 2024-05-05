@@ -585,6 +585,8 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
   function BudgetProChat() {
     const [messages, setMessages] = useState([] as any);
     const [currentMessage, setCurrentMessage] = useState("");
+    const [prompt, setPrompt] = useState("");
+    const messagesContainerRef = useRef(null);
 
     const options = {
       api: "/api/openAI/budgetProChat",
@@ -594,14 +596,36 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
       setCurrentMessage(e.target.value);
     };
 
+    useEffect(() => {
+      async function fetchPrompt() {
+        try {
+          const response: any = await axios.get("/api/openAI/aiPrompt");
+          console.log("this is the response", response.data.prompt);
+          const prompt = response.data.prompt;
+          setPrompt(prompt);
+        } catch (error) {
+          console.error("Error fetching prompt:", error);
+        }
+      }
+      fetchPrompt();
+    }, []);
+
+    useEffect(() => {
+      // Scroll to the bottom of the messages container
+      if (messagesContainerRef.current) {
+        (messagesContainerRef.current as any).scrollTop = (
+          messagesContainerRef.current as any
+        ).scrollHeight;
+      }
+    }, [messages]);
+
     const handleSubmit = async (e: any) => {
       e.preventDefault();
       if (messages.length === 0) {
         const newMessages = [
           {
             role: "system",
-            content:
-              "You are a finance advisor and can give tips based on the transactions from the current year.",
+            content: prompt,
           },
           { role: "user", content: currentMessage },
         ];
@@ -612,8 +636,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
             messages: [
               {
                 role: "system",
-                content:
-                  "You are a finance advisor and can give tips based on the transactions from the current year.",
+                content: prompt,
               },
               { role: "user", content: currentMessage },
             ],
@@ -645,7 +668,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
 
     return (
       <div className="chat-container">
-        <div className="messages-container">
+        <div ref={messagesContainerRef} className="messages-container">
           {messages.slice(1).map((m: any, index: number) => (
             <div
               key={index}

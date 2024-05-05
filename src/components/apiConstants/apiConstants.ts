@@ -2,6 +2,7 @@ import connectDB from "@/pages/lib/connectDB";
 import CIBCTransaction from "@/Models/cibcTransactions";
 
 const getData = async () => {
+  await connectDB();
   const currentYear = new Date().getFullYear();
 
   // Find transactions where the year matches the current year
@@ -16,16 +17,16 @@ const getData = async () => {
 
 const constructPrompt = async () => {
   const dataLength = await getData();
-  console.log("skldjflsjflsjdflsjfjsldfjlsdjflsjflksdjfldkf", dataLength);
 
   const prompt = `
-The number of transactions in the CIBC data is ${dataLength}.
+  You are a finance advisor and can give tips based on the transactions from the current year.
+The number of user's transactions in the CIBC data is ${dataLength}.
 `;
 
   return prompt;
 };
 
-export const getPrompt = () => constructPrompt();
+export const getPrompt = async () => constructPrompt();
 
 // import connectDB from "@/pages/lib/connectDB";
 // import CIBCTransaction from "@/Models/cibcTransactions";
