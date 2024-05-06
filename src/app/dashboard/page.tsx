@@ -44,38 +44,6 @@ import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 import Image from "next/image";
 
-// export function Chat() {
-//   const { messages, input, handleInputChange, handleSubmit } = useChat();
-//   return (
-//     <div className="chat-container">
-//       <div className="messages-container">
-//         {messages.map((m) => (
-//           <div
-//             key={m.id}
-//             className={`message ${
-//               m.role === "user" ? "user-message" : "ai-message"
-//             }`}
-//           >
-//             <span className="message-role">
-//               {m.role === "user" ? "You: " : "AI: "}
-//             </span>
-//             <span className="message-content">{m.content}</span>
-//           </div>
-//         ))}
-//       </div>
-
-//       <form onSubmit={handleSubmit} className="chat-form">
-//         <input
-//           className="chat-input"
-//           value={input}
-//           placeholder="Ask me anything :)"
-//           onChange={handleInputChange}
-//         />
-//       </form>
-//     </div>
-//   );
-// }
-
 export default function Dashboard() {
   // Clerk Session
   const { session } = useSession();
@@ -245,9 +213,6 @@ export default function Dashboard() {
                   <h1 className="text-white lg:text-5xl md:text-3xl font-bold pt-24">
                     CIBC transactions :)
                   </h1>
-                  {/* <p className="text-gray-400 lg:text-2xl md:text-md">
-                    Here is a list of your CIBC Credit Card transactions :)
-                  </p> */}
                 </div>
                 <div className="flex justify-center -mt-40 w-2/6 pt-24">
                   {month !== "" && (
@@ -339,30 +304,17 @@ export default function Dashboard() {
             <TabsContent value="ai">
               <div className="flex flex-col justify-center items-center">
                 <div className="flex">
-                  <h1 className="gradient-text-shadow font-bold mt-6 lg:text-6xl md:text-3xl pb-4">
-                    Ask BudgetPro
-                  </h1>
-
-                  <div className="pl-4 pt-2">
-                    <Image
-                      src="/ai1.png"
-                      alt="Description of GIF"
-                      width={100}
-                      height={100}
-                    />
+                  <div className="flex flex-col items-center">
+                    <h1 className="gradient-text-shadow font-bold mt-6 lg:text-6xl md:text-3xl">
+                      Ask BudgetPro AI 🤖 About Your 2024 Transactions
+                    </h1>
+                    <h1 className="gradient-text-shadow font-bold mt-6 lg:text-2xl md:text-3xl">
+                      It Can Also Help You With Your Budgeting And Give
+                      Financial Advice
+                    </h1>
                   </div>
                 </div>
-                {/* <Button className="mt-6" variant="outline" onClick={callOpenAI}>
-                  Make Request
-                </Button> */}
-                {/* <p className="mt-10">{openAIResponse}</p> */}
                 <div className="pt-10 flex ">
-                  {/* <div className="pr-10">
-                    <div>
-                      <p>{openAIResponse}</p>
-                      <Button onClick={BudgetProSummary}>Generate Summary</Button>
-                    </div>
-                  </div> */}
                   <BudgetProChat />
                 </div>
               </div>

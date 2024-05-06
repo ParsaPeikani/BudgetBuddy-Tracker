@@ -165,8 +165,8 @@
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 600px;
-  height: 550px;
+  width: 1400px;
+  height: 530px;
 }
 
 /* Message container styles */
@@ -190,7 +190,7 @@
   border-radius: 6px;
   color: #fff;
   min-width: 100px; /* Ensure a minimum width for better visual */
-  max-width: 80%; /* Ensure messages don't take full width, adjust as needed */
+  max-width: 60%; /* Ensure messages don't take full width, adjust as needed */
 }
 
 .user-message {
