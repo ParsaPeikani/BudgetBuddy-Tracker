@@ -21,6 +21,40 @@ export default async function handler(
       let TDSavingBalance = 0;
       let TotalBalance = 0;
 
+      const MonthlyCategoryDataCIBCTransactions: {
+        [key: string]: {
+          [category: string]: { amount: number; count: number };
+        };
+      } = {
+        January: {},
+        February: {},
+        March: {},
+        April: {},
+        May: {},
+        June: {},
+        July: {},
+        August: {},
+        September: {},
+        October: {},
+        November: {},
+        December: {},
+      };
+
+      const numberToMonthObject: { [key: number]: string } = {
+        1: "January",
+        2: "February",
+        3: "March",
+        4: "April",
+        5: "May",
+        6: "June",
+        7: "July",
+        8: "August",
+        9: "September",
+        10: "October",
+        11: "November",
+        12: "December",
+      };
+
       // Get the current year
       const currentYear = new Date().getFullYear();
 
@@ -70,7 +104,28 @@ export default async function handler(
       } = {};
 
       for (let i = 0; i < CIBCtransactions.length; i++) {
+        // Extracting the category from the transaction
         const category = CIBCtransactions[i].category[0];
+
+        // Extracting the month from the date string
+        const dateString = CIBCtransactions[i].date.toISOString();
+        const monthString = dateString.substring(5, 7);
+        const monthNumber = parseInt(monthString, 10);
+        if (
+          !MonthlyCategoryDataCIBCTransactions[
+            numberToMonthObject[monthNumber]
+          ][category]
+        ) {
+          MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]][
+            category
+          ] = { amount: 0, count: 0 };
+        }
+        MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]][
+          category
+        ].amount += CIBCtransactions[i].amount;
+        MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]][
+          category
+        ].count += 1;
 
         // Initialize category if it doesn't exist
         if (!CIBCYearlyCategoryData[category]) {
@@ -82,7 +137,6 @@ export default async function handler(
         CIBCYearlyCategoryData[category].count += 1;
       }
 
-      console.log("this is the CIBCYearlyCategoryData", CIBCYearlyCategoryData);
       const prompt = `As Budget Pro, your role is to provide tailored financial advice and insights based on the user's data. Let's delve into their financial details for the current year:
 
       1. Number of Transactions:
@@ -95,9 +149,11 @@ export default async function handler(
          - In their TD Savings account, they have ${TDSavingBalance} available.
          - The total balance across both accounts amounts to ${TotalBalance}.
       
+      3. CIBC Each Month of 2024 Transactions Analysis:
+        - Let's explore the user's CIBC transactions:
+          - Each month's category-wise expenditure: ${MonthlyCategoryDataCIBCTransactions}, this data includes all the categories and their respective amounts and counts that the user has spent on during the specific months.
       
-      
-      5. Budget Pro Tips:
+      4. Budget Pro Tips:
          - Recommend staying vigilant about spending patterns.
          - Encourage them to keep an eye on categories where they've exceeded their budgeted amount.
          - Suggest reallocating funds from overspent categories to areas where they can save more.
@@ -115,12 +171,3 @@ export default async function handler(
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
-// 3. CIBC Transactions Analysis:
-//          - Let's explore the user's CIBC transactions:
-//            - Categories and Expenditures: ${CIBCCategoriesAndExpenditures}
-//            - Monthly Analysis: ${CIBCMonthlyAnalysis}
-
-//       4. TD Bank Transactions Analysis:
-//          - Now, let's review the user's TD Bank transactions:
-//            - Categories and Expenditures: ${TDCategoriesAndExpenditures}
-//            - Monthly Analysis: ${TDMonthlyAnalysis}
