@@ -23,21 +23,76 @@ export default async function handler(
 
       const MonthlyCategoryDataCIBCTransactions: {
         [key: string]: {
-          [category: string]: { amount: number; count: number };
+          amount: number;
+          total: number;
+          category: {
+            [key: string]: {
+              amount: number;
+              count: number;
+            };
+          };
         };
       } = {
-        January: {},
-        February: {},
-        March: {},
-        April: {},
-        May: {},
-        June: {},
-        July: {},
-        August: {},
-        September: {},
-        October: {},
-        November: {},
-        December: {},
+        January: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        February: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        March: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        April: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        May: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        June: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        July: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        August: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        September: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        October: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        November: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
+        December: {
+          amount: 0,
+          total: 0,
+          category: {},
+        },
       };
 
       const numberToMonthObject: { [key: number]: string } = {
@@ -112,20 +167,27 @@ export default async function handler(
         const monthString = dateString.substring(5, 7);
         const monthNumber = parseInt(monthString, 10);
         if (
-          !MonthlyCategoryDataCIBCTransactions[
-            numberToMonthObject[monthNumber]
-          ][category]
+          !MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]]
+            .category[category]
         ) {
-          MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]][
-            category
-          ] = { amount: 0, count: 0 };
+          MonthlyCategoryDataCIBCTransactions[
+            numberToMonthObject[monthNumber]
+          ].category[category] = { amount: 0, count: 0 };
         }
-        MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]][
-          category
+        MonthlyCategoryDataCIBCTransactions[
+          numberToMonthObject[monthNumber]
+        ].category[category].amount += CIBCtransactions[i].amount;
+        MonthlyCategoryDataCIBCTransactions[
+          numberToMonthObject[monthNumber]
+        ].category[category].count += 1;
+
+        // Increment the total amount and count for the month
+        MonthlyCategoryDataCIBCTransactions[
+          numberToMonthObject[monthNumber]
         ].amount += CIBCtransactions[i].amount;
-        MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]][
-          category
-        ].count += 1;
+        MonthlyCategoryDataCIBCTransactions[
+          numberToMonthObject[monthNumber]
+        ].total += 1;
 
         // Initialize category if it doesn't exist
         if (!CIBCYearlyCategoryData[category]) {
@@ -136,9 +198,12 @@ export default async function handler(
         CIBCYearlyCategoryData[category].amount += CIBCtransactions[i].amount;
         CIBCYearlyCategoryData[category].count += 1;
       }
+      console.log(
+        "this is the MonthlyCategoryDataCIBCTransactions",
+        MonthlyCategoryDataCIBCTransactions
+      );
 
       const prompt = `As Budget Pro, your role is to provide tailored financial advice and insights based on the user's data. Let's delve into their financial details for the current year:
-
       1. Number of Transactions:
          - The user has conducted ${CIBCtransactions.length} transactions with CIBC.
          - They've performed ${TDCheckingNumberOfTransactions} transactions in their TD Checking account.
@@ -152,6 +217,10 @@ export default async function handler(
       3. CIBC Each Month of 2024 Transactions Analysis:
         - Let's explore the user's CIBC transactions:
           - Each month's category-wise expenditure: ${MonthlyCategoryDataCIBCTransactions}, this data includes all the categories and their respective amounts and counts that the user has spent on during the specific months.
+          - In the data, you will see each month is pointing to an object that contains the amount spent in that month, the total number of transactions, and a category object that contains the amount spent in each category and the number of transactions in that category. If the user asked how many transactions they had in a specific month, just provide the value of the total key in the object.
+          - If the user asked about a specific month, you can provide them with detailed insights into their spending habits for that month.
+          - If the user asks about a month that is not in the data, you can inform them that there is no data available for that month. So if the month has total 0 transactions and total 0 amount spent, you can inform the user that there is no data available for that month.
+          - The user had 0 transaction in the month of December 2024 no matter what.
       
       4. Budget Pro Tips:
          - Recommend staying vigilant about spending patterns.
