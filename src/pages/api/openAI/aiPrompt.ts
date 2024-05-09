@@ -200,12 +200,15 @@ export default async function handler(
       }
       console.log(
         "this is the MonthlyCategoryDataCIBCTransactions",
-        MonthlyCategoryDataCIBCTransactions
+        MonthlyCategoryDataCIBCTransactions,
+        MonthlyCategoryDataCIBCTransactions["January"]
       );
 
       const prompt = `As Budget Pro, your role is to provide tailored financial advice and insights based on the user's data. Let's delve into their financial details for the current year:
       1. Number of Transactions:
-         - The user has conducted ${CIBCtransactions.length} transactions with CIBC.
+         - The user has conducted ${
+           CIBCtransactions.length
+         } transactions with CIBC.
          - They've performed ${TDCheckingNumberOfTransactions} transactions in their TD Checking account.
          - Their TD Savings account reflects ${TDSavingNumberOfTransactions} transactions.
       
@@ -216,9 +219,104 @@ export default async function handler(
       
       3. CIBC Each Month of 2024 Transactions Analysis:
         - Let's explore the user's CIBC transactions:
-          - Each month's category-wise expenditure: ${MonthlyCategoryDataCIBCTransactions}, this data includes all the categories and their respective amounts and counts that the user has spent on during the specific months.
+          - Each month's category-wise expenditure: This data includes all the categories and their respective amounts and counts that the user has spent on during the specific months.
           - In the data, you will see each month is pointing to an object that contains the amount spent in that month, the total number of transactions, and a category object that contains the amount spent in each category and the number of transactions in that category. If the user asked how many transactions they had in a specific month, just provide the value of the total key in the object.
-          - If the user asked about a specific month, you can provide them with detailed insights into their spending habits for that month.
+          - This user in the month of January 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["January"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["January"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of January 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["January"].category
+          )}
+          - This user in the month of February 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["February"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["February"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of February 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["February"].category
+          )}
+          - This user in the month of March 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["March"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["March"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of March 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["March"].category
+          )}
+          - This user in the month of April 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["April"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["April"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of April 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["April"].category
+          )}
+          - This user in the month of May 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["May"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["May"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of May 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["May"].category
+          )}
+          - This user in the month of June 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["June"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["June"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of June 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["June"].category
+          )}
+          - This user in the month of July 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["July"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["July"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of July 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["July"].category
+          )}
+          - This user in the month of August 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["August"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["August"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of August 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["August"].category
+          )}
+          - This user in the month of September 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["September"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["September"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of September 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["September"].category
+          )}
+          - This user in the month of October 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["October"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["October"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of October 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["October"].category
+          )}
+          - This user in the month of November 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["November"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["November"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of November 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["November"].category
+          )}
+          - This user in the month of December 2024 had a total of ${
+            MonthlyCategoryDataCIBCTransactions["December"].total
+          } transactions and spent a total of ${
+        MonthlyCategoryDataCIBCTransactions["December"].amount
+      }.
+          - Information regaring the user's transactions in each category for the month of December 2024 is here: ${JSON.stringify(
+            MonthlyCategoryDataCIBCTransactions["December"].category
+          )}
           - If the user asks about a month that is not in the data, you can inform them that there is no data available for that month. So if the month has total 0 transactions and total 0 amount spent, you can inform the user that there is no data available for that month.
           - The user had 0 transaction in the month of December 2024 no matter what.
       
