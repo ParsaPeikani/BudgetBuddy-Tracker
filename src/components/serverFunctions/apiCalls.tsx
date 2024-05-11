@@ -7,6 +7,7 @@ import { useSession } from "@clerk/nextjs";
 import { Checking } from "../balance/checkingTable";
 import React, { createContext, useState, useContext, useCallback } from "react";
 import { set } from "mongoose";
+import Image from "next/image";
 
 ///////////////////////////////////TD Transactions/////////////////////////////////////
 
@@ -584,6 +585,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
   const [openAIResponse, setOpenAIResponse] = useState("");
   function BudgetProChat() {
     const [messages, setMessages] = useState([] as any);
+    const [isLoading, setIsLoading] = useState(false);
     const [currentMessage, setCurrentMessage] = useState("");
     const [prompt, setPrompt] = useState("");
     const messagesContainerRef = useRef(null);
@@ -600,7 +602,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
       async function fetchPrompt() {
         try {
           const response: any = await axios.get("/api/openAI/aiPrompt");
-          console.log("this is the response", response.data.prompt);
+          // console.log("this is the response", response.data.prompt);
           const prompt = response.data.prompt;
           setPrompt(prompt);
         } catch (error) {
@@ -620,6 +622,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
     }, [messages]);
 
     const handleSubmit = async (e: any) => {
+      setIsLoading(true);
       e.preventDefault();
       if (messages.length === 0) {
         const newMessages = [
@@ -643,6 +646,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
           });
           const newMessage = response.data;
           setMessages([...newMessages, newMessage]);
+          setIsLoading(false);
         } catch (error) {
           console.error("There was an error calling OpenAI!", error);
         }
@@ -660,6 +664,7 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
           console.log("these are the new messasges: ", response.data);
           const newMessage = response.data;
           setMessages([...newMessages, newMessage]);
+          setIsLoading(false);
         } catch (error) {
           console.error("There was an error calling OpenAI!", error);
         }
@@ -668,8 +673,13 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
 
     return (
       <div className="chat-container">
+        {isLoading && (
+          <div className="loading">
+            <Image src="/gear.svg" width={80} height={80} alt="Loading" />
+          </div>
+        )}
         <div ref={messagesContainerRef} className="messages-container">
-          {messages.slice(1).map((m: any, index: number) => (
+          {messages.slice(1).map((m: any, index: any) => (
             <div
               key={index}
               className={`message ${
@@ -679,7 +689,10 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
               <span className="message-role">
                 {m.role === "user" ? "You: " : "AI: "}
               </span>
-              <span className="message-content">{m.content}</span>
+              <span
+                className="message-content"
+                dangerouslySetInnerHTML={{ __html: m.content }}
+              ></span>
             </div>
           ))}
         </div>

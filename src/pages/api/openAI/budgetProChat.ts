@@ -1,10 +1,13 @@
-// import { openai } from "@ai-sdk/openai";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
   organization: process.env.OPENAI_ORGANIZATION_ID,
   project: process.env.OPENAI_PROJECT_ID,
 });
+
+function convertLinefeedsToHTML(text: any) {
+  return text.content.replace(/\n/g, "</br>");
+}
 
 export default async function handler(req: any, res: any) {
   try {
@@ -18,8 +21,7 @@ export default async function handler(req: any, res: any) {
     });
 
     const response = openAIresponse.choices[0].message;
-
-    console.log("this is the response", response);
+    response.content = convertLinefeedsToHTML(response);
 
     res.status(200).json(response);
   } catch (error) {

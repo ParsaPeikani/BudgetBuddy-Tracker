@@ -157,6 +157,7 @@
 
 /* Chat container styles */
 .chat-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -234,4 +235,11 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: #333; /* Set the color of the scrollbar thumb */
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
