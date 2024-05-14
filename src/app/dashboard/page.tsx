@@ -43,6 +43,7 @@ import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
 import Image from "next/image";
+import axios from "axios";
 
 export default function Dashboard() {
   // Clerk Session
@@ -90,6 +91,12 @@ export default function Dashboard() {
     setActiveTab(value);
   };
 
+  const getItem = async () => {
+    // console.log("we are getting here");
+    const response = await axios.get("/api/plaid/webhookUrl");
+    // console.log(response);
+  };
+
   useEffect(() => {
     try {
       FetchCIBCTransactions(true);
@@ -121,6 +128,9 @@ export default function Dashboard() {
     <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="">
       <div className="justify-center">
         <Navbar />
+        <div>
+          <Button onClick={() => getItem()}>Get the Item</Button>
+        </div>
         <div className="flex justify-center">
           <TabsList>
             <TabsTrigger value="overview">OverView</TabsTrigger>
