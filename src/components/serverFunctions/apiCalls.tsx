@@ -64,6 +64,7 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
     const response = await axios.get(
       "/api/mongoDB/fetchTDCheckingTransactions"
     );
+    console.log("this is the response", response);
     const TDTrans = response.data.map((transaction: any) => ({
       id: transaction.transactionId,
       date: new Date(transaction.date).toLocaleDateString("en-CA", {

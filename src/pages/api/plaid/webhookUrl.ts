@@ -41,15 +41,15 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await connectDB();
-
-  if (req.method === "GET") {
-    try {
-      console.log("we are getting here");
-      res.status(200).json({
-        message: `Webhook URL is working`,
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Error Deleting Transactions" });
-    }
+  try {
+    const webhook_code = req.body.webhook_code;
+    const webhook_type = req.body.webhook_type;
+    const item_id = req.body.item_id;
+    console.log("we are getting here", webhook_code, webhook_type, item_id);
+    res.status(200).json({
+      message: `Webhook URL is working`,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error Deleting Transactions" });
   }
 }

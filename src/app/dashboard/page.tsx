@@ -86,15 +86,9 @@ export default function Dashboard() {
   const { BudgetProChat, BudgetProSummary, openAIResponse }: any = useOpenAI();
 
   // State for the active tab
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("balance");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-  };
-
-  const getItem = async () => {
-    // console.log("we are getting here");
-    const response = await axios.get("/api/plaid/webhookUrl");
-    // console.log(response);
   };
 
   useEffect(() => {
@@ -128,9 +122,6 @@ export default function Dashboard() {
     <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="">
       <div className="justify-center">
         <Navbar />
-        <div>
-          <Button onClick={() => getItem()}>Get the Item</Button>
-        </div>
         <div className="flex justify-center">
           <TabsList>
             <TabsTrigger value="overview">OverView</TabsTrigger>

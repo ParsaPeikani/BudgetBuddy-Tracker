@@ -20,10 +20,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  DropdownMenuContentTD,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -183,7 +180,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
               Columns <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContentTD align="end">
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -201,7 +198,7 @@ export function CheckingTable({ data }: { data: Checking[] }) {
                   </DropdownMenuCheckboxItem>
                 );
               })}
-          </DropdownMenuContent>
+          </DropdownMenuContentTD>
         </DropdownMenu>
       </div>
       <div className="rounded-md border">

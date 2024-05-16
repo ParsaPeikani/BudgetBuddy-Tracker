@@ -46,7 +46,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  console.log("hello we are getting here", req.query.user_id);
   await connectDB();
   Promise.resolve().then(async function () {
     // Set cursor to empty to receive all historical updates
