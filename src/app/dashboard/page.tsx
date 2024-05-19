@@ -87,7 +87,7 @@ export default function Dashboard() {
   const { BudgetProChat, BudgetProSummary, openAIResponse }: any = useOpenAI();
   // console.log("these are the Td checking transactions", TdCheckingTransactions);
   // State for the active tab
-  const [activeTab, setActiveTab] = useState("balance");
+  const [activeTab, setActiveTab] = useState("overview");
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };

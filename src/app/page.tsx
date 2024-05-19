@@ -1,8 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { SignedOut } from "@clerk/nextjs";
 import axios from "axios";
 import Link from "next/link";
+import { useState } from "react";
+import PlaidLinkComponent from "@/components/plaidLink/plaidLink";
 
 export default function Home() {
   const handleClick = async (e: any) => {
@@ -13,6 +16,30 @@ export default function Home() {
       console.error("There was an error!", error);
     }
   };
+
+  const getData = async () => {
+    try {
+      const response = await axios.put("/api/updateData/updateCIBCData");
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const { status, data } = error.response;
+        if (status === 401 && data.error === "ITEM_LOGIN_REQUIRED") {
+          console.log("Item login required");
+          // Show re-authentication flow
+          setShowGetLatestData(false);
+          setShowPlaidLink(true);
+        } else {
+          console.error("Error fetching transactions:", data.error);
+        }
+      } else {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const [showPlaidLink, setShowPlaidLink] = useState(false);
+  const [showGetLatestData, setShowGetLatestData] = useState(true);
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-deep-blue text-white space-y-8">
       <div className="text-center">
@@ -30,6 +57,19 @@ export default function Home() {
       >
         Go to Dashboard
       </Link>
+
+      {showGetLatestData && (
+        <Button
+          variant="outline"
+          className="border-2 text-md py-6 px-6"
+          onClick={() => {
+            getData();
+          }}
+        >
+          Get Latest Data
+        </Button>
+      )}
+      {showPlaidLink && <PlaidLinkComponent />}
 
       <SignedOut>
         <div className="text-center">

@@ -29,7 +29,8 @@
     "src/pages/api/hello.ts",
     "src/pages/lib/connectDB.js",
     "src/components/charts/pie.jsx",
-    "src/app/dashboard/loading.tsx"
+    "src/app/dashboard/loading.tsx",
+    "src/pages/api/updateData/updateCIBCData.js"
   ],
   "exclude": ["node_modules"]
 }
