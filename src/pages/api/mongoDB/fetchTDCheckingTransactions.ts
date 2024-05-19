@@ -14,7 +14,7 @@ export default async function handler(
     try {
       let transactions;
 
-      const TdCheckingID = process.env.TD_CHECKING_ACCOUNT_ID;
+      const TdCheckingID = process.env.NEXT_PUBLIC_TD_CHECKING_ACCOUNT_ID;
 
       transactions = await TDTransaction.find({ accountId: TdCheckingID }).sort(
         { date: -1 }

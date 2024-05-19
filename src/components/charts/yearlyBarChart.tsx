@@ -199,7 +199,7 @@ export default function MonthlyBarChart({
     for (let i = 0; i < transactions.length; i++) {
       if (transactions[i].category === "Food and Drink") {
         MonthlyChartdata[monthIndex[month]].Food += transactions[i].amount;
-      } else if (transactions[i].category === "Shopping") {
+      } else if (transactions[i].category === "Shops") {
         MonthlyChartdata[monthIndex[month]].Shopping += transactions[i].amount;
       } else if (transactions[i].category === "Travel") {
         MonthlyChartdata[monthIndex[month]].Travel += transactions[i].amount;
@@ -215,7 +215,7 @@ export default function MonthlyBarChart({
         if (transactions[i].category === "Food and Drink") {
           MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Food +=
             transactions[i].amount;
-        } else if (transactions[i].category === "Shopping") {
+        } else if (transactions[i].category === "Shops") {
           MonthlyChartdata[getMonthNumber(transactions[i].date) - 1].Shopping +=
             transactions[i].amount;
         } else if (transactions[i].category === "Travel") {

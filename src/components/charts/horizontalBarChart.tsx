@@ -59,7 +59,7 @@ export default function HorizontalBarChart({
   for (let i = 0; i < transactions?.length; i++) {
     if (transactions[i].category === "Food and Drink") {
       data[0].Actual += transactions[i].amount;
-    } else if (transactions[i].category === "Payment") {
+    } else if (transactions[i].category === "Shops") {
       data[1].Actual += transactions[i].amount;
     } else if (transactions[i].category === "Travel") {
       data[2].Actual += transactions[i].amount;

@@ -2,6 +2,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import { BalanceMonthlyChartLoading } from "../loading/loading";
 import { useState, useEffect } from "react";
 import { Checking } from "@/components/balance/checkingTable";
+import { ConeIcon } from "lucide-react";
 
 const monthIndex: Record<string, number> = {
   January: 0,
@@ -31,7 +32,7 @@ export default function TdIncomeVsExpenseChart({
   year,
   isLoading,
 }: {
-  TDtransactions: Checking[];
+  TDtransactions: any[];
   CIBCTransactions: any;
   month: string;
   year: string;
@@ -51,19 +52,31 @@ export default function TdIncomeVsExpenseChart({
     { month: "Nov", Expense: 0, Income: 0 },
     { month: "Dec", Expense: 0, Income: 0 },
   ];
-  // Update Values from data for each month
+
+  // Filter TD transactions based on Checkings Account
+  TDtransactions = TDtransactions.filter(
+    (transaction) =>
+      transaction.accountId === process.env.NEXT_PUBLIC_TD_CHECKING_ACCOUNT_ID
+  );
+
+  // Update Values from data for each month and only including the income
   for (let i = 0; i < TDtransactions.length; i++) {
     const transaction = TDtransactions[i];
     const transactionMonth = getMonthNumber(transaction.date);
-    TdExpenseVsIncomeChartdata[transactionMonth - 1].Income +=
-      transaction.amount;
+    if (transaction.amount < 0) {
+      TdExpenseVsIncomeChartdata[transactionMonth - 1].Income +=
+        transaction.amount;
+    }
   }
 
+  // Update Values from data for each month and only including the Expense that are not Transfer
   for (let i = 0; i < CIBCTransactions.length; i++) {
     const transaction = CIBCTransactions[i];
     const transactionMonth = getMonthNumber(transaction.date);
-    TdExpenseVsIncomeChartdata[transactionMonth - 1].Expense +=
-      transaction.amount;
+    if (transaction.category !== "Transfer") {
+      TdExpenseVsIncomeChartdata[transactionMonth - 1].Expense +=
+        transaction.amount;
+    }
   }
 
   // Round up the Expense and Income Values
@@ -76,7 +89,7 @@ export default function TdIncomeVsExpenseChart({
     );
   }
 
-  // Reversing The Income Data from Positive to Negative
+  // Reversing The Income Data from Negative to Positive
   for (let i = 0; i < TdExpenseVsIncomeChartdata.length; i++) {
     TdExpenseVsIncomeChartdata[i].Income *= -1;
   }

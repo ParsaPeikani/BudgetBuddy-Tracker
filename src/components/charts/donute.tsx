@@ -25,7 +25,7 @@ export default function MyResponsivePie({ data }: { data: any[] }) {
   for (let i = 0; i < data?.length; i++) {
     if (data[i].category === "Food and Drink") {
       testingdata[0].value += 1;
-    } else if (data[i].category === "Payment") {
+    } else if (data[i].category === "Shops") {
       testingdata[1].value += 1;
     } else if (data[i].category === "Travel") {
       testingdata[2].value += 1;

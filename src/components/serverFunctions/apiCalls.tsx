@@ -46,6 +46,7 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
     });
     const TDTrans = response.data.map((transaction: any) => ({
       id: transaction.transactionId,
+      accountId: transaction.accountId,
       date: new Date(transaction.date).toLocaleDateString("en-CA", {
         year: "numeric",
         month: "2-digit",
@@ -64,7 +65,6 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
     const response = await axios.get(
       "/api/mongoDB/fetchTDCheckingTransactions"
     );
-    console.log("this is the response", response);
     const TDTrans = response.data.map((transaction: any) => ({
       id: transaction.transactionId,
       date: new Date(transaction.date).toLocaleDateString("en-CA", {
@@ -119,6 +119,7 @@ export const TDTransactionsProvider = ({ children }: { children: any }) => {
         .then((newdata) => {
           const newColumns = newdata.data.map((transaction: any) => ({
             id: transaction.transactionId,
+            accountId: transaction.accountId,
             date: new Date(transaction.date).toLocaleDateString("en-CA", {
               year: "numeric",
               month: "2-digit",
@@ -529,7 +530,6 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
           if (balancePage) {
             setBalanceCIBCTransactions([...newColumns]);
           } else {
-            console.log("hello");
             setCIBCTransactions([...newColumns]);
             setMonth(data.month);
             setYear(data.year);
@@ -712,7 +712,6 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
 
   async function BudgetProSummary() {
     try {
-      console.log("hello");
       const response = await axios.post("/api/openAI/testing");
       console.log("this is the response", response);
       const message = response.data.choices[0].message.content;

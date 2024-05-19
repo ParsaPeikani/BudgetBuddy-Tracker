@@ -19,7 +19,6 @@ export function CheckingComponent({
   account: any;
   transactions: Checking[];
 }) {
-  // console.log("these are the transactions", transactions[0]);
   return (
     <Card className="w-1/2 bg-gray-950">
       <CardHeader>

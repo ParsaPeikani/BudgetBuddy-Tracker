@@ -42,8 +42,9 @@ import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
-import Image from "next/image";
-import axios from "axios";
+
+// User Id
+let parsa_id = process.env.NEXT_PUBLIC_MY_USER_ID;
 
 export default function Dashboard() {
   // Clerk Session
@@ -51,7 +52,7 @@ export default function Dashboard() {
   const user_id = session?.user.id;
 
   // Post Transaction Function from custom Hook
-  const postTrans = usePostTrans();
+  // const postTrans = usePostTrans();
 
   // CIBC Transaction Variables
   const {
@@ -84,7 +85,7 @@ export default function Dashboard() {
   }: any = useTDTransactions();
 
   const { BudgetProChat, BudgetProSummary, openAIResponse }: any = useOpenAI();
-
+  // console.log("these are the Td checking transactions", TdCheckingTransactions);
   // State for the active tab
   const [activeTab, setActiveTab] = useState("balance");
   const handleTabChange = (value: string) => {
@@ -117,6 +118,19 @@ export default function Dashboard() {
 
   // Getting the column data from the getColumns function
   const columns = GetColumns(UpdateCIBCTransaction);
+
+  if (user_id && parsa_id && user_id !== parsa_id) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black text-white">
+        <div className="text-center max-w-lg p-6">
+          <h1 className="text-5xl font-bold mb-4">Access Denied</h1>
+          <p className="text-2xl">
+            You are Not Parsa Peikai. You are not allowed to be here 😠
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="">
