@@ -117,3 +117,15 @@ export function BalanceMonthYearLoading() {
     </div>
   );
 }
+
+// components/Loading.js
+export function GetDataLoading() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-md z-50">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="animate-spin rounded-full h-24 w-24 border-t-4 border-b-4 border-white"></div>
+        <p className="text-white text-xl font-semibold">Loading...</p>
+      </div>
+    </div>
+  );
+}
