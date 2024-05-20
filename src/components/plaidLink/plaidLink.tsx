@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 import { usePlaidLink } from "react-plaid-link";
+import React, { useState, useEffect } from "react";
 
 interface CreateLinkTokenResponse {
   link_token: string;
@@ -10,7 +11,7 @@ interface ExchangePublicTokenResponse {
   access_token: string;
 }
 
-const PlaidLinkComponent: React.FC = () => {
+const PlaidLinkComponent = ({ isCIBCData }: { isCIBCData: boolean }) => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,11 +41,39 @@ const PlaidLinkComponent: React.FC = () => {
       const accessToken = response.data.access_token;
       console.log("Access token:", accessToken);
 
-      // Call the API route to update the .env.local file
-      await axios.post("/api/env/update_env", { access_token: accessToken });
-      console.log("Access token updated in .env.local");
-      await axios.put("/api/updateData/updateCIBCData");
-      console.log("Data updated successfully");
+      if (isCIBCData) {
+        // Call the API route to update the .env.local file for CIBC access token
+        await axios.post("/api/env/update_cibc_env", {
+          access_token: accessToken,
+        });
+        console.log("Access token updated in .env.local");
+        await axios.put("/api/updateData/updateCIBCData");
+        console.log("CIBC Data updated successfully");
+        toast("CIBC Data Has Been Updated :)", {
+          position: "top-center",
+          style: {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        });
+      } else {
+        // Call the API route to update the .env.local file for TD access token
+        await axios.post("/api/env/update_td_env", {
+          access_token: accessToken,
+        });
+        console.log("Access token updated in .env.local");
+        await axios.put("/api/updateData/updateTDData");
+        console.log("TD Data updated successfully");
+        toast("TD Data Has Been Updated :)", {
+          position: "top-center",
+          style: {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        });
+      }
     } catch (error) {
       console.error(
         "Error exchanging public token or updating .env.local:",

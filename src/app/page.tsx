@@ -1,23 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { SignedOut, SignedIn } from "@clerk/nextjs";
 import axios from "axios";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { SignedOut, SignedIn } from "@clerk/nextjs";
 import PlaidLinkComponent from "@/components/plaidLink/plaidLink";
 
 export default function Home() {
-  const handleClick = async (e: any) => {
-    // e.preventDefault(); // Stop the link from triggering a page navigation
-    try {
-      const response = await axios.post("/api/hello", { name: "parsa" });
-    } catch (error) {
-      console.error("There was an error!", error);
-    }
-  };
-
   const getCIBCData = async () => {
     try {
       const response = await axios.put("/api/updateData/updateCIBCData");
@@ -37,6 +28,7 @@ export default function Home() {
         if (status === 401 && data.error === "ITEM_LOGIN_REQUIRED") {
           // Show re-authentication flow
           setShowGetLatestCIBCData(false);
+          setIsCIBCData(true);
           setShowPlaidLink(true);
         } else {
           console.error("Error fetching transactions:", data.error);
@@ -79,6 +71,7 @@ export default function Home() {
   const [showPlaidLink, setShowPlaidLink] = useState(false);
   const [showGetLatestCIBCData, setShowGetLatestCIBCData] = useState(true);
   const [showGetLatestTDData, setShowGetLatestTDData] = useState(true);
+  const [isCIBCData, setIsCIBCData] = useState(false);
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-deep-blue text-white space-y-8">
@@ -89,7 +82,6 @@ export default function Home() {
 
       <Link
         href="/dashboard"
-        onClick={handleClick}
         className="px-6 py-3 bg-transparent text-white font-semibold rounded-lg shadow hover:bg-white hover:text-black transition duration-300 border-2 border-white"
       >
         Go To Dashboard
@@ -107,7 +99,7 @@ export default function Home() {
             Get Latest CIBC Data
           </Button>
         )}
-        {showPlaidLink && <PlaidLinkComponent />}
+        {showPlaidLink && <PlaidLinkComponent isCIBCData={isCIBCData} />}
 
         {showGetLatestTDData && (
           <Button
@@ -120,14 +112,14 @@ export default function Home() {
             Get Latest TD Data
           </Button>
         )}
-        {showPlaidLink && <PlaidLinkComponent />}
+        {showPlaidLink && <PlaidLinkComponent isCIBCData={isCIBCData} />}
       </SignedIn>
 
       <SignedOut>
         <div className="text-center">
           <Link
             href="/sign-up"
-            className="px-6 py-3 bg-transparent text-white font-semibold rounded-lg shadow hover:bg-white hover:text-black transition duration-300 border-2 border-white"
+            className="px-6 py-4 bg-transparent text-white font-semibold rounded-lg shadow hover:bg-white hover:text-black transition duration-300 border-2 border-white"
           >
             Sign in or Sign up
           </Link>

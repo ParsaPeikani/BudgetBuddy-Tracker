@@ -30,7 +30,7 @@ export default async function handler(
 
     return res
       .status(200)
-      .json({ message: "Access token updated successfully" });
+      .json({ message: "CIBC Access token updated successfully" });
   } else {
     return res.status(405).json({ error: "Method not allowed" });
   }
