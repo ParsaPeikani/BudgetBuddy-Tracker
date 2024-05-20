@@ -25,7 +25,6 @@ export default function RootLayout({
         <OpenAIProvider>
           <div>
             <section>{children}</section>
-            <Toaster />
           </div>
         </OpenAIProvider>
       </TDTransactionsProvider>

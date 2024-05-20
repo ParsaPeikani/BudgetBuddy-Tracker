@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 
@@ -21,7 +22,12 @@ export default function RootLayout({
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang="en">
         <link rel="icon" href="/favicon.png" sizes="32x32" />
-        <body className="landing-page">{children}</body>
+        <body className="landing-page">
+          <div>
+            <section>{children}</section>
+            <Toaster />
+          </div>
+        </body>
       </html>
     </ClerkProvider>
   );

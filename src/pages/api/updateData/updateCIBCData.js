@@ -99,7 +99,6 @@ export default async function handler(req, res) {
       new Date(a.date).getTime() - new Date(b.date).getTime();
     const recently_added = added.sort(compareTxnsByDateAscending).slice(-20);
     const refactoredTransactions = refactorCIBCTransactions(recently_added);
-    console.log("Refactored transactions:", refactoredTransactions);
     await saveCIBCToDatabase(refactoredTransactions);
     console.log("CIBC Transactions Updated");
     res.status(200).json({ message: "CIBC Transactions Updated" });
