@@ -32,17 +32,24 @@ const PlaidLinkComponent: React.FC = () => {
     fetchLinkToken();
   }, []);
 
-  const onSuccess = async (public_token: string, metadata: any) => {
+  const onSuccess = async (public_token: any, metadata: any) => {
     try {
-      const response = await axios.post<ExchangePublicTokenResponse>(
-        "/api/plaid/exchange_public_token",
-        {
-          public_token,
-        }
-      );
-      console.log("Access token:", response.data.access_token);
+      const response = await axios.post("/api/plaid/exchange_public_token", {
+        public_token,
+      });
+      const accessToken = response.data.access_token;
+      console.log("Access token:", accessToken);
+
+      // Call the API route to update the .env.local file
+      await axios.post("/api/env/update_env", { access_token: accessToken });
+      console.log("Access token updated in .env.local");
+      await axios.put("/api/updateData/updateCIBCData");
+      console.log("Data updated successfully");
     } catch (error) {
-      console.error("Error exchanging public token:", error);
+      console.error(
+        "Error exchanging public token or updating .env.local:",
+        error
+      );
     }
   };
 
