@@ -9,7 +9,7 @@ import { Configuration, PlaidApi, Products, PlaidEnvironments } from "plaid";
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
 const PLAID_SECRET = process.env.PLAID_SECRET;
 const PLAID_ENV = "development";
-const CIBC_ACCESS_TOKEN = process.env.PLAID_CIBC_ACCESS_TOKEN;
+const TD_ACCESS_TOKEN = process.env.PLAID_TD_ACCESS_TOKEN;
 
 const USER_ID = process.env.NEXT_PUBLIC_MY_USER_ID;
 
@@ -27,47 +27,82 @@ const configuration = new Configuration({
 const client = new PlaidApi(configuration);
 
 // Models
-import CIBCTransaction from "@/Models/cibcTransactions";
+import TDTransaction from "@/Models/tdTransactions";
+import Balance from "@/Models/balance";
 
-// Function to refactor the CIBC Transactions
-function refactorCIBCTransactions(transactions) {
+// Function to refactor the TD Transactions
+function refactorTDTransactions(transactions) {
   return transactions.map((transaction) => {
     return {
       transactionId: transaction.transaction_id,
       accountId: transaction.account_id,
-      userId: USER_ID,
       amount: transaction.amount,
-      authorized_date: transaction.authorized_date,
-      location: transaction.location?.city || null,
       date: transaction.date,
       category: transaction.category,
       pending: transaction.pending,
-      merchantName: transaction.merchant_name,
-      paymentChannel: transaction.payment_channel,
-      currency: transaction.iso_currency_code,
+      name: transaction.name,
     };
   });
 }
 
-// Function to save the CIBC transactions to the Database
-async function saveCIBCToDatabase(transactions) {
+// Function to save the TD transactions to the Database
+async function saveTDToDatabase(transactions) {
   try {
     for (const transaction of transactions) {
-      const existingTransaction = await CIBCTransaction.findOne({
+      const existingTransaction = await TDTransaction.findOne({
         transactionId: transaction.transactionId,
       });
 
       if (existingTransaction) {
-        await CIBCTransaction.replaceOne(
+        await TDTransaction.replaceOne(
           { transactionId: transaction.transactionId },
           transaction
         );
       } else {
-        await CIBCTransaction.create(transaction);
+        await TDTransaction.create(transaction);
       }
     }
   } catch (error) {
-    console.error("Error in saveToDatabase function:", error);
+    console.error("Error in saveTDToDatabase function:", error);
+  }
+}
+
+// Function to get the latest Balances from PLAID
+async function getBalancesFromPlaid() {
+  try {
+    const request = {
+      access_token: TD_ACCESS_TOKEN,
+    };
+    const response = await client.accountsBalanceGet(request);
+    const accounts = response.data.accounts;
+    return accounts;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Drop the existing balances collection and create the new one
+async function saveBalancesToDatabase(accounts) {
+  try {
+    await Balance.collection.drop();
+    for (const account of accounts) {
+      const balance = {
+        account: {
+          accountId: account.account_id,
+          balances: {
+            available: account.balances.available,
+            current: account.balances.current,
+            iso_currency_code: account.balances.iso_currency_code,
+          },
+          mask: account.mask,
+          name: account.name,
+          subtype: account.subtype,
+        },
+      };
+      await Balance.create(balance);
+    }
+  } catch (error) {
+    console.error("Error in saveBalancesToDatabase function:", error);
   }
 }
 
@@ -82,7 +117,7 @@ export default async function handler(req, res) {
   try {
     while (hasMore) {
       const request = {
-        access_token: CIBC_ACCESS_TOKEN,
+        access_token: TD_ACCESS_TOKEN,
         cursor: cursor,
       };
       const response = await client.transactionsSync(request);
@@ -94,13 +129,30 @@ export default async function handler(req, res) {
       cursor = data.next_cursor;
     }
 
+    // Sort the transactions by date
     const compareTxnsByDateAscending = (a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime();
+
+    // Get the 20 most recent TD transactions from Plaid
     const recently_added = added.sort(compareTxnsByDateAscending).slice(-20);
-    const refactoredTransactions = refactorCIBCTransactions(recently_added);
-    await saveCIBCToDatabase(refactoredTransactions);
-    console.log("CIBC Transactions Updated");
-    res.status(200).json({ message: "CIBC Transactions Updated" });
+
+    // Refactor the TD transactions
+    const refactoredTransactions = refactorTDTransactions(recently_added);
+
+    // Save the TD transactions to the database
+    await saveTDToDatabase(refactoredTransactions);
+    console.log("TD Transactions Have Been Updated");
+
+    // Getting the TD Balance Accounts
+    const accounts = await getBalancesFromPlaid();
+
+    // Saving the TD Balance Accounts to the Database
+    await saveBalancesToDatabase(accounts);
+    console.log("TD Balances Have Been Updated");
+
+    res
+      .status(200)
+      .json({ message: "TD Transactions && Balances Have Updated" });
   } catch (error) {
     if (
       error.response &&
@@ -112,7 +164,7 @@ export default async function handler(req, res) {
       );
       res.status(401).json({ error: "ITEM_LOGIN_REQUIRED" });
     } else {
-      console.error("Error in getCIBCTransactionsFromPlaid function:", error);
+      console.error("Error in getTDTransactionsFromPlaid function:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
