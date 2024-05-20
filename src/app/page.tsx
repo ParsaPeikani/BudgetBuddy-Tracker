@@ -24,7 +24,6 @@ export default function Home() {
       if (axios.isAxiosError(error) && error.response) {
         const { status, data } = error.response;
         if (status === 401 && data.error === "ITEM_LOGIN_REQUIRED") {
-          console.log("Item login required");
           // Show re-authentication flow
           setShowGetLatestData(false);
           setShowPlaidLink(true);

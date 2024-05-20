@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
-import { Button } from "../ui/button";
 
 interface CreateLinkTokenResponse {
   link_token: string;
