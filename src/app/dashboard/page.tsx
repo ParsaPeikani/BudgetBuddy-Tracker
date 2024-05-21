@@ -1,8 +1,10 @@
 "use client";
 
 // General Imports
+import axios from "axios";
 import { useChat } from "ai/react";
 import { useSession } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -32,6 +34,7 @@ import {
   TableLoading,
   ChartLoading,
   BalanceLoading,
+  GetDataLoading,
   MonthYearLoading,
   TotalSpentLoading,
   BalanceMonthYearLoading,
@@ -42,11 +45,15 @@ import MyResponsivePie from "@/components/charts/donute";
 import MonthlyBarChart from "@/components/charts/yearlyBarChart";
 import HorizontalBarChart from "@/components/charts/horizontalBarChart";
 import TdIncomeVsExpenseChart from "@/components/charts/expenseVsIncomeChart";
+import { User } from "lucide-react";
 
 // User Id
 let parsa_id = process.env.NEXT_PUBLIC_MY_USER_ID;
 
 export default function Dashboard() {
+  // Making sure if the user is authorized or not
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+
   // Clerk Session
   const { session } = useSession();
   const user_id = session?.user.id;
@@ -85,7 +92,7 @@ export default function Dashboard() {
   }: any = useTDTransactions();
 
   const { BudgetProChat, BudgetProSummary, openAIResponse }: any = useOpenAI();
-  // console.log("these are the Td checking transactions", TdCheckingTransactions);
+
   // State for the active tab
   const [activeTab, setActiveTab] = useState("overview");
   const handleTabChange = (value: string) => {
@@ -93,18 +100,37 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    try {
-      FetchCIBCTransactions(true);
-      FetchAllTDTransactions(true);
-      FetchTDCheckingTransactions();
-      FetchTDSavingTransactions();
-      FetchBalances();
-    } catch (error) {
-      console.error("Failed to fetch Transactions:", error);
-    } finally {
-      setTimeout(() => {
-        setIsTdLoading(false);
-      });
+    if (user_id) {
+      const checkAuth = async () => {
+        try {
+          const response = await axios.get("/api/auth/check-auth", {
+            params: { user_id }, // Use params instead of data for GET requests
+          });
+          setIsAuthorized(response.data.authorized);
+        } catch (error) {
+          setIsAuthorized(false);
+        }
+      };
+
+      checkAuth();
+    }
+  }, [user_id]);
+
+  useEffect(() => {
+    if (user_id && parsa_id && user_id === parsa_id) {
+      try {
+        FetchCIBCTransactions(true);
+        FetchAllTDTransactions(true);
+        FetchTDCheckingTransactions();
+        FetchTDSavingTransactions();
+        FetchBalances();
+      } catch (error) {
+        console.error("Failed to fetch Transactions:", error);
+      } finally {
+        setTimeout(() => {
+          setIsTdLoading(false);
+        });
+      }
     }
   }, [
     FetchCIBCTransactions,
@@ -114,12 +140,17 @@ export default function Dashboard() {
     FetchTDSavingTransactions,
     FetchBalances,
     setIsTdLoading,
+    user_id,
   ]);
 
   // Getting the column data from the getColumns function
   const columns = GetColumns(UpdateCIBCTransaction);
 
-  if (user_id && parsa_id && user_id !== parsa_id) {
+  if (isAuthorized === null) {
+    return <GetDataLoading />;
+  }
+
+  if (!isAuthorized) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black text-white">
         <div className="text-center max-w-lg p-6">
@@ -127,6 +158,11 @@ export default function Dashboard() {
           <p className="text-2xl">
             You are Not Parsa Peikai. You are not allowed to be here 😠
           </p>
+
+          <div className="flex items-center p-4 justify-center">
+            <h1 className="pr-4 text-lg">Please Sign Out Here</h1>
+            <UserButton afterSignOutUrl="/" />
+          </div>
         </div>
       </div>
     );

@@ -243,3 +243,49 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@keyframes dot-1 {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-2 {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  66% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-3 {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.dot {
+  margin-left: 2px; /* Adjust the space as needed */
+}
+
+.dot-1 {
+  animation: dot-1 1.5s infinite;
+}
+
+.dot-2 {
+  animation: dot-2 1.5s infinite;
+}
+
+.dot-3 {
+  animation: dot-3 1.5s infinite;
+}
