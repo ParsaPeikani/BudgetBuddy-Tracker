@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import * as React from "react";
 import { Settings2, Trash, Trash2 } from "lucide-react";
 import { RowDropBox } from "../row-size/row-size";
+import { CreditBalances } from "../creditBalances/creditBalances";
 
 import {
   ColumnDef,
@@ -80,14 +81,19 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex py-4 justify-between">
         <div className="flex">
-          <Input
-            placeholder="Filter transactions..."
-            value={filtering}
-            onChange={(event) => setFiltering(event.target.value)}
-            className="w-72"
-          />
+          <div className="flex">
+            <Input
+              placeholder="Filter transactions..."
+              value={filtering}
+              onChange={(event) => setFiltering(event.target.value)}
+              className="w-72"
+            />
+          </div>
+          <CreditBalances />
+          {/* <Button variant="outline" className="ml-4">
+            See Balances
+          </Button> */}
         </div>
-
         <div className="flex">
           {table.getFilteredSelectedRowModel().rows.length > 0 && (
             <Button
