@@ -15,6 +15,7 @@ export default function Home() {
   const [showGetLatestCIBCData, setShowGetLatestCIBCData] = useState(true);
   const [showGetLatestTDData, setShowGetLatestTDData] = useState(true);
   const [isCIBCData, setIsCIBCData] = useState(false);
+  const [isTDData, setIsTDData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const getCIBCData = async () => {
@@ -39,6 +40,8 @@ export default function Home() {
           // Show re-authentication flow
           setShowGetLatestCIBCData(false);
           setIsCIBCData(true);
+          setIsTDData(false);
+          setIsLoading(false);
           setShowPlaidLink(true);
         } else {
           console.error("Error fetching transactions:", data.error);
@@ -70,6 +73,9 @@ export default function Home() {
         if (status === 401 && data.error === "ITEM_LOGIN_REQUIRED") {
           // Show re-authentication flow
           setShowGetLatestTDData(false);
+          setIsCIBCData(false);
+          setIsTDData(true);
+          setIsLoading(false);
           setShowPlaidLink(true);
         } else {
           console.error("Error fetching transactions:", data.error);
@@ -115,7 +121,9 @@ export default function Home() {
               Get Latest CIBC Data
             </Button>
           )}
-          {showPlaidLink && <PlaidLinkComponent isCIBCData={isCIBCData} />}
+          {showPlaidLink && isCIBCData && (
+            <PlaidLinkComponent isCIBCData={isCIBCData} />
+          )}
 
           {showGetLatestTDData && (
             <Button
@@ -128,7 +136,9 @@ export default function Home() {
               Get Latest TD Data
             </Button>
           )}
-          {showPlaidLink && <PlaidLinkComponent isCIBCData={isCIBCData} />}
+          {showPlaidLink && isTDData && (
+            <PlaidLinkComponent isCIBCData={isCIBCData} />
+          )}
         </div>
       </SignedIn>
 

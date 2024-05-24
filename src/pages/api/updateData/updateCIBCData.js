@@ -96,7 +96,8 @@ export default async function handler(req, res) {
 
     const compareTxnsByDateAscending = (a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime();
-    const recently_added = added.sort(compareTxnsByDateAscending).slice(-20);
+    const recently_added = added.sort(compareTxnsByDateAscending).slice(-500);
+    console.log("these are the transactions", recently_added);
     const refactoredTransactions = refactorCIBCTransactions(recently_added);
     await saveCIBCToDatabase(refactoredTransactions);
     console.log("CIBC Transactions Updated");

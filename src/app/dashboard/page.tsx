@@ -69,6 +69,7 @@ export default function Dashboard() {
     year,
     setIsLoading,
     CIBCTransactions,
+    FetchCIBCBalances,
     DeleteAllSelectedRows,
     UpdateCIBCTransaction,
     BalanceCIBCTransactions,
@@ -124,6 +125,7 @@ export default function Dashboard() {
         FetchTDCheckingTransactions();
         FetchTDSavingTransactions();
         FetchBalances();
+        FetchCIBCBalances();
       } catch (error) {
         console.error("Failed to fetch Transactions:", error);
       } finally {

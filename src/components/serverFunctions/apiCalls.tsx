@@ -189,6 +189,7 @@ const CIBCTransactionsContext = createContext({
   totalSpent: 0,
   setTotalSpent: (value: number) => {},
   FetchCIBCTransactions: () => {},
+  FetchCIBCBalances: () => {},
   setCIBCTransactions: (transactions: CIBCTransaction[]) => {},
   setBalanceCIBCTransactions: (transactions: CIBCTransaction[]) => {},
   setIsLoading: (value: boolean) => {},
@@ -230,6 +231,8 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [totalSpent, setTotalSpent] = useState(0);
+  const [cibcDebitBalance, setCibcDebitBalance] = useState(0);
+  const [cibcCreditBalance, setCibcCreditBalance] = useState(0);
 
   // Fetching CIBC Transactions from the database
   const FetchCIBCTransactions = useCallback(async (latestYear = true) => {
@@ -543,6 +546,9 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     }
   };
 
+  // Fetch CIBC Balances from the database
+  const FetchCIBCBalances = async () => {};
+
   return (
     <CIBCTransactionsContext.Provider
       value={{
@@ -553,6 +559,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         year,
         totalSpent,
         FetchCIBCTransactions,
+        FetchCIBCBalances,
         setCIBCTransactions,
         setBalanceCIBCTransactions,
         setTotalSpent,
