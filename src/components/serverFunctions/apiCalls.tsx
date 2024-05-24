@@ -547,7 +547,14 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   };
 
   // Fetch CIBC Balances from the database
-  const FetchCIBCBalances = async () => {};
+  const FetchCIBCBalances = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/mongoDB/fetchCIBCBalances");
+      console.log("this is the CIBC balance response", response.data);
+    } catch (error) {
+      console.error("Failed to fetch balances:", error);
+    }
+  }, []);
 
   return (
     <CIBCTransactionsContext.Provider
