@@ -204,7 +204,7 @@ export default async function handler(
         MonthlyCategoryDataCIBCTransactions["January"]
       );
 
-      const prompt = `As Budget Pro, your role is to provide tailored financial advice and insights based on the user's data. Let's delve into their financial details for the current year:
+      const prompt = `As Budget Pro, your role is to provide tailored financial advice and insights based on the user's data. Let's delve into their financial details for the current year, if the user asked anything unreleated to finance you should inform them that you are not able to provide that information and you can only provide financial information.:
       1. Number of Transactions:
          - The user has conducted ${
            CIBCtransactions.length

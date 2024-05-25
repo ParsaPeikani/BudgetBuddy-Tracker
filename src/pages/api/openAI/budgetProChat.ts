@@ -5,8 +5,15 @@ const openai = new OpenAI({
   project: process.env.OPENAI_PROJECT_ID,
 });
 
-function convertLinefeedsToHTML(text: any) {
-  return text.content.replace(/\n/g, "</br>");
+function convertLinefeedsAndBoldToHTML(text: any) {
+  // Convert line breaks to <br>
+  let convertedText = text.content.replace(/\n/g, "</br>");
+  // Convert **bold** to <strong>bold</strong>
+  convertedText = convertedText.replace(
+    /\*\*(.*?)\*\*/g,
+    "<strong>$1</strong>"
+  );
+  return convertedText;
 }
 
 export default async function handler(req: any, res: any) {
@@ -21,11 +28,11 @@ export default async function handler(req: any, res: any) {
     });
 
     const response = openAIresponse.choices[0].message;
-    response.content = convertLinefeedsToHTML(response);
+    response.content = convertLinefeedsAndBoldToHTML(response);
 
     res.status(200).json(response);
   } catch (error) {
     console.error("Error Getting OpenAI response:", error);
-    return error;
+    res.status(500).json({ error: "Error getting OpenAI response" });
   }
 }

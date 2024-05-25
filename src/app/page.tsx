@@ -122,7 +122,11 @@ export default function Home() {
             </Button>
           )}
           {showPlaidLink && isCIBCData && (
-            <PlaidLinkComponent isCIBCData={isCIBCData} />
+            <PlaidLinkComponent
+              isCIBCData={isCIBCData}
+              setShowPlaidLink={setShowPlaidLink}
+              setShowGetLatestCIBCData={setShowGetLatestCIBCData}
+            />
           )}
 
           {showGetLatestTDData && (
@@ -137,7 +141,11 @@ export default function Home() {
             </Button>
           )}
           {showPlaidLink && isTDData && (
-            <PlaidLinkComponent isCIBCData={isCIBCData} />
+            <PlaidLinkComponent
+              isCIBCData={isCIBCData}
+              setShowPlaidLink={setShowPlaidLink}
+              setShowGetLatestTDData={setShowGetLatestTDData}
+            />
           )}
         </div>
       </SignedIn>

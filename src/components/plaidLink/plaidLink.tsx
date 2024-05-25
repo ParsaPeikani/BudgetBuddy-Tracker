@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "sonner";
 import { usePlaidLink } from "react-plaid-link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 interface CreateLinkTokenResponse {
   link_token: string;
@@ -11,7 +11,17 @@ interface ExchangePublicTokenResponse {
   access_token: string;
 }
 
-const PlaidLinkComponent = ({ isCIBCData }: { isCIBCData: boolean }) => {
+const PlaidLinkComponent = ({
+  isCIBCData,
+  setShowPlaidLink,
+  setShowGetLatestCIBCData,
+  setShowGetLatestTDData,
+}: {
+  isCIBCData: boolean;
+  setShowPlaidLink: Dispatch<SetStateAction<boolean>>;
+  setShowGetLatestCIBCData?: Dispatch<SetStateAction<boolean>> | undefined;
+  setShowGetLatestTDData?: Dispatch<SetStateAction<boolean>> | undefined;
+}) => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,7 +44,9 @@ const PlaidLinkComponent = ({ isCIBCData }: { isCIBCData: boolean }) => {
   }, []);
 
   const onSuccess = async (public_token: any, metadata: any) => {
+    console.log("hello we are getting here");
     try {
+      setShowPlaidLink(false);
       const response = await axios.post("/api/plaid/exchange_public_token", {
         public_token,
       });
@@ -86,6 +98,12 @@ const PlaidLinkComponent = ({ isCIBCData }: { isCIBCData: boolean }) => {
     token: linkToken!,
     onSuccess,
     onExit: (err: any, metadata: any) => {
+      setShowPlaidLink(false);
+      if (isCIBCData) {
+        setShowGetLatestCIBCData && setShowGetLatestCIBCData(true);
+      } else {
+        setShowGetLatestTDData && setShowGetLatestTDData(true);
+      }
       // Handle the exit event, which occurs when the user closes the Plaid Link flow
       console.log("User exited Plaid Link:", err, metadata);
     },
@@ -116,3 +134,6 @@ const PlaidLinkComponent = ({ isCIBCData }: { isCIBCData: boolean }) => {
 };
 
 export default PlaidLinkComponent;
+function setShowGetLatestCIBCData(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}

@@ -553,7 +553,7 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     try {
       const response = await axios.get("/api/mongoDB/fetchCIBCBalances");
       setCibcDebitBalance(response.data[1].account.balances.current);
-      setCibcCreditBalance(response.data[0].account.balances.current);
+      setCibcCreditBalance(response.data[0].account.balances.available);
     } catch (error) {
       console.error("Failed to fetch balances:", error);
     }
@@ -599,7 +599,6 @@ export const useCIBCTransactions = () => useContext(CIBCTransactionsContext);
 const OpenAIContext = createContext({
   openAIResponse: "",
   BudgetProChat: () => {},
-  BudgetProSummary: () => {},
 });
 export const OpenAIProvider = ({ children }: { children: any }) => {
   const [openAIResponse, setOpenAIResponse] = useState("");
@@ -728,26 +727,8 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
     );
   }
 
-  async function BudgetProSummary() {
-    try {
-      const response = await axios.post("/api/openAI/testing");
-      console.log("this is the response", response);
-      const message = response.data.choices[0].message.content;
-      console.log(
-        "We are getting here",
-        response.data.choices[0].message.content
-      );
-      setOpenAIResponse(message);
-      // return response.data;
-    } catch (error) {
-      console.error("There was an error calling OpenAI!", error);
-    }
-  }
-
   return (
-    <OpenAIContext.Provider
-      value={{ BudgetProChat, BudgetProSummary, openAIResponse }}
-    >
+    <OpenAIContext.Provider value={{ BudgetProChat, openAIResponse }}>
       {children}
     </OpenAIContext.Provider>
   );
