@@ -187,6 +187,8 @@ const CIBCTransactionsContext = createContext({
   month: "",
   year: "",
   totalSpent: 0,
+  cibcDebitBalance: 0,
+  cibcCreditBalance: 0,
   setTotalSpent: (value: number) => {},
   FetchCIBCTransactions: () => {},
   FetchCIBCBalances: () => {},
@@ -550,7 +552,8 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
   const FetchCIBCBalances = useCallback(async () => {
     try {
       const response = await axios.get("/api/mongoDB/fetchCIBCBalances");
-      console.log("this is the CIBC balance response", response.data);
+      setCibcDebitBalance(response.data[1].account.balances.current);
+      setCibcCreditBalance(response.data[0].account.balances.current);
     } catch (error) {
       console.error("Failed to fetch balances:", error);
     }
@@ -564,6 +567,8 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
         isLoading,
         month,
         year,
+        cibcDebitBalance,
+        cibcCreditBalance,
         totalSpent,
         FetchCIBCTransactions,
         FetchCIBCBalances,
@@ -676,7 +681,6 @@ export const OpenAIProvider = ({ children }: { children: any }) => {
           const response = await axios.post(options.api, {
             messages: [...messages, { role: "user", content: currentMessage }],
           });
-          console.log("these are the new messasges: ", response.data);
           const newMessage = response.data;
           setMessages([...newMessages, newMessage]);
           setIsLoading(false);

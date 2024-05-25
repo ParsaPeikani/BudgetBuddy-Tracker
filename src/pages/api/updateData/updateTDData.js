@@ -102,7 +102,7 @@ async function saveBalancesToDatabase(accounts) {
       await Balance.create(balance);
     }
   } catch (error) {
-    console.error("Error in saveBalancesToDatabase function:", error);
+    console.error("Error in saveTDBalancesToDatabase function:", error);
   }
 }
 

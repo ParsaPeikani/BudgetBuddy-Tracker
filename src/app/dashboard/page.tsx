@@ -141,6 +141,7 @@ export default function Dashboard() {
     FetchTDCheckingTransactions,
     FetchTDSavingTransactions,
     FetchBalances,
+    FetchCIBCBalances,
     setIsTdLoading,
     user_id,
   ]);

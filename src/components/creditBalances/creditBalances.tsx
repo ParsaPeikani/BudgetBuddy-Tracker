@@ -3,64 +3,16 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
+import { useCIBCTransactions } from "@/components/serverFunctions/apiCalls";
 
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { toast } from "sonner";
-import { useState } from "react";
+export function CreditBalances() {
+  const { cibcCreditBalance, cibcDebitBalance } = useCIBCTransactions();
 
-// Define your form validation schema using Zod
-const transactionSchema = z.object({
-  name: z.string(),
-  amount: z.string(),
-  date: z.date(),
-  category: z.string(),
-  verified: z.boolean(),
-});
-
-export function CreditBalances({}) {
-  const form = useForm({
-    resolver: zodResolver(transactionSchema),
-    defaultValues: {
-      creditCard: "Unknown",
-      debitCard: "Unknown",
-    },
-  });
-
-  //   const [checkedBox, setCheckedBox] = useState(!transaction.verified);
-
-  const onSubmit = (data: any) => {
-    console.log("closing the form ...");
-  };
-  const onError = (errors: any) => {
-    console.error("Form submission errors:", errors);
-  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -68,69 +20,37 @@ export function CreditBalances({}) {
           See Balances
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-black text-white">
         <DialogHeader>
-          <DialogTitle className="text-center">
-            CIBC Debit && Credit Card Balances
+          <DialogTitle className="text-center text-white">
+            CIBC Debit & Credit Card Balances
           </DialogTitle>
-          <DialogDescription className="text-center">
+          <DialogDescription className="text-center text-gray-400">
             These Are Your Current Balances
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6"
-          >
-            <div>
-              <div className="space-y-4 mb-4">
-                <FormField
-                  control={form.control}
-                  name="creditCard"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col md:flex-row items-center md:justify-between space-y-2 md:space-y-0 w-full">
-                      <div className="md:flex-1">
-                        <FormLabel className="text-base">
-                          Credit Card{" "}
-                        </FormLabel>
-                      </div>
-                      <FormControl className="flex-grow">
-                        {/* <Input
-                          className="ml-8 w-full"
-                          placeholder="Enter Transaction Name"
-                          {...field}
-                        /> */}
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="debitCard"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col md:flex-row items-center md:justify-between space-y-2 md:space-y-0 w-full">
-                    <div className="md:flex-1">
-                      <FormLabel className="text-base">Debit Card</FormLabel>
-                    </div>
-                    <FormControl className="flex-grow">
-                      {/* <Input
-                        className="ml-8 w-full"
-                        placeholder="Enter Transaction Name"
-                        {...field}
-                      /> */}
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+        <div className="flex w-full">
+          <div className="w-1/2 p-4 border-r border-gray-600">
+            <div className="text-center">
+              <span className="text-base text-white">Credit Card</span>
             </div>
-            {/* <DialogFooter>
-              <Button type="submit" variant="outline">
-                Close
-              </Button>
-            </DialogFooter> */}
-          </form>
-        </Form>
+            <div className="text-center mt-2">
+              <span className="text-lg font-semibold text-white">
+                ${cibcCreditBalance}
+              </span>
+            </div>
+          </div>
+          <div className="w-1/2 p-4">
+            <div className="text-center">
+              <span className="text-base text-white">Debit Card</span>
+            </div>
+            <div className="text-center mt-2">
+              <span className="text-lg font-semibold text-white">
+                ${cibcDebitBalance}
+              </span>
+            </div>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -90,9 +90,6 @@ export function DataTable<TData, TValue>({
             />
           </div>
           <CreditBalances />
-          {/* <Button variant="outline" className="ml-4">
-            See Balances
-          </Button> */}
         </div>
         <div className="flex">
           {table.getFilteredSelectedRowModel().rows.length > 0 && (

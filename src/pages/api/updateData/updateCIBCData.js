@@ -28,6 +28,7 @@ const client = new PlaidApi(configuration);
 
 // Models
 import CIBCTransaction from "@/Models/cibcTransactions";
+import CIBCBalance from "@/Models/cibcBalance";
 
 // Function to refactor the CIBC Transactions
 function refactorCIBCTransactions(transactions) {
@@ -71,6 +72,45 @@ async function saveCIBCToDatabase(transactions) {
   }
 }
 
+// Function to get the latest Balances from PLAID
+async function getBalancesFromPlaid() {
+  try {
+    const request = {
+      access_token: CIBC_ACCESS_TOKEN,
+    };
+    const response = await client.accountsBalanceGet(request);
+    const accounts = response.data.accounts;
+    return accounts;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Drop the existing balances collection and create the new one
+async function saveBalancesToDatabase(accounts) {
+  try {
+    await CIBCBalance.collection.drop();
+    for (const account of accounts) {
+      const balance = {
+        account: {
+          accountId: account.account_id,
+          balances: {
+            available: account.balances.available,
+            current: account.balances.current,
+            iso_currency_code: account.balances.iso_currency_code,
+          },
+          mask: account.mask,
+          name: account.name,
+          subtype: account.subtype,
+        },
+      };
+      await CIBCBalance.create(balance);
+    }
+  } catch (error) {
+    console.error("Error in saveCIBCBalancesToDatabase function:", error);
+  }
+}
+
 // Function to get the latest CIBC Transactions from PLAID
 export default async function handler(req, res) {
   let cursor = null;
@@ -96,11 +136,24 @@ export default async function handler(req, res) {
 
     const compareTxnsByDateAscending = (a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime();
-    const recently_added = added.sort(compareTxnsByDateAscending).slice(-500);
-    console.log("these are the transactions", recently_added);
+
+    // Sort the transactions by date and get the last 50 transactions
+    const recently_added = added.sort(compareTxnsByDateAscending).slice(-50);
+
+    // Refactor the transactions and save them to the database
     const refactoredTransactions = refactorCIBCTransactions(recently_added);
+
+    // Save the CIBC transactions to the database
     await saveCIBCToDatabase(refactoredTransactions);
     console.log("CIBC Transactions Updated");
+
+    // Get CIBC Balances
+    const accounts = await getBalancesFromPlaid();
+
+    // Save the CIBC Balances to the Database
+    await saveBalancesToDatabase(accounts);
+    console.log("CIBC Balances Updated");
+
     res.status(200).json({ message: "CIBC Transactions Updated" });
   } catch (error) {
     if (
