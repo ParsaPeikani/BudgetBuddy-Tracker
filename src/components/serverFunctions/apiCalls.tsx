@@ -510,7 +510,6 @@ export const CIBCTransactionsProvider = ({ children }: { children: any }) => {
     data: any,
     balancePage: boolean = false
   ) => {
-    console.log("this is the balance page", balancePage);
     setIsLoading(true);
     try {
       await axios

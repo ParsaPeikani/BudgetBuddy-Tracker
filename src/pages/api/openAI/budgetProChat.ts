@@ -20,7 +20,6 @@ export default async function handler(req: any, res: any) {
   try {
     // Extract the `messages` from the body of the request
     const { messages } = req.body;
-    console.log("these are the messages: ", messages);
 
     const openAIresponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",

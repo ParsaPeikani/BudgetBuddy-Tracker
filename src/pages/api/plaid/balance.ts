@@ -42,7 +42,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  console.log("hello we are getting here");
   await connectDB();
   Promise.resolve().then(async function () {
     // Iterate through each page of new transaction updates for item

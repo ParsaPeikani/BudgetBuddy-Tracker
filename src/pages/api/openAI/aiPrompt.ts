@@ -95,6 +95,10 @@ export default async function handler(
         },
       };
 
+      let CIBCTotalSpendAndTransactions: {
+        [key: string]: { amount: number; count: number };
+      } = {};
+
       const numberToMonthObject: { [key: number]: string } = {
         1: "January",
         2: "February",
@@ -112,6 +116,9 @@ export default async function handler(
 
       // Get the current year
       const currentYear = new Date().getFullYear();
+
+      // Initialize the yearly spend and transaction count for CIBC
+      CIBCTotalSpendAndTransactions[currentYear] = { amount: 0, count: 0 };
 
       // Find TD Checking, Saving and Total Balances
       const checkingAccount = await Balance.find({
@@ -166,6 +173,13 @@ export default async function handler(
         const dateString = CIBCtransactions[i].date.toISOString();
         const monthString = dateString.substring(5, 7);
         const monthNumber = parseInt(monthString, 10);
+
+        // Increment the total spend and transaction count for CIBC
+        if (category !== "Transfer")
+          CIBCTotalSpendAndTransactions[currentYear].amount +=
+            CIBCtransactions[i].amount;
+        CIBCTotalSpendAndTransactions[currentYear].count += 1;
+
         if (
           !MonthlyCategoryDataCIBCTransactions[numberToMonthObject[monthNumber]]
             .category[category]
@@ -181,10 +195,14 @@ export default async function handler(
           numberToMonthObject[monthNumber]
         ].category[category].count += 1;
 
-        // Increment the total amount and count for the month
-        MonthlyCategoryDataCIBCTransactions[
-          numberToMonthObject[monthNumber]
-        ].amount += CIBCtransactions[i].amount;
+        // Increment the total amount and count for the month if the category is not Transfer
+        if (category !== "Transfer") {
+          MonthlyCategoryDataCIBCTransactions[
+            numberToMonthObject[monthNumber]
+          ].amount += CIBCtransactions[i].amount;
+        }
+
+        // Increment the total count for the month
         MonthlyCategoryDataCIBCTransactions[
           numberToMonthObject[monthNumber]
         ].total += 1;
@@ -194,15 +212,10 @@ export default async function handler(
           CIBCYearlyCategoryData[category] = { amount: 0, count: 0 };
         }
 
-        // Increment amount and count
+        // Increment amount and count for each category
         CIBCYearlyCategoryData[category].amount += CIBCtransactions[i].amount;
         CIBCYearlyCategoryData[category].count += 1;
       }
-      console.log(
-        "this is the MonthlyCategoryDataCIBCTransactions",
-        MonthlyCategoryDataCIBCTransactions,
-        MonthlyCategoryDataCIBCTransactions["January"]
-      );
 
       const prompt = `As Budget Pro, your role is to provide tailored financial advice and insights based on the user's data. Let's delve into their financial details for the current year, if the user asked anything unreleated to finance you should inform them that you are not able to provide that information and you can only provide financial information.:
       1. Number of Transactions:
@@ -319,6 +332,16 @@ export default async function handler(
           )}
           - If the user asks about a month that is not in the data, you can inform them that there is no data available for that month. So if the month has total 0 transactions and total 0 amount spent, you can inform the user that there is no data available for that month.
           - The user had 0 transaction in the month of December 2024 no matter what.
+        
+        This is the Yearly Category Data for CIBC Transactions, there is a key for each category and the value is an object that contains the amount spent in that category and the number of transactions in that category for the whole year:
+        ${CIBCYearlyCategoryData}
+
+        this is also the total number of transactions and the total amount spent for the whole year:
+        In the current year the user has spent a total of ${
+          CIBCTotalSpendAndTransactions[currentYear].amount
+        } and has conducted a total of ${
+        CIBCTotalSpendAndTransactions[currentYear].count
+      } transactions.
       
       4. Budget Pro Tips:
          - Recommend staying vigilant about spending patterns.

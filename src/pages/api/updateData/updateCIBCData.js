@@ -126,6 +126,7 @@ export default async function handler(req, res) {
         cursor: cursor,
       };
       const response = await client.transactionsSync(request);
+      console.log("this is the response \n\n\n\n\n\n\n", response.data);
       const data = response.data;
       added = added.concat(data.added);
       modified = modified.concat(data.modified);

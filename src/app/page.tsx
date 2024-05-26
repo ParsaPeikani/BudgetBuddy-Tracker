@@ -126,6 +126,7 @@ export default function Home() {
               isCIBCData={isCIBCData}
               setShowPlaidLink={setShowPlaidLink}
               setShowGetLatestCIBCData={setShowGetLatestCIBCData}
+              setIsLoading={setIsLoading}
             />
           )}
 
@@ -145,6 +146,7 @@ export default function Home() {
               isCIBCData={isCIBCData}
               setShowPlaidLink={setShowPlaidLink}
               setShowGetLatestTDData={setShowGetLatestTDData}
+              setIsLoading={setIsLoading}
             />
           )}
         </div>

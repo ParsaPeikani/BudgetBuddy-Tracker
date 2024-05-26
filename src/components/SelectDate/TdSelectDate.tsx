@@ -57,7 +57,6 @@ export function TDSelectDate({
       });
       return;
     }
-    console.log("these are the data", data);
     GetNewCIBCTransactions(data, true);
     GetNewTDTransactions(data);
   }

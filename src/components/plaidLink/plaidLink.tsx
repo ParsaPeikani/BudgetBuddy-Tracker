@@ -2,6 +2,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { usePlaidLink } from "react-plaid-link";
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { set } from "mongoose";
 
 interface CreateLinkTokenResponse {
   link_token: string;
@@ -16,11 +17,13 @@ const PlaidLinkComponent = ({
   setShowPlaidLink,
   setShowGetLatestCIBCData,
   setShowGetLatestTDData,
+  setIsLoading,
 }: {
   isCIBCData: boolean;
   setShowPlaidLink: Dispatch<SetStateAction<boolean>>;
   setShowGetLatestCIBCData?: Dispatch<SetStateAction<boolean>> | undefined;
   setShowGetLatestTDData?: Dispatch<SetStateAction<boolean>> | undefined;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
 
@@ -52,8 +55,10 @@ const PlaidLinkComponent = ({
       });
       const accessToken = response.data.access_token;
       console.log("Access token:", accessToken);
+      setIsLoading(true);
 
       if (isCIBCData) {
+        setShowGetLatestCIBCData && setShowGetLatestCIBCData(true);
         // Call the API route to update the .env.local file for CIBC access token
         await axios.post("/api/env/update_cibc_env", {
           access_token: accessToken,
@@ -61,6 +66,7 @@ const PlaidLinkComponent = ({
         console.log("Access token updated in .env.local");
         await axios.put("/api/updateData/updateCIBCData");
         console.log("CIBC Data updated successfully");
+        setIsLoading(false);
         toast("CIBC Data Has Been Updated :)", {
           position: "top-center",
           style: {
@@ -70,13 +76,15 @@ const PlaidLinkComponent = ({
           },
         });
       } else {
+        setShowGetLatestTDData && setShowGetLatestTDData(true);
         // Call the API route to update the .env.local file for TD access token
-        await axios.post("/api/env/update_td_env", {
-          access_token: accessToken,
-        });
-        console.log("Access token updated in .env.local");
+        // await axios.post("/api/env/update_td_env", {
+        //   access_token: accessToken,
+        // });
+        // console.log("Access token updated in .env.local");
         await axios.put("/api/updateData/updateTDData");
         console.log("TD Data updated successfully");
+        setIsLoading(false);
         toast("TD Data Has Been Updated :)", {
           position: "top-center",
           style: {
