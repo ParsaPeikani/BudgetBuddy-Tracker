@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { SignedOut, SignedIn } from "@clerk/nextjs";
 import { GetDataLoading } from "@/components/loading/loading";
 import PlaidLinkComponent from "@/components/plaidLink/plaidLink";
+import { useUser } from "@clerk/clerk-react";
 import { set } from "mongoose";
 
 export default function Home() {
+  const { isSignedIn, user, isLoaded } = useUser();
   const [showPlaidLink, setShowPlaidLink] = useState(false);
   const [showGetLatestCIBCData, setShowGetLatestCIBCData] = useState(true);
   const [showGetLatestTDData, setShowGetLatestTDData] = useState(true);
@@ -90,12 +92,23 @@ export default function Home() {
     <div className="relative flex flex-col justify-center items-center min-h-screen bg-deep-blue text-white space-y-8">
       {isLoading && <GetDataLoading />}
 
-      <div
-        className={`flex flex-col items-center ${isLoading ? "blur-sm" : ""}`}
-      >
-        <h1 className="text-5xl font-bold mb-4">Welcome To BudgetPro Parsa</h1>
-        <p className="max-w-md text-lg">Your Personal Finance Assistant :)</p>
-      </div>
+      {isSignedIn ? (
+        <div
+          className={`flex flex-col items-center ${isLoading ? "blur-sm" : ""}`}
+        >
+          <h1 className="text-5xl font-bold mb-4">
+            Welcome To BudgetPro Parsa
+          </h1>
+          <p className="max-w-md text-lg">Your Personal Finance Assistant :)</p>
+        </div>
+      ) : (
+        <div
+          className={`flex flex-col items-center ${isLoading ? "blur-sm" : ""}`}
+        >
+          <h1 className="text-5xl font-bold mb-4">Welcome To BudgetPro </h1>
+          <p className="max-w-md text-lg">Please Authenticate :)</p>
+        </div>
+      )}
 
       <Link
         href="/dashboard"

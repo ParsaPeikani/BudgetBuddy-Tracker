@@ -199,9 +199,9 @@ export const data = [
   },
 ];
 
-export const yearlyBudgetData = [1000, 500, 1500, 750, 400];
+export const yearlyBudgetData = [4000, 6000, 2000, 14000, 2000];
 
-export const monthlyBudgetData = [200, 100, 300, 150, 80];
+export const monthlyBudgetData = [350, 500, 200, 1250, 200];
 
 const Transactions = [
   {

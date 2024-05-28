@@ -111,13 +111,63 @@ async function saveBalancesToDatabase(accounts) {
   }
 }
 
+// Function to get the number of transactions
+async function getNumberOfTransactions(
+  accessToken,
+  startDate,
+  endDate,
+  accountId
+) {
+  let totalTransactions = 0;
+  let hasMore = true;
+  let offset = 0;
+  const count = 500; // Number of transactions to fetch per request
+
+  try {
+    while (hasMore) {
+      const response = await client.transactionsGet({
+        access_token: accessToken,
+        start_date: startDate,
+        end_date: endDate,
+        options: {
+          account_ids: [accountId],
+          count: count,
+          offset: offset,
+        },
+      });
+
+      totalTransactions += response.data.transactions.length;
+
+      // Check if there are more transactions to fetch
+      if (response.data.total_transactions > totalTransactions) {
+        offset += count;
+      } else {
+        hasMore = false;
+      }
+    }
+
+    return totalTransactions;
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    throw error;
+  }
+}
 // Function to get the latest CIBC Transactions from PLAID
 export default async function handler(req, res) {
+  // try {
+  //   const transNum = await getNumberOfTransactions(
+  //     CIBC_ACCESS_TOKEN,
+  //     "2021-01-01",
+  //     "2024-12-31",
+  //     "6w71yKY46zUw66xyYxnAUZ0geKDjL5HAnyk7D"
+  //   );
+  //   console.log("This is the toatl number of transactions", transNum);
   let cursor = null;
   let added = [];
   let modified = [];
   let removed = [];
   let hasMore = true;
+  let total = 0;
 
   try {
     while (hasMore) {
@@ -128,6 +178,7 @@ export default async function handler(req, res) {
       const response = await client.transactionsSync(request);
       console.log("this is the response \n\n\n\n\n\n\n", response.data);
       const data = response.data;
+      total += data.added.length;
       added = added.concat(data.added);
       modified = modified.concat(data.modified);
       removed = removed.concat(data.removed);
@@ -135,11 +186,16 @@ export default async function handler(req, res) {
       cursor = data.next_cursor;
     }
 
+    console.log(
+      "This is the total number of transactions \n\n\n\n\n\n\n\n",
+      total
+    );
+
     const compareTxnsByDateAscending = (a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime();
 
     // Sort the transactions by date and get the last 50 transactions
-    const recently_added = added.sort(compareTxnsByDateAscending).slice(-50);
+    const recently_added = added.sort(compareTxnsByDateAscending).slice(-500);
 
     // Refactor the transactions and save them to the database
     const refactoredTransactions = refactorCIBCTransactions(recently_added);
