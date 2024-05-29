@@ -9,15 +9,10 @@ import {
 } from "plaid";
 
 // Assigning the environment variables to the variables
-const PLAID_CLIENT_ID = "64e8dab8f457560013a34314";
-const PLAID_SECRET = "954916e3e8be33a64ecf9046d26ecc";
-const PLAID_ENV = "development";
-const TD_ACCESS_TOKEN =
-  "access-development-7b839e25-3b56-4ead-8c13-755c6a575868";
-const CIBC_ACCESS_TOKEN =
-  "access-development-3adb047b-7cb4-4b74-a807-af6d37fe20e4";
-
-const USER_ID = "user_2cLSzspbg7ZAYLa4wys5AdXUkCI";
+const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID!;
+const PLAID_SECRET = process.env.PLAID_SECRET!;
+const PLAID_ENV = process.env.PLAID_ENV!;
+const CIBC_ACCESS_TOKEN = process.env.PLAID_CIBC_ACCESS_TOKEN!;
 
 const configuration = new Configuration({
   basePath: PlaidEnvironments[PLAID_ENV],
@@ -39,13 +34,13 @@ async function createLinkToken(
   try {
     const response = await client.linkTokenCreate({
       user: {
-        client_user_id: req.body.userId, // Adjust this based on your authentication system
+        client_user_id: process.env.NEXT_PUBLIC_MY_USER_ID || "default_user_id",
       },
       client_name: "parsa",
       products: [Products.Transactions],
       country_codes: [CountryCode.Ca],
       language: "en",
-      access_token: CIBC_ACCESS_TOKEN!, // Include the existing access token to re-authenticate
+      access_token: CIBC_ACCESS_TOKEN!,
     });
     res.json({ link_token: response.data.link_token });
   } catch (error) {

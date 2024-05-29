@@ -13,6 +13,8 @@ export default async function handler(
       return res.status(400).json({ error: "Access token is required" });
     }
 
+    console.log("this is the access token \n\n\n\n\n\n", access_token);
+
     // Path to the .env.local file
     const envPath = path.resolve(process.cwd(), ".env.local");
 

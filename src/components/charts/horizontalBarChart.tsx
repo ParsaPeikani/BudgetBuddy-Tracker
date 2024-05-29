@@ -172,6 +172,18 @@ export default function HorizontalBarChart({
               ],
             },
           ]}
+          tooltip={({ id, value, color, indexValue }) => (
+            <div
+              style={{
+                padding: 12,
+                color,
+                background: "#222222",
+              }}
+            >
+              <span>{`${indexValue} - ${id}: ${value} `}</span>
+              <br />
+            </div>
+          )}
           layout="horizontal"
           enableGridY={false}
           enableGridX={true}

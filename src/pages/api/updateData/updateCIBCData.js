@@ -162,7 +162,8 @@ export default async function handler(req, res) {
   //     "6w71yKY46zUw66xyYxnAUZ0geKDjL5HAnyk7D"
   //   );
   //   console.log("This is the toatl number of transactions", transNum);
-  let cursor = null;
+  let cursor =
+    "CAESJXBiYXhSdjlQajhjbzBqOHBkT1JtZnc5dm9kcUJRWHUzdk8xSjgiDAiJtJiyBhCgq4nGAyoMCIm0mLIGEKCricYD";
   let added = [];
   let modified = [];
   let removed = [];
@@ -171,6 +172,7 @@ export default async function handler(req, res) {
 
   try {
     while (hasMore) {
+      console.log("this is the cursor \n\n\n\n", cursor);
       const request = {
         access_token: CIBC_ACCESS_TOKEN,
         cursor: cursor,
@@ -195,7 +197,7 @@ export default async function handler(req, res) {
       new Date(a.date).getTime() - new Date(b.date).getTime();
 
     // Sort the transactions by date and get the last 50 transactions
-    const recently_added = added.sort(compareTxnsByDateAscending).slice(-500);
+    const recently_added = added.sort(compareTxnsByDateAscending).slice(-10);
 
     // Refactor the transactions and save them to the database
     const refactoredTransactions = refactorCIBCTransactions(recently_added);

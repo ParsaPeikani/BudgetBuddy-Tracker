@@ -32,10 +32,7 @@ const PlaidLinkComponent = ({
     const fetchLinkToken = async () => {
       try {
         const response = await axios.post<CreateLinkTokenResponse>(
-          "/api/plaid/create_link_token",
-          {
-            userId: "user-id-here", // Adjust this based on your authentication system
-          }
+          "/api/plaid/create_link_token"
         );
         setLinkToken(response.data.link_token);
       } catch (error) {
@@ -50,20 +47,20 @@ const PlaidLinkComponent = ({
     console.log("hello we are getting here");
     try {
       setShowPlaidLink(false);
-      const response = await axios.post("/api/plaid/exchange_public_token", {
-        public_token,
-      });
-      const accessToken = response.data.access_token;
-      console.log("Access token:", accessToken);
+      // const response = await axios.post("/api/plaid/exchange_public_token", {
+      //   public_token,
+      // });
+      // const accessToken = response.data.access_token;
+      // console.log("Access token:", accessToken);
       setIsLoading(true);
 
       if (isCIBCData) {
         setShowGetLatestCIBCData && setShowGetLatestCIBCData(true);
         // Call the API route to update the .env.local file for CIBC access token
-        await axios.post("/api/env/update_cibc_env", {
-          access_token: accessToken,
-        });
-        console.log("Access token updated in .env.local");
+        // await axios.post("/api/env/update_cibc_env", {
+        //   access_token: accessToken,
+        // });
+        // console.log("Access token updated in .env.local");
         await axios.put("/api/updateData/updateCIBCData");
         console.log("CIBC Data updated successfully");
         setIsLoading(false);
